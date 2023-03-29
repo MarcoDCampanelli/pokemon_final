@@ -11,7 +11,6 @@ const options = {
 
 const Signin = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  console.log(MONGO_URI);
 
   await client.connect();
   const db = client.db("Pokemon");

@@ -1,5 +1,4 @@
 const express = require("express");
-const app = express();
 
 const { Signin } = require("./handlers/pokemonHandlers");
 
@@ -7,6 +6,6 @@ express()
   .use(express.json())
   .use(express.static("public"))
 
-  .post("/createUser", Signin);
+  .post("/createUser", Signin)
 
-app.listen(3000, () => console.log("Server started on port 3000."));
+  .listen(3000, () => console.log("Listening on port 3000"));
