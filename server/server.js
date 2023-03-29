@@ -6,6 +6,4 @@ express()
   .use(express.json())
   .use(express.static("public"))
 
-  .post("/createUser", Signin)
-
-  .listen(3000, () => console.log("Listening on port 3000"));
+  .post("/createUser", Signin);
