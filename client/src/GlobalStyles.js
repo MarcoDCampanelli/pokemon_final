@@ -12,6 +12,10 @@ const GlobalStyle = createGlobalStyle`
     @media (max-width: 480px) {
         font-size: 12px;
     }
+
+    @media (max-width: 375px) {
+        font-size: 8px;
+    }
   }
 
 html, body, div, span, applet, object, iframe,

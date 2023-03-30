@@ -76,9 +76,11 @@ const Name = styled.div`
 
 // This will style the signout/signin button
 const Button = styled.button`
+  width: 10%;
   margin: auto 0;
   padding: 0.5rem;
   border-radius: 5px;
+  overflow: hidden;
 
   &:hover {
     color: white;

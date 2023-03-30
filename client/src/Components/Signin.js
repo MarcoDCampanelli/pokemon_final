@@ -82,7 +82,7 @@ const Signin = () => {
           Log In
         </Button>
       </Form>
-      <ErrorMessage>{error}</ErrorMessage>
+      {error ? <ErrorMessage>{error}</ErrorMessage> : <></>}
     </SigninContainer>
   );
 };
@@ -152,4 +152,5 @@ const Button = styled.button`
 const ErrorMessage = styled.div`
   margin: 0.5rem auto;
   padding: 1rem;
+  border-left: 0.2rem solid red;
 `;
