@@ -1,57 +1,49 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
 import styled from "styled-components";
 
-const Signin = () => {
-  const signin = {
+const Registration = () => {
+  const registration = {
     user: "",
     password: "",
+    email: "",
   };
 
   const { setCurrentUser } = useContext(UserContext);
-  const [returningUser, setReturningUser] = useState(signin);
-  const navigate = useNavigate();
+  const [newUser, setNewUser] = useState(registration);
 
-  const handleSignIn = (e) => {
+  const handleRegistration = (e) => {
     e.preventDefault();
 
-    fetch("/signinUser", {
+    fetch("/createUser", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(returningUser),
+      body: JSON.stringify(newUser),
     })
       .then((res) => res.json())
       .then((resData) => {
-        if (resData.status === 200) {
-          window.localStorage.setItem(
-            "currentUser",
-            JSON.stringify(resData.data)
-          );
-          setCurrentUser(resData.data);
-          navigate("/");
-        } else {
-          window.alert(resData.message);
-        }
+        window.localStorage.setItem(
+          "currentUser",
+          JSON.stringify(resData.data)
+        );
+        setCurrentUser(resData.data);
       });
   };
 
   return (
     <SigninContainer>
-      <h1>Login</h1>
-      <Form onSubmit={handleSignIn}>
+      <h1>Register</h1>
+      <Form onSubmit={handleRegistration}>
         <div>
           <label>Username:</label>
           <input
             type="text"
             placeholder="Username"
-            onChange={(e) =>
-              setReturningUser({ ...returningUser, user: e.target.value })
-            }
+            onChange={(e) => setNewUser({ ...newUser, user: e.target.value })}
           ></input>
         </div>
         <div>
@@ -60,19 +52,27 @@ const Signin = () => {
             type="password"
             placeholder="Password"
             onChange={(e) =>
-              setReturningUser({ ...returningUser, password: e.target.value })
+              setNewUser({ ...newUser, password: e.target.value })
             }
           ></input>
         </div>
-        <button type="submit" onClick={handleSignIn}>
-          Log in
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            placeholder="example@email.com"
+            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+          ></input>
+        </div>
+        <button type="submit" onClick={handleRegistration}>
+          Register
         </button>
       </Form>
     </SigninContainer>
   );
 };
 
-export default Signin;
+export default Registration;
 
 const SigninContainer = styled.div`
   display: flex;

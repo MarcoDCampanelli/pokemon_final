@@ -1,12 +1,33 @@
+import { UserContext } from "./UserContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Banner from "../assets/Banner.jpg";
 import styled from "styled-components";
 
 const Header = () => {
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const navigate = useNavigate();
+
   return (
     <HeaderContainer>
       <Image src={Banner} />
       <Demo>
-        <>boo</>
+        {currentUser ? (
+          <>
+            <div>Hello {currentUser}</div>
+            <button
+              onClick={() => {
+                window.localStorage.clear();
+                setCurrentUser(null);
+              }}
+            >
+              Log out
+            </button>
+          </>
+        ) : (
+          <button onClick={() => navigate("/signin")}>Log in</button>
+        )}
       </Demo>
     </HeaderContainer>
   );
