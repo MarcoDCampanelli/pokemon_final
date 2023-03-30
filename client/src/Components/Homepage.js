@@ -4,10 +4,12 @@ import styled from "styled-components";
 
 const Homepage = () => {
   const [pokemon, setPokemon] = useState("");
+  const [loading, setLoading] = useState("idle");
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(51);
 
   useEffect(() => {
+    setLoading("loading");
     let pokemonPromiseList = [];
     for (let i = currentPage; i < postsPerPage; i++) {
       pokemonPromiseList.push(
@@ -26,11 +28,12 @@ const Homepage = () => {
       );
     }
     Promise.all(pokemonPromiseList).then((data) => setPokemon(data));
+    setLoading("idle");
   }, [currentPage]);
 
   console.log(pokemon);
 
-  if (!pokemon) {
+  if (!pokemon || loading === "loading") {
     return <>Loading...</>;
   }
 
@@ -105,7 +108,7 @@ const IndividualPokemonContainer = styled.div`
 
 // Styled image of the sprite of the pokemon
 const Sprite = styled.img`
-  width: 100%;
+  width: 50%;
 `;
 
 // Styled name of the pokemon
