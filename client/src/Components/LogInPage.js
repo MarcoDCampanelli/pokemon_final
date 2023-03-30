@@ -20,8 +20,8 @@ const Login = () => {
       ) : (
         <LogInContainer>
           <Registration />
-          <h3>Do you already have an account?</h3>
-          <Button onClick={() => setAccount(true)}>Sign in</Button>
+          <h3>Already have an account?</h3>
+          <Button onClick={() => setAccount(true)}>Sign In</Button>
         </LogInContainer>
       )}
     </>
@@ -41,6 +41,7 @@ const Button = styled.button`
   margin: auto;
   padding: 0.5rem;
   border-radius: 5px;
+  overflow: hidden;
 
   &:hover {
     color: white;

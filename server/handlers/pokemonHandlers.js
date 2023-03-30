@@ -18,6 +18,30 @@ const Registration = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const { user, password, email } = req.body;
 
+  // The following are validation checks when creating an account
+  // 1. The user needs to have an actual username with a minimum of 1 character
+  if (user === "") {
+    return res
+      .status(406)
+      .json({ status: 406, message: "Please enter a valid username." });
+  }
+
+  // 2. The email must contain an @ symbol
+  if (!email.includes("@")) {
+    return res
+      .status(406)
+      .json({ status: 406, message: "Please enter a valid email address." });
+  }
+
+  // The password can't be empty, must contain at least 1 number, and must be at least 8 characters long
+  if (password === "" || !/\d/.test(password) || password.length < 8) {
+    return res.status(406).json({
+      status: 406,
+      message:
+        "Your password must include a number and be at least 8 characters long.",
+    });
+  }
+
   await client.connect();
   const db = client.db("Pokemon");
 

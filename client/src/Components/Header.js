@@ -9,13 +9,15 @@ const Header = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
 
+  console.log(currentUser);
+
   return (
     <HeaderContainer>
       <Image src={Banner} />
       <Demo>
         {currentUser ? (
           <>
-            <div>Hello {currentUser}</div>
+            <div>Hello, {currentUser}</div>
             <button
               onClick={() => {
                 window.localStorage.clear();
@@ -26,7 +28,7 @@ const Header = () => {
             </button>
           </>
         ) : (
-          <button onClick={() => navigate("/signin")}>Log in</button>
+          <button onClick={() => navigate("/signin")}>Sign In</button>
         )}
       </Demo>
     </HeaderContainer>
