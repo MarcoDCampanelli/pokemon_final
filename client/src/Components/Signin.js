@@ -4,9 +4,11 @@ import { UserContext } from "./UserContext";
 
 import styled from "styled-components";
 
+// This components contains the code for the user to signin if they already have an account
 const Signin = () => {
   const signin = {
     user: "",
+    email: "",
     password: "",
   };
 
@@ -14,6 +16,7 @@ const Signin = () => {
   const [returningUser, setReturningUser] = useState(signin);
   const navigate = useNavigate();
 
+  // POST request in order to verify information in order to sign in
   const handleSignIn = (e) => {
     e.preventDefault();
 
@@ -55,6 +58,16 @@ const Signin = () => {
           ></input>
         </div>
         <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            placeholder="example@email.com"
+            onChange={(e) =>
+              setReturningUser({ ...returningUser, email: e.target.value })
+            }
+          ></input>
+        </div>
+        <div>
           <label>Password:</label>
           <input
             type="password"
@@ -74,12 +87,14 @@ const Signin = () => {
 
 export default Signin;
 
+// Container for the entire page
 const SigninContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
 `;
 
+// Styling for the form
 const Form = styled.form`
   display: flex;
   flex-direction: column;

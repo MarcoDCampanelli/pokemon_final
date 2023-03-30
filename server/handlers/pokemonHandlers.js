@@ -1,6 +1,8 @@
 const { MongoClient } = require("mongodb");
 // Package to generate random id strings
 const { v4: uuidv4 } = require("uuid");
+// Package to hash passwords
+const bcrypt = require("bcrypt");
 
 require("dotenv").config();
 
@@ -34,10 +36,14 @@ const Registration = async (req, res) => {
   }
 
   // If the name is available, create the user
+  // 1. Create a id string
   const _id = uuidv4();
+  // 2. Hash the password
+  const hash = await bcrypt.hash(password, 10);
+  // 3. Create the user with the aforementioned details
   const createUser = await db
     .collection("Users")
-    .insertOne({ _id, ...req.body });
+    .insertOne({ _id, user: user, email: email, hash: hash });
 
   client.close();
 
@@ -56,7 +62,7 @@ const Registration = async (req, res) => {
 // Handler to sign in the user
 const Signin = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
-  const { user, password } = req.body;
+  const { user, email, password } = req.body;
 
   await client.connect();
   const db = client.db("Pokemon");
@@ -64,25 +70,32 @@ const Signin = async (req, res) => {
   // First, check to see if the user exists
   const result = await db
     .collection("Users")
-    .findOne({ user: user, password: password });
+    .findOne({ user: user, email: email });
 
-  // If yes, then the user's name will be returned to the front end
+  // If yes, then the user's password needs to be checked
   if (result) {
-    return res.status(200).json({
-      status: 200,
-      data: user,
-      message: "Log in successful.",
-    });
+    const validPassword = await bcrypt.compare(password, result.hash);
+
+    // If the passwords are the same, the following is returned.
+    if (validPassword) {
+      return res.status(200).json({
+        status: 200,
+        data: user,
+        message: "Log in successful.",
+      });
+    } else {
+      return res
+        .status(404)
+        .json({ status: 404, message: "Incorrect password." });
+    }
   }
 
   client.close();
 
-  return res
-    .status(404)
-    .json({
-      status: 404,
-      message: "Sorry, a user with that name and password does not exist.",
-    });
+  return res.status(404).json({
+    status: 404,
+    message: "Sorry, a user with that name and password does not exist.",
+  });
 };
 
 module.exports = { Registration, Signin };

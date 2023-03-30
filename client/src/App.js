@@ -5,7 +5,7 @@ import styled from "styled-components";
 import GlobalStyle from "./GlobalStyles";
 
 import Header from "./Components/Header";
-import Signin from "./Components/Signin";
+import Login from "./Components/LogInPage";
 
 const App = () => {
   return (
@@ -16,7 +16,7 @@ const App = () => {
           <Header />
           <Routes>
             <Route path="/" element={<>Hi there friend</>} />
-            <Route path="/signin" element={<Signin />} />
+            <Route path="/signin" element={<Login />} />
           </Routes>
         </SiteContainer>
       </BrowserRouter>

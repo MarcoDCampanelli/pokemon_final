@@ -4,6 +4,14 @@ const GlobalStyle = createGlobalStyle`
 
 :root {
     font-size: 16px;
+
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 12px;
+    }
   }
 
 html, body, div, span, applet, object, iframe,
@@ -27,6 +35,7 @@ html, body, div, span, applet, object, iframe,
         vertical-align: baseline;
         font-family: sans-serif;
     }
+
 `;
 
 export default GlobalStyle;

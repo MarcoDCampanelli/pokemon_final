@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
 import styled from "styled-components";
 
+// This component contains the code for the user to create an account for the first time.
 const Registration = () => {
   const registration = {
     user: "",
@@ -12,7 +14,9 @@ const Registration = () => {
 
   const { setCurrentUser } = useContext(UserContext);
   const [newUser, setNewUser] = useState(registration);
+  const navigate = useNavigate();
 
+  // POST request in order to create a new user to the Users collection
   const handleRegistration = (e) => {
     e.preventDefault();
 
@@ -26,11 +30,16 @@ const Registration = () => {
     })
       .then((res) => res.json())
       .then((resData) => {
-        window.localStorage.setItem(
-          "currentUser",
-          JSON.stringify(resData.data)
-        );
-        setCurrentUser(resData.data);
+        if (resData.status === 201) {
+          window.localStorage.setItem(
+            "currentUser",
+            JSON.stringify(resData.data)
+          );
+          setCurrentUser(resData.data);
+          navigate("/");
+        } else {
+          window.alert(resData.message);
+        }
       });
   };
 
@@ -47,6 +56,14 @@ const Registration = () => {
           ></input>
         </div>
         <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            placeholder="example@email.com"
+            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+          ></input>
+        </div>
+        <div>
           <label>Password:</label>
           <input
             type="password"
@@ -54,14 +71,6 @@ const Registration = () => {
             onChange={(e) =>
               setNewUser({ ...newUser, password: e.target.value })
             }
-          ></input>
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            placeholder="example@email.com"
-            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
           ></input>
         </div>
         <button type="submit" onClick={handleRegistration}>
