@@ -1,28 +1,33 @@
+import Banner from "../assets/Banner.jpg";
+import styled from "styled-components";
+
 const Header = () => {
-  const handleSignIn = () => {
-    const data = {
-      user: "Marco",
-    };
-
-    fetch("/createUser", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((resData) => console.log(resData));
-
-    console.log("Done");
-  };
-
   return (
-    <>
-      <button onClick={() => handleSignIn()}>Signin</button>
-    </>
+    <HeaderContainer>
+      <Image src={Banner} />
+      <Demo>
+        <>boo</>
+      </Demo>
+    </HeaderContainer>
   );
 };
 
 export default Header;
+
+const HeaderContainer = styled.div`
+  position: relative;
+  height: 15vh;
+`;
+
+const Image = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0.5;
+  height: 15vh;
+`;
+
+const Demo = styled.div`
+  position: relative;
+`;

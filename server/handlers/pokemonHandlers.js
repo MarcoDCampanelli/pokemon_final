@@ -11,14 +11,17 @@ const options = {
 
 const Signin = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
+  console.log(req.body);
 
   await client.connect();
   const db = client.db("Pokemon");
 
-  const result = await db.collection("Users").insertOne({ user: "Marco" });
+  // const result = await db.collection("Users").insertOne({ user: "Marco" });
 
   client.close();
-  return res.status(201).json({ status: 201, message: "User created." });
+  return res
+    .status(201)
+    .json({ status: 201, data: { user: "MArco" }, message: "User created." });
 };
 
 module.exports = { Signin };

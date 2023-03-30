@@ -5,6 +5,7 @@ import styled from "styled-components";
 import GlobalStyle from "./GlobalStyles";
 
 import Header from "./Components/Header";
+import Signin from "./Components/Signin";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Header />
           <Routes>
             <Route path="/" element={<>Hi there friend</>} />
+            <Route path="/signin" element={<Signin />} />
           </Routes>
         </SiteContainer>
       </BrowserRouter>
