@@ -9,8 +9,6 @@ const Header = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  console.log(currentUser);
-
   return (
     <HeaderContainer>
       <Image src={Banner} />
