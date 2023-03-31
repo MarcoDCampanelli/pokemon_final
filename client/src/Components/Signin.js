@@ -46,7 +46,7 @@ const Signin = () => {
 
   return (
     <SigninContainer>
-      <h1>Sign In</h1>
+      <Title>Sign In</Title>
       <Form onSubmit={handleSignIn}>
         <InfoContainer>
           <Label>Username:</Label>
@@ -94,6 +94,12 @@ const SigninContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+`;
+
+// Title styling
+const Title = styled.h1`
+  margin: 0.5rem;
+  font-weight: bold;
 `;
 
 // Styling for the form

@@ -46,7 +46,7 @@ const Registration = () => {
 
   return (
     <SigninContainer>
-      <h1>Register</h1>
+      <Title>Register</Title>
       <Form onSubmit={handleRegistration}>
         <InfoContainer>
           <Label>Username:</Label>
@@ -90,6 +90,12 @@ const SigninContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+`;
+
+// Title styling
+const Title = styled.h1`
+  margin: 0.5rem;
+  font-weight: bold;
 `;
 
 // Styling for the form
