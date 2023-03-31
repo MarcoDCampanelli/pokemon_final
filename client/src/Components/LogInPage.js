@@ -14,13 +14,13 @@ const Login = () => {
       {account ? (
         <LogInContainer>
           <Signin />
-          <h3>Don't have an account?</h3>
+          <Question>Don't have an account?</Question>
           <Button onClick={() => setAccount(false)}>Register</Button>
         </LogInContainer>
       ) : (
         <LogInContainer>
           <Registration />
-          <h3>Already have an account?</h3>
+          <Question>Already have an account?</Question>
           <Button onClick={() => setAccount(true)}>Sign In</Button>
         </LogInContainer>
       )}
@@ -47,4 +47,8 @@ const Button = styled.button`
     color: white;
     background-color: lightblue;
   }
+`;
+
+const Question = styled.h3`
+  margin: 0.5rem;
 `;
