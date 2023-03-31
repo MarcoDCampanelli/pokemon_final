@@ -7,6 +7,7 @@ import GlobalStyle from "./GlobalStyles";
 import Header from "./Components/Header";
 import Homepage from "./Components/Homepage";
 import Login from "./Components/LogInPage";
+import SpecificPokemon from "./Components/SpecificPokemon";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/signin" element={<Login />} />
+            <Route path="/pokemon/:pokemon" element={<SpecificPokemon />} />
           </Routes>
         </SiteContainer>
       </BrowserRouter>

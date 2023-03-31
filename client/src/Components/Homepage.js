@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import styled from "styled-components";
 
 const Homepage = () => {
-  // The first 4 states are used for Pagination
+  // The first 3 states are used for Pagination
   const [pokemonList, setPokemonList] = useState("");
   const [offset, setOffset] = useState(0);
-  const [oddOne, setOddOne] = useState(null);
-  const [postsPerPage, setPostsPerPage] = useState(42);
+  const [postsPerPage, setPostsPerPage] = useState(50);
   // The following states are used in the search bars
   const [pokemon, setPokemon] = useState("");
   const [attack, setAttack] = useState("");
@@ -16,7 +16,7 @@ const Homepage = () => {
   // This endpoint is used from the PokeAPI to grab a list of all Pokemon and all of their forms
   useEffect(() => {
     fetch(
-      `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${postsPerPage}`
+      `https://pokeapi.co/api/v2/pokemon-species/?offset=${offset}&limit=${postsPerPage}`
     )
       .then((res) => res.json())
       .then((resData) => {
@@ -63,31 +63,17 @@ const Homepage = () => {
       <div>
         <ButtonContainer>
           <Button
-            // The numbers were chosen for specific reasons: 42 makes it so that it ends on the last pokemon of the dex.
-            // After this points, the forms are stored in different endpoints so a second state is created to account for the new url. The state only becomes active after all pokemon have been listed.
             disabled={offset === 0}
             onClick={() => {
-              setOffset(offset - 42);
-              if (offset < 966) {
-                setOddOne(0);
-              }
-              if (oddOne > 0) {
-                setOddOne(oddOne - 1);
-              }
+              setOffset(offset - postsPerPage);
             }}
           >
             Previous
           </Button>
           <Button
-            disabled={pokemonList.length < 42}
+            disabled={pokemonList.length < postsPerPage}
             onClick={() => {
-              setOffset(offset + 42);
-              if (offset === 966) {
-                setOddOne(0);
-              }
-              if (oddOne >= 0 && offset > 966) {
-                setOddOne(oddOne + 1);
-              }
+              setOffset(offset + postsPerPage);
             }}
           >
             Next
@@ -97,28 +83,18 @@ const Homepage = () => {
           {pokemonList.map((pokemon, index) => {
             return (
               <IndividualPokemonContainer key={index}>
-                <PokemonName>
+                <PokemonName to={`/pokemon/${pokemon.name}`}>
                   {pokemon.name
                     .replaceAll("-", " ")
                     .split(" ")
                     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                     .join(" ")}
                 </PokemonName>
-                {/* Ternery is necessary for way API is set up. Alternate forms no longer follow the usual img url. Instead they jump to 10000. Therefore, a second state was created to account for this */}
-                {offset < 968 ? (
-                  <Sprite
-                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                      index + 1 + offset
-                    }.png`}
-                  />
-                ) : (
-                  <Sprite
-                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                      9999 + index + oddOne * postsPerPage
-                    }.png`}
-                    alt={"Not available"}
-                  />
-                )}
+                <Sprite
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                    index + 1 + offset
+                  }.png`}
+                />
               </IndividualPokemonContainer>
             );
           })}
@@ -167,8 +143,15 @@ const Sprite = styled.img`
 `;
 
 // Styled name of the pokemon
-const PokemonName = styled.p`
+const PokemonName = styled(Link)`
+  display: block;
+  text-decoration: none;
   font-weight: bold;
+  color: black;
+
+  &:hover {
+    color: lightblue;
+  }
 `;
 
 // Styling for the Next/Previous button
