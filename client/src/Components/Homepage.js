@@ -5,46 +5,26 @@ import styled from "styled-components";
 const Homepage = () => {
   // The first 4 states are used for Pagination
   const [pokemonList, setPokemonList] = useState("");
-  const [loading, setLoading] = useState("idle");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(51);
+  const [offset, setOffset] = useState(0);
+  const [oddOne, setOddOne] = useState(null);
+  const [postsPerPage, setPostsPerPage] = useState(42);
   // The following states are used in the search bars
   const [pokemon, setPokemon] = useState("");
   const [attack, setAttack] = useState("");
   const [ability, setAbility] = useState("");
 
+  // This endpoint is used from the PokeAPI to grab a list of all Pokemon and all of their forms
   useEffect(() => {
-    setLoading("loading");
-    let pokemonPromiseList = [];
-    for (let i = currentPage; i < postsPerPage; i++) {
-      pokemonPromiseList.push(
-        fetch(`https://pokeapi.co/api/v2/pokemon/${i}/`)
-          .then((res) => res.json())
-          .then((resData) => {
-            if (resData) {
-              try {
-                return [
-                  resData.name
-                    .replace("-", " ")
-                    .split(" ")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" "),
-                  resData.sprites.front_default,
-                ];
-              } catch (err) {
-                console.log(err);
-              }
-            }
-          })
-      );
-    }
-    Promise.all(pokemonPromiseList).then((data) => setPokemonList(data));
-    setLoading("idle");
-  }, [currentPage]);
+    fetch(
+      `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${postsPerPage}`
+    )
+      .then((res) => res.json())
+      .then((resData) => {
+        setPokemonList(resData.results);
+      });
+  }, [offset]);
 
-  // console.log(pokemon);
-
-  if (!pokemonList || loading === "loading") {
+  if (!pokemonList) {
     return <>Loading...</>;
   }
 
@@ -83,19 +63,31 @@ const Homepage = () => {
       <div>
         <ButtonContainer>
           <Button
-            disabled={currentPage === 1}
+            // The numbers were chosen for specific reasons: 42 makes it so that it ends on the last pokemon of the dex.
+            // After this points, the forms are stored in different endpoints so a second state is created to account for the new url. The state only becomes active after all pokemon have been listed.
+            disabled={offset === 0}
             onClick={() => {
-              setCurrentPage(currentPage - 50);
-              setPostsPerPage(postsPerPage - 50);
+              setOffset(offset - 42);
+              if (offset < 966) {
+                setOddOne(0);
+              }
+              if (oddOne > 0) {
+                setOddOne(oddOne - 1);
+              }
             }}
           >
             Previous
           </Button>
           <Button
-            disabled={pokemonList.length < 50}
+            disabled={pokemonList.length < 42}
             onClick={() => {
-              setCurrentPage(currentPage + 50);
-              setPostsPerPage(postsPerPage + 50);
+              setOffset(offset + 42);
+              if (offset === 966) {
+                setOddOne(0);
+              }
+              if (oddOne >= 0 && offset > 966) {
+                setOddOne(oddOne + 1);
+              }
             }}
           >
             Next
@@ -105,8 +97,28 @@ const Homepage = () => {
           {pokemonList.map((pokemon, index) => {
             return (
               <IndividualPokemonContainer key={index}>
-                <PokemonName>{pokemon[0]}</PokemonName>
-                <Sprite src={pokemon[1]} />
+                <PokemonName>
+                  {pokemon.name
+                    .replaceAll("-", " ")
+                    .split(" ")
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")}
+                </PokemonName>
+                {/* Ternery is necessary for way API is set up. Alternate forms no longer follow the usual img url. Instead they jump to 10000. Therefore, a second state was created to account for this */}
+                {offset < 968 ? (
+                  <Sprite
+                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                      index + 1 + offset
+                    }.png`}
+                  />
+                ) : (
+                  <Sprite
+                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                      9999 + index + oddOne * postsPerPage
+                    }.png`}
+                    alt={"Not available"}
+                  />
+                )}
               </IndividualPokemonContainer>
             );
           })}
@@ -206,7 +218,7 @@ const Title = styled.h1`
 
 // Individual search containers
 const SearchContainer = styled.div`
-  width: 50%;
+  width: 40%;
   margin: 0.1rem auto;
   text-align: right;
   border: 0.1rem solid black;
