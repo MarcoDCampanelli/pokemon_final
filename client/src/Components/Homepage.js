@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 
 import styled from "styled-components";
+import { UserContext } from "./UserContext";
 
 const Homepage = () => {
+  const { capAndRemoveHyphen } = useContext(UserContext);
   // The first 3 states are used for Pagination
   const [pokemonList, setPokemonList] = useState("");
   const [offset, setOffset] = useState(0);
@@ -84,11 +86,7 @@ const Homepage = () => {
             return (
               <IndividualPokemonContainer key={index}>
                 <PokemonName to={`/pokemon/${pokemon.name}`}>
-                  {pokemon.name
-                    .replaceAll("-", " ")
-                    .split(" ")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")}
+                  {capAndRemoveHyphen(pokemon.name)}
                 </PokemonName>
                 <Sprite
                   src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
