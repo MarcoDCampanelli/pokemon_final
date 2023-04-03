@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
@@ -7,6 +7,7 @@ import LoadingPage from "./LoadingPage";
 
 const SpecificPokemon = () => {
   const id = useParams();
+  const navigate = useNavigate();
   const { capAndRemoveHyphen } = useContext(UserContext);
   const [species, setSpecies] = useState("");
   const [pokemon, setPokemon] = useState("");
@@ -16,6 +17,9 @@ const SpecificPokemon = () => {
       .then((res) => res.json())
       .then((resData) => {
         setSpecies(resData);
+      })
+      .catch((err) => {
+        navigate("/error");
       });
 
     fetch(`https://pokeapi.co/api/v2/pokemon/${id.pokemon}`)
@@ -35,8 +39,7 @@ const SpecificPokemon = () => {
     return <LoadingPage />;
   }
 
-  console.log(species.has_gender_differences);
-  console.log(pokemon);
+  console.log(species);
 
   return (
     <Container>
