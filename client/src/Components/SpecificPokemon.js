@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 import Attacks from "./Attacks";
+import AlternateAttacks from "./AlternateAttacks";
 import LoadingPage from "./LoadingPage";
 
 const SpecificPokemon = () => {
@@ -215,9 +216,14 @@ const SpecificPokemon = () => {
         </select>
       </div>
       {pokemon ? (
-        <div>
-          <Attacks pokemon={pokemon} generation={generation} />
-        </div>
+        <>
+          <div>
+            <Attacks pokemon={pokemon} generation={generation} />
+          </div>
+          <div>
+            <AlternateAttacks pokemon={pokemon} generation={generation} />
+          </div>
+        </>
       ) : (
         <></>
       )}

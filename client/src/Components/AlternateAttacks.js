@@ -5,33 +5,34 @@ import styled from "styled-components";
 import { UserContext } from "./UserContext";
 import LoadingPage from "./LoadingPage";
 
-const Attacks = ({ pokemon, generation }) => {
+const AlternateAttacks = ({ pokemon, generation }) => {
   const { capAndRemoveHyphen } = useContext(UserContext);
-  // Create an array of the Pokemon's attacks and levels at which those attacks are learned
+
+  // Create an array of the Pokemon's attacks and the method in which those attacks are learned
   const attacks = {};
 
-  // Map over the attacks of a pokemon. If the attack can be learned in the selected generation by level up, push it into the attacks object and include it's level
+  // Map over the attacks of a pokemon. If te attack can be learned in the selected generation (and isn't a level-up attack), push it into the attacks object and include the method that it is learned in.
   pokemon.moves.map((move) => {
     return move.version_group_details.map((version) => {
       if (
         version.version_group.name === generation &&
-        version.move_learn_method.name === "level-up"
+        version.move_learn_method.name !== "level-up"
       ) {
-        return (attacks[move.move.name] = version.level_learned_at);
+        return (attacks[move.move.name] = version.move_learn_method.name);
       }
     });
   });
 
-  // Create and sort an array of those moves in chronological order by level up
+  // Create and sort an array of those moves in alphabetical order by method (machines will be grouped together, egg moves and move tutors)
   let sortable = [];
   for (const move in attacks) {
-    // First push all of the attacks into the array
     sortable.push([move, attacks[move]]);
-    // Then, sort those attacks in order by level up
     sortable.sort((a, b) => {
-      return a[1] - b[1];
+      return a[1].localeCompare(b[1]);
     });
   }
+
+  console.log(sortable);
 
   if (!pokemon) {
     return <LoadingPage />;
@@ -39,7 +40,7 @@ const Attacks = ({ pokemon, generation }) => {
 
   return (
     <>
-      <Title>Learn-up Move Set</Title>
+      <Title>Machine/Egg/Tutor Moves</Title>
       {sortable.length === 0 ? (
         <p>This Pokemon is not available this generation.</p>
       ) : (
@@ -47,7 +48,13 @@ const Attacks = ({ pokemon, generation }) => {
           return (
             <Attack to={`/pokemon/${moveCombo[0]}`}>
               <Level>
-                {moveCombo[1] !== 0 ? <>Lvl:{moveCombo[1]}</> : <>Evo</>}
+                {moveCombo[1] === "machine" ? (
+                  <>TM/HM</>
+                ) : moveCombo[1] === "egg" ? (
+                  <>Egg Move</>
+                ) : (
+                  <>Tutor</>
+                )}
               </Level>
               <Move>{capAndRemoveHyphen(moveCombo[0])}</Move>
             </Attack>
@@ -58,7 +65,7 @@ const Attacks = ({ pokemon, generation }) => {
   );
 };
 
-export default Attacks;
+export default AlternateAttacks;
 
 const Attack = styled(Link)`
   display: flex;
