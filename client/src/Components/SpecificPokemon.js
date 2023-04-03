@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
+import GenerationSelect from "./GenerationSelect";
 import Attacks from "./Attacks";
 import AlternateAttacks from "./AlternateAttacks";
 import LoadingPage from "./LoadingPage";
@@ -10,7 +11,7 @@ import LoadingPage from "./LoadingPage";
 const SpecificPokemon = () => {
   const id = useParams();
   const navigate = useNavigate();
-  const { capAndRemoveHyphen, generations } = useContext(UserContext);
+  const { capAndRemoveHyphen } = useContext(UserContext);
   const [species, setSpecies] = useState("");
   const [pokemon, setPokemon] = useState("");
   const [generation, setGeneration] = useState("red-blue");
@@ -199,30 +200,17 @@ const SpecificPokemon = () => {
           <></>
         )}
       </FormContainer>
-      <div>
-        <label>Select the Pokemon Game:</label>
-        <select
-          name="generation"
-          onChange={(e) => {
-            setGeneration(e.target.value);
-          }}
-        >
-          <option defaultValue={true} disabled>
-            Select a game:
-          </option>
-          {generations.map((generation) => {
-            return <option value={generation.value}>{generation.name}</option>;
-          })}
-        </select>
-      </div>
       {pokemon ? (
         <>
-          <div>
-            <Attacks pokemon={pokemon} generation={generation} />
-          </div>
-          <div>
-            <AlternateAttacks pokemon={pokemon} generation={generation} />
-          </div>
+          <GenerationSelect setGeneration={setGeneration} />
+          <AttackContainer>
+            <AttackColumn>
+              <Attacks pokemon={pokemon} generation={generation} />
+            </AttackColumn>
+            <AttackColumn>
+              <AlternateAttacks pokemon={pokemon} generation={generation} />
+            </AttackColumn>
+          </AttackContainer>
         </>
       ) : (
         <></>
@@ -316,4 +304,16 @@ const Select = styled.select`
   padding: 0.5rem;
   border: 0.2rem solid black;
   border-radius: 5px;
+`;
+
+const AttackContainer = styled.div`
+  display: flex;
+  overflow: hidden;
+`;
+
+const AttackColumn = styled.div`
+  margin: 0.5rem;
+  text-align: center;
+  overflow-y: auto;
+  max-height: 500px;
 `;
