@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
+import LoadingPage from "./LoadingPage";
 
 const SpecificPokemon = () => {
   const id = useParams();
@@ -31,7 +32,7 @@ const SpecificPokemon = () => {
   };
 
   if (!species) {
-    return <>Loading...</>;
+    return <LoadingPage />;
   }
 
   console.log(species.has_gender_differences);

@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 
 const Homepage = () => {
   const { capAndRemoveHyphen } = useContext(UserContext);
+  const navigate = useNavigate();
   // The first 3 states are used for Pagination
   const [pokemonList, setPokemonList] = useState("");
   const [offset, setOffset] = useState(0);
@@ -15,7 +16,7 @@ const Homepage = () => {
   const [attack, setAttack] = useState("");
   const [ability, setAbility] = useState("");
 
-  // This endpoint is used from the PokeAPI to grab a list of all Pokemon and all of their forms
+  // This endpoint is used from the PokeAPI to grab a list of all Pokemon and all of their forms based off of species
   useEffect(() => {
     fetch(
       `https://pokeapi.co/api/v2/pokemon-species/?offset=${offset}&limit=${postsPerPage}`
@@ -25,6 +26,10 @@ const Homepage = () => {
         setPokemonList(resData.results);
       });
   }, [offset]);
+
+  const handlePokemonSearch = () => {
+    navigate(`/pokemon/${pokemon}`);
+  };
 
   if (!pokemonList) {
     return <>Loading...</>;
@@ -39,9 +44,11 @@ const Homepage = () => {
           <Inputs
             type="text"
             placeholder="Pokemon"
-            onChange={(e) => setPokemon(e.target.value)}
+            onChange={(e) => setPokemon(e.target.value.toLowerCase())}
           ></Inputs>
-          <SearchButton>Search</SearchButton>
+          <SearchButton onClick={() => handlePokemonSearch()}>
+            Search
+          </SearchButton>
         </SearchContainer>
         <SearchContainer>
           <Label>Search Attack:</Label>
