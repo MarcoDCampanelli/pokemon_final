@@ -32,8 +32,6 @@ const AlternateAttacks = ({ pokemon, generation }) => {
     });
   }
 
-  console.log(sortable);
-
   if (!pokemon) {
     return <LoadingPage />;
   }

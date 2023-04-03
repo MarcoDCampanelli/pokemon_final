@@ -6,6 +6,7 @@ import { UserContext } from "./UserContext";
 import GenerationSelect from "./GenerationSelect";
 import Attacks from "./Attacks";
 import AlternateAttacks from "./AlternateAttacks";
+import StatTable from "./StatTable";
 import LoadingPage from "./LoadingPage";
 
 const SpecificPokemon = () => {
@@ -211,6 +212,7 @@ const SpecificPokemon = () => {
               <AlternateAttacks pokemon={pokemon} generation={generation} />
             </AttackColumn>
           </AttackContainer>
+          <StatTable pokemon={pokemon} />
         </>
       ) : (
         <></>
