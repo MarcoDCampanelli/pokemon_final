@@ -8,9 +8,10 @@ import LoadingPage from "./LoadingPage";
 const SpecificPokemon = () => {
   const id = useParams();
   const navigate = useNavigate();
-  const { capAndRemoveHyphen } = useContext(UserContext);
+  const { capAndRemoveHyphen, generations } = useContext(UserContext);
   const [species, setSpecies] = useState("");
   const [pokemon, setPokemon] = useState("");
+  const [generation, setGeneration] = useState("red-blue");
 
   useEffect(() => {
     fetch(`https://pokeapi.co/api/v2/pokemon-species/${id.pokemon}`)
@@ -39,7 +40,7 @@ const SpecificPokemon = () => {
     return <LoadingPage />;
   }
 
-  console.log(species);
+  console.log(generation);
 
   return (
     <Container>
@@ -196,6 +197,22 @@ const SpecificPokemon = () => {
           <></>
         )}
       </FormContainer>
+      <div>
+        <label>Select the Pokemon Game:</label>
+        <select
+          name="generation"
+          onChange={(e) => {
+            setGeneration(e.target.value);
+          }}
+        >
+          <option defaultValue={true} disabled>
+            Select a game:
+          </option>
+          {generations.map((generation) => {
+            return <option value={generation.value}>{generation.name}</option>;
+          })}
+        </select>
+      </div>
     </Container>
   );
 };
