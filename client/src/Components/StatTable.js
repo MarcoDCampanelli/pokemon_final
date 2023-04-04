@@ -45,108 +45,108 @@ const StatTable = ({ pokemon }) => {
   };
 
   return (
-    <Container>
-      <StatAndValue>
-        <Test>
-          <Title>Stat Name: </Title>
-          <div>Value:</div>
-        </Test>
-        {pokemon.stats.map((stat) => {
+    <Table>
+      <tr>
+        <StatNameHeader>Stat Name</StatNameHeader>
+        <ValueHeader>Value</ValueHeader>
+        <StatWeightHeader>Stat Weight</StatWeightHeader>
+        <MinMaxHeader>Min/Max Value</MinMaxHeader>
+      </tr>
+      {pokemon.stats.map((stat) => {
+        if (pokemon.name !== "shedinja" && stat.stat.name === "hp") {
           return (
-            <Test>
-              <StatName>{capAndRemoveHyphen(stat.stat.name)}: </StatName>
-              <div>{stat.base_stat}</div>
-            </Test>
+            <tr>
+              <StatName>{capAndRemoveHyphen(stat.stat.name)}</StatName>
+              <Value>{stat.base_stat}</Value>
+              <td>
+                <ColorDiv
+                  color={stat.base_stat}
+                  style={{ width: `${(stat.base_stat / total) * 100 * 2}%` }}
+                ></ColorDiv>
+              </td>
+              <MinMax>
+                {minHP(stat.base_stat)} / {maxHP(stat.base_stat)}
+              </MinMax>
+            </tr>
           );
-        })}
-      </StatAndValue>
-      <BaseStatContainer>
-        <Title>Stat Weight:</Title>
-        {pokemon.stats.map((stat) => {
+        }
+        if (pokemon.name === "shedinja" && stat.stat.name === "hp") {
           return (
-            <ColorDiv
-              style={{ width: `${(stat.base_stat / total) * 100}%` }}
-            ></ColorDiv>
+            <tr>
+              <StatName>{capAndRemoveHyphen(stat.stat.name)}</StatName>
+              <Value>{stat.base_stat}</Value>
+              <td>
+                <ColorDiv
+                  color={stat.base_stat}
+                  style={{ width: `${(stat.base_stat / total) * 100 * 2}%` }}
+                ></ColorDiv>
+              </td>
+              <MinMax>1 / 1</MinMax>
+            </tr>
           );
-        })}
-      </BaseStatContainer>
-      <div>
-        <div>Minimum/Maximum Value</div>
-        {pokemon.stats.map((stat) => {
-          if (pokemon.name !== "shedinja" && stat.stat.name === "hp") {
-            return (
-              <MinMaxContainer>
-                <div>
-                  {minHP(stat.base_stat)} / {maxHP(stat.base_stat)}
-                </div>
-              </MinMaxContainer>
-            );
-          }
-          if (pokemon.name === "shedinja" && stat.stat.name === "hp") {
-            return (
-              <MinMaxContainer>
-                <div>1 / 1</div>
-              </MinMaxContainer>
-            );
-          } else {
-            return (
-              <MinMaxContainer>
-                <div>
-                  {minStat(stat.base_stat)} / {maxStat(stat.base_stat)}
-                </div>
-              </MinMaxContainer>
-            );
-          }
-        })}
-      </div>
-    </Container>
+        } else {
+          return (
+            <tr>
+              <StatName>{capAndRemoveHyphen(stat.stat.name)}</StatName>
+              <Value>{stat.base_stat}</Value>
+              <td>
+                <ColorDiv
+                  color={stat.base_stat}
+                  style={{ width: `${(stat.base_stat / total) * 100 * 2}%` }}
+                ></ColorDiv>
+              </td>
+              <MinMax>
+                {minStat(stat.base_stat)} / {maxStat(stat.base_stat)}
+              </MinMax>
+            </tr>
+          );
+        }
+      })}
+    </Table>
   );
 };
 
 export default StatTable;
 
-const Title = styled.div`
-  margin: auto;
-`;
-
-const Container = styled.div`
-  margin: 2rem;
-  display: flex;
-  border: 2px solid black;
-`;
-
-const StatAndValue = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 30%;
-
-  @media (max-width: 480px) {
-    width: 50%;
-  }
+const Table = styled.table`
+  border: 0.2rem solid black;
+  border-radius: 5px;
+  width: 95%;
+  margin: 0.5rem auto;
 `;
 
 const ColorDiv = styled.div`
+  background-color: ${(props) =>
+    props.color >= 90 ? "green" : props.color < 50 ? "red" : "yellow"};
   border: 0.1rem solid black;
-  height: 95%;
-  background-color: yellow;
+  height: 1rem;
+  align-items: center;
 `;
 
-const Test = styled.div`
-  display: flex;
-  justify-content: space-around;
+const StatNameHeader = styled.th`
+  width: 20%;
 `;
 
-const StatName = styled.div`
-  width: 80%;
+const StatName = styled.td`
+  text-align: center;
 `;
 
-const BaseStatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 40%;
+const ValueHeader = styled.th`
+  width: 10%;
 `;
 
-const MinMaxContainer = styled.div`
-  display: flex;
-  justify-content: right;
+const Value = styled.td`
+  text-align: center;
+`;
+
+const StatWeightHeader = styled.th`
+  width: 50%;
+`;
+
+const MinMaxHeader = styled.th`
+  width: 20%;
+`;
+
+const MinMax = styled.td`
+  text-align: center;
 `;

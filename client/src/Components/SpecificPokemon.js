@@ -201,6 +201,7 @@ const SpecificPokemon = () => {
           <></>
         )}
       </FormContainer>
+      {pokemon ? <StatTable pokemon={pokemon} /> : <></>}
       {pokemon ? (
         <>
           <GenerationSelect setGeneration={setGeneration} />
@@ -212,7 +213,6 @@ const SpecificPokemon = () => {
               <AlternateAttacks pokemon={pokemon} generation={generation} />
             </AttackColumn>
           </AttackContainer>
-          <StatTable pokemon={pokemon} />
         </>
       ) : (
         <></>
