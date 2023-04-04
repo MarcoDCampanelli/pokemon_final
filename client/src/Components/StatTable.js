@@ -50,7 +50,7 @@ const StatTable = ({ pokemon }) => {
         <StatNameHeader>Stat Name</StatNameHeader>
         <ValueHeader>Value</ValueHeader>
         <StatWeightHeader>Stat Weight</StatWeightHeader>
-        <MinMaxHeader>Min/Max Value</MinMaxHeader>
+        <MinMaxHeader>Min/Max Value (L100)</MinMaxHeader>
       </tr>
       {pokemon.stats.map((stat) => {
         if (pokemon.name !== "shedinja" && stat.stat.name === "hp") {

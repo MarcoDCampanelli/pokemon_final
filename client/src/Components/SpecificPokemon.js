@@ -7,6 +7,7 @@ import GenerationSelect from "./GenerationSelect";
 import Attacks from "./Attacks";
 import AlternateAttacks from "./AlternateAttacks";
 import StatTable from "./StatTable";
+import CreateBuildTable from "./CreateBuildTable";
 import LoadingPage from "./LoadingPage";
 
 const SpecificPokemon = () => {
@@ -202,9 +203,9 @@ const SpecificPokemon = () => {
         )}
       </FormContainer>
       {pokemon ? <StatTable pokemon={pokemon} /> : <></>}
+      {pokemon ? <GenerationSelect setGeneration={setGeneration} /> : <></>}
       {pokemon ? (
         <>
-          <GenerationSelect setGeneration={setGeneration} />
           <AttackContainer>
             <AttackColumn>
               <Attacks pokemon={pokemon} generation={generation} />
@@ -212,6 +213,11 @@ const SpecificPokemon = () => {
             <AttackColumn>
               <AlternateAttacks pokemon={pokemon} generation={generation} />
             </AttackColumn>
+            <CreateBuildTable
+              pokemonStats={pokemon.stats}
+              pokemon={pokemon}
+              generation={generation}
+            />
           </AttackContainer>
         </>
       ) : (

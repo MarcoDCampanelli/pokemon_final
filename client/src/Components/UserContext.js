@@ -40,9 +40,63 @@ export const UserProvider = ({ children }) => {
     { name: "Scarlet/Violet", value: "scarlet-violet" },
   ];
 
+  // The array that holds all possible Pokemon natures
+  const natures = [
+    "hardy",
+    "lonely",
+    "brave",
+    "adamant",
+    "naughty",
+    "bold",
+    "docile",
+    "relaxed",
+    "impish",
+    "lax",
+    "timid",
+    "hasty",
+    "serious",
+    "jolly",
+    "naive",
+    "modest",
+    "mild",
+    "quiet",
+    "bashful",
+    "rash",
+    "calm",
+    "gentle",
+    "sassy",
+    "careful",
+    "quirky",
+  ];
+
+  // This formula will calculate the pokemon's atk, def, spAtk, spDef and spd stat
+  const calculateStat = (stat, iv, ev, level, nature) => {
+    return Math.floor(
+      (Math.floor(0.01 * (2 * stat + iv + Math.floor(0.25 * ev)) * level) + 5) *
+        nature
+    );
+  };
+
+  // This formula will calculate the pokemon's hp stat
+  const calculateHealth = (stat, iv, ev, level) => {
+    return (
+      Math.floor(0.01 * (2 * stat + iv + Math.floor(0.25 * ev)) * level) +
+      level +
+      10
+    );
+  };
+
   return (
     <UserContext.Provider
-      value={{ currentUser, setCurrentUser, capAndRemoveHyphen, generations }}
+      value={{
+        currentUser,
+        setCurrentUser,
+        capAndRemoveHyphen,
+        generations,
+        natures,
+        calculateStat,
+        calculateHealth,
+      }}
     >
       {children}
     </UserContext.Provider>
