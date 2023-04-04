@@ -28,12 +28,16 @@ const Homepage = () => {
   }, [offset]);
 
   const handlePokemonSearch = () => {
-    navigate(`/pokemon/${pokemon}`);
+    if (pokemon.length > 0) {
+      navigate(`/pokemon/${pokemon}`);
+    }
   };
 
   if (!pokemonList) {
     return <>Loading...</>;
   }
+
+  console.log(pokemon);
 
   return (
     <>
@@ -46,7 +50,11 @@ const Homepage = () => {
             placeholder="Pokemon"
             onChange={(e) => setPokemon(e.target.value.toLowerCase())}
           ></Inputs>
-          <SearchButton onClick={() => handlePokemonSearch()}>
+          <SearchButton
+            onClick={() => {
+              handlePokemonSearch();
+            }}
+          >
             Search
           </SearchButton>
         </SearchContainer>

@@ -32,6 +32,15 @@ const AlternateAttacks = ({ pokemon, generation }) => {
     });
   }
 
+  let array = [];
+
+  pokemon.moves.map((move) =>
+    move.version_group_details.map((version) =>
+      array.push(version.version_group.name)
+    )
+  );
+  console.log(array.includes(generation));
+
   if (!pokemon) {
     return <LoadingPage />;
   }
@@ -39,7 +48,11 @@ const AlternateAttacks = ({ pokemon, generation }) => {
   return (
     <>
       <Title>Machine/Egg/Tutor Moves</Title>
-      {sortable.length === 0 ? (
+      {array.includes(generation) ? (
+        <>
+          This pokemon can't learn any moves by TM/HM, breeding or move tutors
+        </>
+      ) : sortable.length === 0 ? (
         <p>This Pokemon is not available this generation.</p>
       ) : (
         sortable.map((moveCombo) => {
