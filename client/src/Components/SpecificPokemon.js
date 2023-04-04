@@ -45,8 +45,6 @@ const SpecificPokemon = () => {
     return <LoadingPage />;
   }
 
-  console.log(pokemon);
-
   return (
     <Container>
       <PokemonContainer>
@@ -119,7 +117,7 @@ const SpecificPokemon = () => {
             </IndividialStat>
             <IndividialStat>
               Habitat:
-              {species.habitat ? (
+              {species.habitat.name ? (
                 <> {capAndRemoveHyphen(species.habitat.name)}</>
               ) : (
                 <>Unknown</>

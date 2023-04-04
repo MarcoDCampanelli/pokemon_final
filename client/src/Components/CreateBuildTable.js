@@ -5,7 +5,7 @@ import { UserContext } from "./UserContext";
 
 const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
   const {
-    user,
+    currentUser,
     capAndRemoveHyphen,
     natures,
     calculateStat,
@@ -72,7 +72,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     return <>Loading...</>;
   }
 
-  console.log(natureValues);
+  console.log(currentUser);
 
   const handlePost = () => {
     const data = {
@@ -468,7 +468,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
         </Select>
       </SelectionContainer>
       <SelectionContainer>
-        {user ? (
+        {currentUser ? (
           <Button onClick={handlePost}>Submit Pokemon</Button>
         ) : (
           <>If you wish to save your information, please sign-in.</>
