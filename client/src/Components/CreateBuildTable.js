@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { UserContext } from "./UserContext";
 
 const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
-  const { capAndRemoveHyphen, natures, calculateStat, calculateHealth } =
+  const { user, capAndRemoveHyphen, natures, calculateStat, calculateHealth } =
     useContext(UserContext);
 
   // Create an array of the Pokemon's attacks that they can learn in the selected generation regardless of method.
@@ -444,7 +444,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
         </Select>
       </SelectionContainer>
       <SelectionContainer>
-        <Label>Choose a Level:</Label>
+        <Label>Level:</Label>
         <Input
           type="number"
           min="1"
@@ -547,7 +547,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
         </Select>
       </SelectionContainer>
       <SelectionContainer>
-        {1 === 1 ? (
+        {user ? (
           <Button onClick={handlePost}>Submit Pokemon</Button>
         ) : (
           <>If you wish to save your information, please sign-in.</>
@@ -567,53 +567,64 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
 
 export default CreateBuildTable;
 
+// Container for the entire table as well as the ability, nature, level and attack selections
 const Container = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
+// Styling for the table
 const Table = styled.table`
-  border: 2px solid black;
+  border: 0.2rem solid black;
   text-align: center;
-  width: 95%;
-  margin: 1rem auto;
+  margin: 1rem;
 `;
 
+// Styling for the main  categories of each row and column
 const TableHead = styled.th`
   font-weight: bold;
-  padding: 0.75rem 0;
-  border: 1px solid black;
+  border: 0.1rem solid black;
+  padding: 0.5rem;
   vertical-align: middle;
 `;
 
+// Styling for each individual cell in the table
 const TableCell = styled.td`
-  border: 1px solid black;
-  padding: 2rem 0;
+  border: 0.1rem solid black;
   vertical-align: middle;
 `;
 
+// Styling for the inputs found inside of the table
 const Input = styled.input`
-  padding: 0.5rem 0;
+  border: 0.1rem solid grey;
+  width: 75%;
+  padding: 0.2rem;
+  margin: auto;
   text-align: center;
   font-size: 1rem;
 `;
 
+// Container for each of the selection options (ability, nature, level and attacks)
 const SelectionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
   margin: 0.5rem auto;
   font-weight: bold;
-  font-size: 1.2rem;
+  align-items: center;
 `;
 
+// Styling for the labels (ability, nature, level and attacks)
 const Label = styled.label`
-  padding: 0.5rem;
+  margin: 0rem 0.5rem;
 `;
 
+// Stlying for the select options (ability, nature, attacks)
 const Select = styled.select`
-  padding: 0.5rem 0;
-  text-align: center;
-  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
 `;
 
+// Styling for the button
 const Button = styled.button`
   padding: 0.5rem 1rem;
   color: white;
@@ -625,6 +636,7 @@ const Button = styled.button`
   }
 `;
 
+// Container that holds the error messages
 const ErrorContainer = styled.div`
   margin: 1rem 0;
   padding: 1rem 1rem;
