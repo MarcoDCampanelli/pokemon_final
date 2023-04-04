@@ -4,8 +4,15 @@ import styled from "styled-components";
 import { UserContext } from "./UserContext";
 
 const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
-  const { user, capAndRemoveHyphen, natures, calculateStat, calculateHealth } =
-    useContext(UserContext);
+  const {
+    user,
+    capAndRemoveHyphen,
+    natures,
+    calculateStat,
+    calculateHealth,
+    natureValues,
+    changeNatureValues,
+  } = useContext(UserContext);
 
   // Create an array of the Pokemon's attacks that they can learn in the selected generation regardless of method.
   const attacks = {};
@@ -61,98 +68,11 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
   const [level, setLevel] = useState(1);
   const [error, setError] = useState("");
 
-  let atkNature = 1;
-  if (
-    nature === "lonely" ||
-    nature === "brave" ||
-    nature === "adamant" ||
-    nature === "naughty"
-  ) {
-    atkNature = 1.1;
-  }
-  if (
-    nature === "bold" ||
-    nature === "timid" ||
-    nature === "modest" ||
-    nature === "calm"
-  ) {
-    atkNature = 0.9;
-  }
-
-  let defNature = 1;
-  if (
-    nature === "bold" ||
-    nature === "relaxed" ||
-    nature === "impish" ||
-    nature === "lax"
-  ) {
-    defNature = 1.1;
-  }
-  if (
-    nature === "lonely" ||
-    nature === "hasty" ||
-    nature === "mild" ||
-    nature === "gentle"
-  ) {
-    defNature = 0.9;
-  }
-  let spAtkNature = 1;
-  if (
-    nature === "modest" ||
-    nature === "mild" ||
-    nature === "quiet" ||
-    nature === "rash"
-  ) {
-    spAtkNature = 1.1;
-  }
-  if (
-    nature === "adamant" ||
-    nature === "impish" ||
-    nature === "jolly" ||
-    nature === "careful"
-  ) {
-    spAtkNature = 0.9;
-  }
-  let spDefNature = 1;
-  if (
-    nature === "calm" ||
-    nature === "gentle" ||
-    nature === "sassy" ||
-    nature === "careful"
-  ) {
-    spDefNature = 1.1;
-  }
-  if (
-    nature === "naughty" ||
-    nature === "lax" ||
-    nature === "naive" ||
-    nature === "rash"
-  ) {
-    spDefNature = 0.9;
-  }
-  let spdNature = 1;
-  if (
-    nature === "timid" ||
-    nature === "hasty" ||
-    nature === "jolly" ||
-    nature === "naive"
-  ) {
-    spdNature = 1.1;
-  }
-  if (
-    nature === "brave" ||
-    nature === "relaxed" ||
-    nature === "quiet" ||
-    nature === "sassy"
-  ) {
-    spdNature = 0.9;
-  }
-
   if (!pokemon) {
     return <>Loading...</>;
   }
 
-  console.log(pokemon);
+  console.log(natureValues);
 
   const handlePost = () => {
     const data = {
@@ -366,7 +286,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
               pokemonIv.atk,
               pokemonEv.atk,
               level,
-              atkNature
+              natureValues.atk
             )}
           </TableCell>
           <TableCell>
@@ -375,7 +295,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
               pokemonIv.def,
               pokemonEv.def,
               level,
-              defNature
+              natureValues.def
             )}
           </TableCell>
           <TableCell>
@@ -384,7 +304,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
               pokemonIv.spAtk,
               pokemonEv.spAtk,
               level,
-              spAtkNature
+              natureValues.spAtk
             )}
           </TableCell>
           <TableCell>
@@ -393,7 +313,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
               pokemonIv.spDef,
               pokemonEv.spDef,
               level,
-              spDefNature
+              natureValues.spDef
             )}
           </TableCell>
           <TableCell>
@@ -402,7 +322,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
               pokemonIv.spd,
               pokemonEv.spd,
               level,
-              spdNature
+              natureValues.spd
             )}
           </TableCell>
         </tr>
@@ -433,6 +353,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
           name="nature"
           onChange={(e) => {
             setNature(e.target.value);
+            changeNatureValues(e.target.value);
           }}
         >
           <option selected disabled>

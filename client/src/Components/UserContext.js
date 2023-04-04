@@ -86,6 +86,92 @@ export const UserProvider = ({ children }) => {
     );
   };
 
+  // The next 3 constants are to calculate stats based on natures
+  // 1. This is the original object to hold the static nature values
+  const natureWorth = {
+    atk: 1,
+    def: 1,
+    spAtk: 1,
+    spDef: 1,
+    spd: 1,
+  };
+
+  // Here is the state that holds them and allows us to change them
+  const [natureValues, setNatureValues] = useState(natureWorth);
+
+  // This function will adjust the nature values based on the chosen nature
+  const changeNatureValues = (nature) => {
+    if (
+      nature === "hardy" ||
+      nature === "docile" ||
+      nature === "serious" ||
+      nature === "bashful" ||
+      nature === "quirky"
+    ) {
+      setNatureValues({ ...natureWorth });
+    }
+    if (nature === "lonely") {
+      setNatureValues({ ...natureWorth, atk: 1.1, def: 0.9 });
+    }
+    if (nature === "brave") {
+      setNatureValues({ ...natureWorth, atk: 1.1, spd: 0.9 });
+    }
+    if (nature === "adamant") {
+      setNatureValues({ ...natureWorth, atk: 1.1, spAtk: 0.9 });
+    }
+    if (nature === "naughty") {
+      setNatureValues({ ...natureWorth, atk: 1.1, spDef: 0.9 });
+    }
+    if (nature === "bold") {
+      setNatureValues({ ...natureWorth, def: 1.1, atk: 0.9 });
+    }
+    if (nature === "relaxed") {
+      setNatureValues({ ...natureWorth, def: 1.1, spd: 0.9 });
+    }
+    if (nature === "impish") {
+      setNatureValues({ ...natureWorth, def: 1.1, spAtk: 0.9 });
+    }
+    if (nature === "lax") {
+      setNatureValues({ ...natureWorth, def: 1.1, spDef: 0.9 });
+    }
+    if (nature === "timid") {
+      setNatureValues({ ...natureWorth, spd: 1.1, atk: 0.9 });
+    }
+    if (nature === "hasty") {
+      setNatureValues({ ...natureWorth, spd: 1.1, def: 0.9 });
+    }
+    if (nature === "jolly") {
+      setNatureValues({ ...natureWorth, spd: 1.1, spAtk: 0.9 });
+    }
+    if (nature === "naive") {
+      setNatureValues({ ...natureWorth, spd: 1.1, spDef: 0.9 });
+    }
+    if (nature === "modest") {
+      setNatureValues({ ...natureWorth, spAtk: 1.1, atk: 0.9 });
+    }
+    if (nature === "mild") {
+      setNatureValues({ ...natureWorth, spAtk: 1.1, def: 0.9 });
+    }
+    if (nature === "quiet") {
+      setNatureValues({ ...natureWorth, spAtk: 1.1, spd: 0.9 });
+    }
+    if (nature === "rash") {
+      setNatureValues({ ...natureWorth, spAtk: 1.1, spDef: 0.9 });
+    }
+    if (nature === "calm") {
+      setNatureValues({ ...natureWorth, spDef: 1.1, atk: 0.9 });
+    }
+    if (nature === "gentle") {
+      setNatureValues({ ...natureWorth, spDef: 1.1, def: 0.9 });
+    }
+    if (nature === "sassy") {
+      setNatureValues({ ...natureWorth, spDef: 1.1, spd: 0.9 });
+    }
+    if (nature === "careful") {
+      setNatureValues({ ...natureWorth, spDef: 1.1, spAtk: 0.9 });
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -96,6 +182,8 @@ export const UserProvider = ({ children }) => {
         natures,
         calculateStat,
         calculateHealth,
+        natureValues,
+        changeNatureValues,
       }}
     >
       {children}
