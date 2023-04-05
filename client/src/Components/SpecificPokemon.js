@@ -45,6 +45,8 @@ const SpecificPokemon = () => {
     return <LoadingPage />;
   }
 
+  console.log(species);
+
   return (
     <Container>
       <PokemonContainer>
@@ -113,11 +115,18 @@ const SpecificPokemon = () => {
               Capture Rate: {((species.capture_rate / 255) * 100).toFixed(2)}%
             </IndividialStat>
             <IndividialStat>
-              Level rate: {capAndRemoveHyphen(species.growth_rate.name)}
+              Growth Rate:{" "}
+              {/* ! DAMN YOU API!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
+              {species.generation.name !== "generation-ix" ? (
+                <>{capAndRemoveHyphen(species.growth_rate.name)}</>
+              ) : (
+                <>Unknown</>
+              )}
             </IndividialStat>
             <IndividialStat>
-              Habitat:
-              {species.habitat.name ? (
+              {/* ! DAMN YOU API!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
+              Habitat:{" "}
+              {species.generation.name !== "generation-ix" ? (
                 <> {capAndRemoveHyphen(species.habitat.name)}</>
               ) : (
                 <>Unknown</>
