@@ -39,7 +39,6 @@ const AlternateAttacks = ({ pokemon, generation }) => {
       array.push(version.version_group.name)
     )
   );
-  console.log(array.includes(generation));
 
   if (!pokemon) {
     return <LoadingPage />;

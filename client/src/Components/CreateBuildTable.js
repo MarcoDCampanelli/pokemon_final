@@ -72,8 +72,6 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     return <>Loading...</>;
   }
 
-  console.log(currentUser);
-
   const handlePost = () => {
     const data = {
       // trainer: user.name,

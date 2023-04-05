@@ -245,7 +245,7 @@ const PokemonContainer = styled.div`
   flex-direction: row;
   border: 2px solid black;
   text-align: center;
-  width: 80%;
+  width: 70%;
   margin: 1rem auto;
 `;
 
@@ -315,6 +315,7 @@ const Select = styled.select`
 const AttackContainer = styled.div`
   display: flex;
   overflow: hidden;
+  justify-content: space-around;
 
   @media (max-width: 768px) {
     flex-direction: column;
