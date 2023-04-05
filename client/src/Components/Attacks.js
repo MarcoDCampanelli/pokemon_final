@@ -49,7 +49,7 @@ const Attacks = ({ pokemon, generation }) => {
               <Level>
                 {moveCombo[1] !== 0 ? <>Lvl:{moveCombo[1]}</> : <>Evo</>}
               </Level>
-              <Move to={`/pokemon/${moveCombo[0]}`}>
+              <Move to={`/attacks/${moveCombo[0]}`}>
                 {capAndRemoveHyphen(moveCombo[0])}
               </Move>
             </Container>
@@ -93,6 +93,6 @@ const Move = styled(Link)`
   border-left: 0.1rem solid black;
 
   &:hover {
-    background-color: blue;
+    background-color: lightblue;
   }
 `;

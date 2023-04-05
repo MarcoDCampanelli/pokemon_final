@@ -8,6 +8,7 @@ import Header from "./Components/Header";
 import Homepage from "./Components/Homepage";
 import Login from "./Components/LogInPage";
 import SpecificPokemon from "./Components/SpecificPokemon";
+import IndividualAttack from "./Components/IndividualAttack";
 import ErrorPage from "./Components/ErrorPage";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
             <Route path="/" element={<Homepage />} />
             <Route path="/signin" element={<Login />} />
             <Route path="/pokemon/:pokemon" element={<SpecificPokemon />} />
+            <Route path="/attacks/:attack" element={<IndividualAttack />} />
             <Route path="/error" element={<ErrorPage />} />
           </Routes>
         </SiteContainer>
