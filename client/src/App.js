@@ -9,7 +9,9 @@ import Homepage from "./Components/Homepage";
 import Login from "./Components/LogInPage";
 import SpecificPokemon from "./Components/SpecificPokemon";
 import IndividualAttack from "./Components/IndividualAttack";
+import Natures from "./Components/Natures";
 import ErrorPage from "./Components/ErrorPage";
+import Footer from "./Components/Footer";
 
 const App = () => {
   return (
@@ -18,13 +20,17 @@ const App = () => {
       <BrowserRouter>
         <SiteContainer>
           <Header />
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/signin" element={<Login />} />
-            <Route path="/pokemon/:pokemon" element={<SpecificPokemon />} />
-            <Route path="/attacks/:attack" element={<IndividualAttack />} />
-            <Route path="/error" element={<ErrorPage />} />
-          </Routes>
+          <Body>
+            <Routes>
+              <Route path="/" element={<Homepage />} />
+              <Route path="/signin" element={<Login />} />
+              <Route path="/pokemon/:pokemon" element={<SpecificPokemon />} />
+              <Route path="/attacks/:attack" element={<IndividualAttack />} />
+              <Route path="/natures" element={<Natures />} />
+              <Route path="/error" element={<ErrorPage />} />
+            </Routes>
+          </Body>
+          <Footer />
         </SiteContainer>
       </BrowserRouter>
     </>
@@ -33,7 +39,13 @@ const App = () => {
 
 export default App;
 
+// Container to hold the entire site
 const SiteContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+// This will ensure that the footer stays on the bottom during a loading state
+const Body = styled.div`
+  min-height: 100vh;
 `;
