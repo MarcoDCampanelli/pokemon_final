@@ -10,7 +10,7 @@ const Homepage = () => {
   // The first 3 states are used for Pagination
   const [pokemonList, setPokemonList] = useState("");
   const [offset, setOffset] = useState(0);
-  const [postsPerPage, setPostsPerPage] = useState(50);
+  const [postsPerPage, setPostsPerPage] = useState(45);
   // The following states are used in the search bars
   const [pokemon, setPokemon] = useState("");
   const [attack, setAttack] = useState("");
@@ -30,6 +30,12 @@ const Homepage = () => {
   const handlePokemonSearch = () => {
     if (pokemon.length > 0) {
       navigate(`/pokemon/${pokemon.replaceAll(" ", "-")}`);
+    }
+  };
+
+  const handleAttackSearch = () => {
+    if (attack.length > 0) {
+      navigate(`/attacks/${attack.replaceAll(" ", "-")}`);
     }
   };
 
@@ -61,9 +67,15 @@ const Homepage = () => {
           <Inputs
             type="text"
             placeholder="Attack"
-            onChange={(e) => setAttack(e.target.value)}
+            onChange={(e) => setAttack(e.target.value.toLowerCase())}
           ></Inputs>
-          <SearchButton>Search</SearchButton>
+          <SearchButton
+            onClick={() => {
+              handleAttackSearch();
+            }}
+          >
+            Search
+          </SearchButton>
         </SearchContainer>
         <SearchContainer>
           <Label>Search Ability:</Label>

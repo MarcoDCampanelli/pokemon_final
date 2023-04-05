@@ -60,7 +60,7 @@ const IndividualAttack = () => {
               <span>
                 {entry.effect.replace(
                   "$effect_chance% ",
-                  `${attack.meta.ailment_chance}% `
+                  `${attack.effect_chance}% `
                 )}
               </span>
             );
