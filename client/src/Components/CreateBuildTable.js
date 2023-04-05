@@ -68,20 +68,62 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
   const [level, setLevel] = useState(1);
   const [error, setError] = useState("");
 
+  let hp = calculateHealth(
+    pokemon.stats[0].base_stat,
+    pokemonIv.hp,
+    pokemonEv.hp,
+    level
+  );
+  let atk = calculateStat(
+    pokemon.stats[1].base_stat,
+    pokemonIv.atk,
+    pokemonEv.atk,
+    level,
+    natureValues.atk
+  );
+  let def = calculateStat(
+    pokemon.stats[2].base_stat,
+    pokemonIv.def,
+    pokemonEv.def,
+    level,
+    natureValues.def
+  );
+  let spAtk = calculateStat(
+    pokemon.stats[3].base_stat,
+    pokemonIv.spAtk,
+    pokemonEv.spAtk,
+    level,
+    natureValues.spAtk
+  );
+  let spDef = calculateStat(
+    pokemon.stats[4].base_stat,
+    pokemonIv.spDef,
+    pokemonEv.spDef,
+    level,
+    natureValues.spDef
+  );
+  let spd = calculateStat(
+    pokemon.stats[5].base_stat,
+    pokemonIv.spd,
+    pokemonEv.spd,
+    level,
+    natureValues.spd
+  );
+
   if (!pokemon) {
     return <>Loading...</>;
   }
 
   const handlePost = () => {
     const data = {
-      // trainer: user.name,
+      trainer: currentUser,
       name: pokemon.name,
       ability: ability,
       nature: nature,
       level: level,
       iv: pokemonIv,
       ev: pokemonEv,
-      // stats: [finalHp, finalAtk, finalDef, finalSpAtk, finalSpDef, finalSpd],
+      stats: [hp, atk, def, spAtk, spDef, spd],
       attacks: pokemonAttacks,
     };
 
