@@ -45,8 +45,6 @@ const SpecificPokemon = () => {
     return <LoadingPage />;
   }
 
-  console.log(species);
-
   return (
     <Container>
       <PokemonContainer>
@@ -126,10 +124,11 @@ const SpecificPokemon = () => {
             <IndividialStat>
               {/* ! DAMN YOU API!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
               Habitat:{" "}
-              {species.generation.name !== "generation-ix" ? (
-                <> {capAndRemoveHyphen(species.habitat.name)}</>
-              ) : (
+              {species.generation.name === "generation-ix" ||
+              species.habitat === null ? (
                 <>Unknown</>
+              ) : (
+                <>{capAndRemoveHyphen(species.habitat.name)}</>
               )}
             </IndividialStat>
             <IndividialStat>

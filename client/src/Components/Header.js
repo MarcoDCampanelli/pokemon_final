@@ -1,6 +1,6 @@
 import { UserContext } from "./UserContext";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 import Banner from "../assets/Banner.jpg";
 import styled from "styled-components";
@@ -16,18 +16,26 @@ const Header = () => {
         {currentUser ? (
           <UsernameContainer>
             <Name>Welcome, {currentUser}</Name>
-            <Button
-              onClick={() => {
-                window.localStorage.clear();
-                setCurrentUser(null);
-              }}
-            >
-              Log out
-            </Button>
+            <Link to={"/"}>Return Home</Link>
+            <div>
+              <Button
+                onClick={() => {
+                  window.localStorage.clear();
+                  setCurrentUser(null);
+                }}
+              >
+                Log out
+              </Button>
+            </div>
           </UsernameContainer>
         ) : (
           <SigninContainer>
-            <Button onClick={() => navigate("/signin")}>Sign In</Button>
+            <div>
+              <Link to={"/"}>Return Home</Link>
+            </div>
+            <div>
+              <Button onClick={() => navigate("/signin")}>Sign In</Button>
+            </div>
           </SigninContainer>
         )}
       </Demo>
@@ -59,23 +67,33 @@ const Demo = styled.div`
   position: relative;
 `;
 
-// This will give space to the username and the button
+// Container of currentUser, Home page and button when logged in
 const UsernameContainer = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 1rem;
 `;
 
+// Stlying for the NavLink
+const Link = styled(NavLink)`
+  text-decoration: underline;
+  color: black;
+
+  &.active {
+    color: blue;
+  }
+`;
+
 // This will style the username
-const Name = styled.div`
-  font-size: 1.5rem;
+const Name = styled.span`
+  font-size: 1.2rem;
   font-weight: bold;
+  margin-left: 0.5rem;
 `;
 
 // This will style the signout/signin button
 const Button = styled.button`
-  width: 10%;
-  margin: auto 0;
+  margin-right: 0.5rem;
   padding: 0.5rem;
   border-radius: 5px;
   overflow: hidden;
@@ -87,6 +105,7 @@ const Button = styled.button`
 `;
 
 const SigninContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
   padding: 0 1rem;
-  text-align: right;
 `;

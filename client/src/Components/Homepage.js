@@ -29,15 +29,13 @@ const Homepage = () => {
 
   const handlePokemonSearch = () => {
     if (pokemon.length > 0) {
-      navigate(`/pokemon/${pokemon}`);
+      navigate(`/pokemon/${pokemon.replaceAll(" ", "-")}`);
     }
   };
 
   if (!pokemonList) {
     return <>Loading...</>;
   }
-
-  console.log(pokemon);
 
   return (
     <>
