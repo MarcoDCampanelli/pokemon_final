@@ -111,8 +111,13 @@ export default StatTable;
 const Table = styled.table`
   border: 0.2rem solid black;
   border-radius: 5px;
-  width: 95%;
+  width: 65%;
   margin: 0.5rem auto;
+
+  @media (max-width: 768px) {
+    width: 95%;
+    margin: 0.5rem auto;
+  }
 `;
 
 const ColorDiv = styled.div`
