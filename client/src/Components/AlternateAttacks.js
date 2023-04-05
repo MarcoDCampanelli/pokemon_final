@@ -48,7 +48,7 @@ const AlternateAttacks = ({ pokemon, generation }) => {
   return (
     <>
       <Title>Machine/Egg/Tutor Moves</Title>
-      {array.includes(generation) ? (
+      {!array.includes(generation) ? (
         <>
           This pokemon can't learn any moves by TM/HM, breeding or move tutors
         </>
@@ -57,7 +57,7 @@ const AlternateAttacks = ({ pokemon, generation }) => {
       ) : (
         sortable.map((moveCombo) => {
           return (
-            <Attack to={`/pokemon/${moveCombo[0]}`}>
+            <Container>
               <Level>
                 {moveCombo[1] === "machine" ? (
                   <>TM/HM</>
@@ -67,8 +67,10 @@ const AlternateAttacks = ({ pokemon, generation }) => {
                   <>Tutor</>
                 )}
               </Level>
-              <Move>{capAndRemoveHyphen(moveCombo[0])}</Move>
-            </Attack>
+              <Move to={`/pokemon/${moveCombo[0]}`}>
+                {capAndRemoveHyphen(moveCombo[0])}
+              </Move>
+            </Container>
           );
         })
       )}
@@ -78,20 +80,14 @@ const AlternateAttacks = ({ pokemon, generation }) => {
 
 export default AlternateAttacks;
 
-const Attack = styled(Link)`
+const Container = styled.div`
   display: flex;
   flex-direction: row;
-  overflow: hidden;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  margin: 0.2rem 0;
   border: 0.1rem solid black;
   border-radius: 5px;
-  margin: 0.25rem;
-  padding: 0.25rem 0;
-  text-decoration: none;
-  color: black;
-
-  &:hover {
-    background-color: blue;
-  }
 `;
 
 const Title = styled.p`
@@ -99,16 +95,22 @@ const Title = styled.p`
 `;
 
 const Level = styled.div`
-  overflow: hidden;
   text-align: left;
+  margin-left: 0.1rem;
+  overflow: hidden;
   min-width: 30%;
   font-weight: bold;
-  margin: 0.4rem;
-  border-right: 1px solid black;
 `;
 
-const Move = styled.div`
-  text-align: left;
-  margin: 0.4rem;
-  width: 100%;
+const Move = styled(Link)`
+  text-decoration: none;
+  color: black;
+  overflow: hidden;
+  text-align: center;
+  width: 60%;
+  border-left: 0.1rem solid black;
+
+  &:hover {
+    background-color: blue;
+  }
 `;

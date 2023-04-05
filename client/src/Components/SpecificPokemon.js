@@ -315,6 +315,11 @@ const Select = styled.select`
 const AttackContainer = styled.div`
   display: flex;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin: auto;
+  }
 `;
 
 const AttackColumn = styled.div`
@@ -322,4 +327,10 @@ const AttackColumn = styled.div`
   text-align: center;
   overflow-y: auto;
   max-height: 500px;
+  width: 25%;
+
+  @media (max-width: 768px) {
+    width: 50%;
+    margin: 0.5rem auto;
+  }
 `;
