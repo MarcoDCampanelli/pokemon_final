@@ -78,7 +78,6 @@ const IndividualAttack = () => {
               let exceptions = nameExceptions.some((item) =>
                 array.includes(item)
               );
-
               if (exceptions) {
                 return (
                   <ListElement to={`/pokemon/${pokemon.name.split("-")[0]}`}>
@@ -95,7 +94,7 @@ const IndividualAttack = () => {
             })}
           </ListParent>
         </IndividualListContainer>
-        <IndividualListContainer>
+        <IndividualListContainerDescriptions>
           <ListTitle>Move description by Pokedex entry:</ListTitle>
           <ListParent>
             {attack.flavor_text_entries.map((entry) => {
@@ -111,7 +110,7 @@ const IndividualAttack = () => {
               }
             })}
           </ListParent>
-        </IndividualListContainer>
+        </IndividualListContainerDescriptions>
       </ListContainer>
     </Container>
   );
@@ -196,11 +195,19 @@ const ListContainer = styled.div`
   margin: 1rem;
 `;
 
-// Container for list of pokemon and list of entries
+// Container for list of pokemon
 const IndividualListContainer = styled.div`
   border: 0.2rem solid black;
-  margin: auto 1rem;
-  max-height: 800px;
+  max-height: 900px;
+  overflow: auto;
+  margin: 3rem 1rem;
+`;
+
+// Container for list of entries
+const IndividualListContainerDescriptions = styled.div`
+  position: relative;
+  top: 0;
+  margin: 3rem 1rem;
   overflow: auto;
 `;
 

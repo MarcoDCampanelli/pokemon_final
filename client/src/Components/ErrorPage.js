@@ -22,5 +22,5 @@ const Container = styled.div`
 
 const Image = styled.img`
   margin: 1rem auto;
-  width: 40%;
+  width: 10%;
 `;

@@ -20,8 +20,7 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: center;
   text-align: center;
-  position: absolute;
-  top: 40%;
+  margin: 10rem 0;
 `;
 
 const Rotation = keyframes`
