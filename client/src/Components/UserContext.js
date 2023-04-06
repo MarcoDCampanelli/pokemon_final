@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 
 export const UserContext = createContext(null);
 
@@ -17,6 +17,31 @@ export const UserProvider = ({ children }) => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   };
+
+  // This will fetch a list of all items that can be held as well as all natures
+  const [items, setItems] = useState("");
+  const [itemType, setItemType] = useState("");
+  useEffect(() => {
+    fetch(`https://pokeapi.co/api/v2/item-category/${itemType}/`)
+      .then((res) => res.json())
+      .then((resData) => {
+        setItems(resData.items);
+      });
+  }, [itemType]);
+
+  // This will fetch a list of all natures in the game
+  const [natures, setNatures] = useState("");
+  useEffect(() => {
+    fetch(" https://pokeapi.co/api/v2/nature/?offset=0&limit=25")
+      .then((res) => res.json())
+      .then((resData) => {
+        setNatures(
+          resData.results.map((result) => {
+            return result.name;
+          })
+        );
+      });
+  }, []);
 
   // This array holds the list of all generations being used in this app
   const generations = [
@@ -40,34 +65,50 @@ export const UserProvider = ({ children }) => {
     { name: "Scarlet/Violet", value: "scarlet-violet" },
   ];
 
-  // The array that holds all possible Pokemon natures
-  const natures = [
-    "hardy",
-    "lonely",
-    "brave",
-    "adamant",
-    "naughty",
-    "bold",
-    "docile",
-    "relaxed",
-    "impish",
-    "lax",
-    "timid",
-    "hasty",
-    "serious",
-    "jolly",
-    "naive",
-    "modest",
-    "mild",
-    "quiet",
-    "bashful",
-    "rash",
-    "calm",
-    "gentle",
-    "sassy",
-    "careful",
-    "quirky",
+  // This array holds the list of all itemCategories being used in this app
+  const itemCategories = [
+    { value: "held-items", name: "Held Items" },
+    { value: "medicine", name: "Medicine" },
+    { value: "type-protection", name: "Damage Reduction" },
+    { value: "choice", name: "Choice" },
+    { value: "bad-held-items", name: "Negative Held Items" },
+    { value: "plates", name: "Arceus Plates" },
+    { value: "species-specific", name: "Species Specific" },
+    { value: "type-enhancement", name: "Type Buff" },
+    { value: "jewels", name: "Gems" },
+    { value: "mega-stones", name: "Mega Stones" },
+    { value: "z-crystals", name: "Z-Crystals" },
   ];
+
+  // !Keeping this just in case!!!!!
+  // The array that holds all possible Pokemon natures
+  // const natures = [
+  //   "hardy",
+  //   "lonely",
+  //   "brave",
+  //   "adamant",
+  //   "naughty",
+  //   "bold",
+  //   "docile",
+  //   "relaxed",
+  //   "impish",
+  //   "lax",
+  //   "timid",
+  //   "hasty",
+  //   "serious",
+  //   "jolly",
+  //   "naive",
+  //   "modest",
+  //   "mild",
+  //   "quiet",
+  //   "bashful",
+  //   "rash",
+  //   "calm",
+  //   "gentle",
+  //   "sassy",
+  //   "careful",
+  //   "quirky",
+  // ];
 
   // This formula will calculate the pokemon's atk, def, spAtk, spDef and spd stat
   const calculateStat = (stat, iv, ev, level, nature) => {
@@ -172,6 +213,7 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // These are naming exceptions needed since they are added to certain pokemon to specify a type even though all that is needed is the species name and not the specification of the pokemon.
   const nameExceptions = [
     "normal",
     "attack",
@@ -251,12 +293,16 @@ export const UserProvider = ({ children }) => {
         setCurrentUser,
         capAndRemoveHyphen,
         generations,
+        itemCategories,
         natures,
         calculateStat,
         calculateHealth,
         natureValues,
         changeNatureValues,
         nameExceptions,
+        items,
+        itemType,
+        setItemType,
       }}
     >
       {children}

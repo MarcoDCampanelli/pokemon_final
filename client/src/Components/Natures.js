@@ -10,17 +10,19 @@ const Natures = () => {
 
   useEffect(() => {
     const promises = [];
-    natures.forEach((nature) => {
-      promises.push(
-        fetch(`https://pokeapi.co/api/v2/nature/${nature}/`)
-          .then((res) => res.json())
-          .then((resData) => {
-            return resData;
-          })
-      );
-    });
+    if (natures) {
+      natures.forEach((nature) => {
+        promises.push(
+          fetch(`https://pokeapi.co/api/v2/nature/${nature}/`)
+            .then((res) => res.json())
+            .then((resData) => {
+              return resData;
+            })
+        );
+      });
+    }
     Promise.all(promises).then((data) => setNatureList(data));
-  }, []);
+  }, [natures]);
 
   if (!natureList) {
     return <LoadingPage />;
@@ -43,7 +45,9 @@ const Natures = () => {
         {natureList.map((type) => {
           return (
             <tr>
-              <TableCell>{capAndRemoveHyphen(type.name)}</TableCell>
+              <TableCell key={type.name}>
+                {capAndRemoveHyphen(type.name)}
+              </TableCell>
               <TableCell>
                 {type.increased_stat === null ? (
                   <>-</>

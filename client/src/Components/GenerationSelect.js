@@ -28,6 +28,7 @@ const GenerationSelect = ({ setGeneration }) => {
 
 export default GenerationSelect;
 
+// Container for the label and select options
 const Container = styled.div`
   display: flex;
   margin: 0.5rem;

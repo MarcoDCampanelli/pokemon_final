@@ -6,6 +6,7 @@ const Footer = () => {
   return (
     <Container>
       <Link to={"/natures"}>Natures</Link>
+      <Link to={"/items"}>Item List</Link>
     </Container>
   );
 };
