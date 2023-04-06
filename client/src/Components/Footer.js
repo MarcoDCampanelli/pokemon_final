@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import styled from "styled-components";
 
 const Footer = () => {
   return (
     <Container>
+      <Link to={"/natures"}>Natures</Link>
       <Link to={"/natures"}>Natures</Link>
     </Container>
   );
@@ -13,7 +14,18 @@ const Footer = () => {
 export default Footer;
 
 const Container = styled.div`
-  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
   height: 10vh;
   border-top: 0.2rem solid black;
+`;
+
+const Link = styled(NavLink)`
+  text-decoration: none;
+  color: black;
+  margin: 0.2rem 1rem;
+
+  &.active {
+    color: blue;
+  }
 `;
