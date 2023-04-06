@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
+import LoadingPage from "./LoadingPage";
 
 const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
   const {
@@ -60,6 +61,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     atk4: "",
   };
 
+  // These states hold the following respectively: IV Spread, EV Spread, 4 pokemon attacks, chosen ability, nature, level and any possible error after the post request
   const [pokemonIv, setPokemonIv] = useState(ivSpread);
   const [pokemonEv, setPokemonEv] = useState(evSpread);
   const [pokemonAttacks, setPokemonAttacks] = useState(attackChoices);
@@ -68,6 +70,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
   const [level, setLevel] = useState(1);
   const [error, setError] = useState("");
 
+  // These 6 variables calculate the pokemon's stat based on what is being modified
   let hp = calculateHealth(
     pokemon.stats[0].base_stat,
     pokemonIv.hp,
@@ -111,8 +114,10 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
   );
 
   if (!pokemon) {
-    return <>Loading...</>;
+    return <LoadingPage />;
   }
+
+  console.log(hp, atk, def, spAtk, spDef, spd);
 
   const handlePost = () => {
     const data = {
@@ -307,64 +312,13 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
         <tr>
           <TableHead>Final Stat Value</TableHead>
           <TableCell>
-            {pokemon.name !== "shedinja" ? (
-              <>
-                {calculateHealth(
-                  pokemon.stats[0].base_stat,
-                  pokemonIv.hp,
-                  pokemonEv.hp,
-                  level
-                )}
-              </>
-            ) : (
-              <>1</>
-            )}
+            {pokemon.name !== "shedinja" ? <>{hp}</> : <>1</>}
           </TableCell>
-          <TableCell>
-            {calculateStat(
-              pokemon.stats[1].base_stat,
-              pokemonIv.atk,
-              pokemonEv.atk,
-              level,
-              natureValues.atk
-            )}
-          </TableCell>
-          <TableCell>
-            {calculateStat(
-              pokemon.stats[2].base_stat,
-              pokemonIv.def,
-              pokemonEv.def,
-              level,
-              natureValues.def
-            )}
-          </TableCell>
-          <TableCell>
-            {calculateStat(
-              pokemon.stats[3].base_stat,
-              pokemonIv.spAtk,
-              pokemonEv.spAtk,
-              level,
-              natureValues.spAtk
-            )}
-          </TableCell>
-          <TableCell>
-            {calculateStat(
-              pokemon.stats[4].base_stat,
-              pokemonIv.spDef,
-              pokemonEv.spDef,
-              level,
-              natureValues.spDef
-            )}
-          </TableCell>
-          <TableCell>
-            {calculateStat(
-              pokemon.stats[5].base_stat,
-              pokemonIv.spd,
-              pokemonEv.spd,
-              level,
-              natureValues.spd
-            )}
-          </TableCell>
+          <TableCell>{atk}</TableCell>
+          <TableCell>{def}</TableCell>
+          <TableCell>{spAtk}</TableCell>
+          <TableCell>{spDef}</TableCell>
+          <TableCell>{spd}</TableCell>
         </tr>
       </Table>
       <SelectionContainer>

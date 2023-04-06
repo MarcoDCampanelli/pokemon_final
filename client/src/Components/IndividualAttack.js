@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
+import LoadingPage from "./LoadingPage";
 
 const IndividualAttack = () => {
   const id = useParams();
@@ -18,10 +19,8 @@ const IndividualAttack = () => {
   }, [id]);
 
   if (!attack) {
-    return <>Loading...</>;
+    return <LoadingPage />;
   }
-
-  console.log(attack);
 
   return (
     <Container>
