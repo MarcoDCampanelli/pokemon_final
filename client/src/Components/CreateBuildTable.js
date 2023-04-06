@@ -143,6 +143,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     const data = {
       trainer: currentUser,
       name: pokemon.name,
+      generation: generation,
       ability: ability,
       nature: nature,
       level: level,
@@ -153,7 +154,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
       attacks: pokemonAttacks,
     };
 
-    fetch("/pokemon/competitive-build", {
+    fetch("/pokemonPartyAddition", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

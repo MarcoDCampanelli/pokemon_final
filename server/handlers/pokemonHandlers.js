@@ -122,4 +122,163 @@ const Signin = async (req, res) => {
   });
 };
 
-module.exports = { Registration, Signin };
+// Handler to add a Pokemon to the person's party
+const PokemonPartyAddition = async (req, res) => {
+  const {
+    trainer,
+    name,
+    generation,
+    ability,
+    nature,
+    level,
+    item,
+    iv,
+    ev,
+    stats,
+    attacks,
+  } = req.body;
+
+  const client = new MongoClient(MONGO_URI, options);
+
+  // Several checks must take place first to see if the entered informations is valid.
+  // 1. IV, EV and attacks need to be defined and can't be empty
+  if (!iv || !ev || !attacks) {
+    return res
+      .status(404)
+      .json({ status: 400, message: "Information is missing." });
+  }
+
+  if (!ability) {
+    return res
+      .status(404)
+      .json({ status: 404, message: "Please select an ability." });
+  }
+  if (!nature) {
+    return res
+      .status(404)
+      .json({ status: 404, message: "Please select a nature." });
+  }
+
+  // This will check to see if all stat values are numbers
+  let statCheck = stats.every((stat) => typeof stat === "number");
+  if (!statCheck) {
+    return res.status(404).json({
+      status: 404,
+      message:
+        "The Pokemon's final stat value is not a number, please check again.",
+    });
+  }
+
+  // This will check to see if all iv are numbers and don't exceed 31
+  let ivCheck = Object.values(iv).every(
+    (number) => number <= 31 && typeof number === "number"
+  );
+  if (!ivCheck) {
+    return res.status(404).json({
+      status: 404,
+      message: "Any individual IV cannot exceed a value of 31.",
+    });
+  }
+
+  // This will check to see if all ev are below 252 and don't add up to 510
+  let evCheck =
+    Object.values(ev).every((number) => number <= 252) &&
+    Object.values(ev).reduce((a, b) => a + b, 0) <= 510;
+  if (!evCheck) {
+    return res.status(404).json({
+      status: 404,
+      message:
+        "You cannot exceed a total EV count of 510. Any individual stat cannot exceed a total of 252.",
+    });
+  }
+
+  // This will ensure that attacks aren't repeated and are all unique
+  let attackArray = Array.from(new Set(Object.values(attacks)));
+  let attackCheck =
+    attackArray.length === 4 && attackArray.every((attack) => attack !== "");
+
+  if (!attackCheck) {
+    return res.status(404).json({
+      status: 404,
+      message:
+        "You are required to select 4 unique move slots for this Pokemon.",
+    });
+  }
+
+  await client.connect();
+  const db = client.db("Pokemon");
+  const profile = await db
+    .collection("PokemonParties")
+    .findOne({ trainer: trainer });
+
+  if (!profile) {
+    try {
+      const _id = uuidv4();
+
+      const result = await db.collection("PokemonParties").insertOne({
+        _id,
+        trainer: trainer,
+        party: [
+          {
+            pokemon: name,
+            generation: generation,
+            ability: ability,
+            nature: nature,
+            level: level,
+            item: item,
+            iv: iv,
+            ev: ev,
+            stats: stats,
+            attacks: attacks,
+          },
+        ],
+      });
+      return res.status(201).json({
+        status: 201,
+        data: result,
+        message: "Pokemon successfully added to party.",
+      });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ status: 500, message: "An error occured, please try again" });
+    }
+  }
+
+  if (profile) {
+    try {
+      const result = await db.collection("PokemonParties").updateOne(
+        { trainer: trainer },
+        {
+          $push: {
+            party: {
+              pokemon: name,
+              generation: generation,
+              ability: ability,
+              nature: nature,
+              level: level,
+              item: item,
+              iv: iv,
+              ev: ev,
+              stats: stats,
+              attacks: attacks,
+            },
+          },
+        }
+      );
+      return res.status(201).json({
+        status: 201,
+        data: result,
+        message: "Pokemon successfully added to party.",
+      });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ status: 500, message: "An error occured, please try again" });
+    }
+  }
+
+  client.close();
+};
+
+module.exports = { Registration, Signin, PokemonPartyAddition };

@@ -1,6 +1,10 @@
 const express = require("express");
 
-const { Registration, Signin } = require("./handlers/pokemonHandlers");
+const {
+  Registration,
+  Signin,
+  PokemonPartyAddition,
+} = require("./handlers/pokemonHandlers");
 
 express()
   .use(express.json())
@@ -11,5 +15,8 @@ express()
 
   // Endpoint called in order to sign into the website (Signin.js)
   .post("/signinUser", Signin)
+
+  // Endpoint called in order to sign into the website (Signin.js)
+  .post("/pokemonPartyAddition", PokemonPartyAddition)
 
   .listen(4000, () => console.log("Listening on port 4000."));
