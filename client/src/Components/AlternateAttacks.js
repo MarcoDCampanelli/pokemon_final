@@ -32,6 +32,7 @@ const AlternateAttacks = ({ pokemon, generation }) => {
     });
   }
 
+  // This array is used to see whether the pokemon learns any moves this generation. If yes, but the previous sortable array is empty, then the pokemon is part of the generation, but can't learn any tm/hm/egg/tutor moves
   let array = [];
 
   pokemon.moves.map((move) =>
@@ -47,7 +48,7 @@ const AlternateAttacks = ({ pokemon, generation }) => {
   return (
     <>
       <Title>Machine/Egg/Tutor Moves</Title>
-      {!array.includes(generation) ? (
+      {array.includes(generation) ? (
         <>
           This pokemon can't learn any moves by TM/HM, breeding or move tutors
         </>

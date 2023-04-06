@@ -34,7 +34,7 @@ const IndividualAttack = () => {
         <MoveStatsContainer>
           <MoveStatContainer>
             <MoveStat>Accuracy:</MoveStat>
-            {attack.accuracy}%
+            {attack.accuracy ? <>{attack.accuracy}%</> : <>-</>}
           </MoveStatContainer>
           <MoveStatContainer>
             <MoveStat>Power:</MoveStat>
