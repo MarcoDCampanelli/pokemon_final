@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
@@ -13,7 +13,28 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     calculateHealth,
     natureValues,
     changeNatureValues,
+    itemCategories,
+    setItemType,
+    items,
   } = useContext(UserContext);
+
+  // This will fetch the items that the user has decided to scroll through
+  const [itemList, setItemList] = useState("");
+  useEffect(() => {
+    const promises = [];
+    if (items) {
+      items.forEach((item) => {
+        promises.push(
+          fetch(`https://pokeapi.co/api/v2/item/${item.name}/`)
+            .then((res) => res.json())
+            .then((resData) => {
+              return resData;
+            })
+        );
+      });
+    }
+    Promise.all(promises).then((data) => setItemList(data));
+  }, [items]);
 
   // Create an array of the Pokemon's attacks that they can learn in the selected generation regardless of method.
   const attacks = {};
@@ -61,13 +82,14 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     atk4: "",
   };
 
-  // These states hold the following respectively: IV Spread, EV Spread, 4 pokemon attacks, chosen ability, nature, level and any possible error after the post request
+  // These states hold the following respectively: IV Spread, EV Spread, 4 pokemon attacks, chosen ability, nature, level, held-item, and any possible error after the post request
   const [pokemonIv, setPokemonIv] = useState(ivSpread);
   const [pokemonEv, setPokemonEv] = useState(evSpread);
   const [pokemonAttacks, setPokemonAttacks] = useState(attackChoices);
   const [ability, setAbility] = useState("");
   const [nature, setNature] = useState("");
   const [level, setLevel] = useState(1);
+  const [item, setItem] = useState();
   const [error, setError] = useState("");
 
   // These 6 variables calculate the pokemon's stat based on what is being modified
@@ -117,8 +139,6 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     return <LoadingPage />;
   }
 
-  console.log(hp, atk, def, spAtk, spDef, spd);
-
   const handlePost = () => {
     const data = {
       trainer: currentUser,
@@ -126,6 +146,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
       ability: ability,
       nature: nature,
       level: level,
+      item: item,
       iv: pokemonIv,
       ev: pokemonEv,
       stats: [hp, atk, def, spAtk, spDef, spd],
@@ -358,6 +379,52 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
           })}
         </Select>
       </SelectionContainer>
+      <SelectionContainer>
+        <Label>Select an Item Category:</Label>
+        <Select
+          name="item"
+          onChange={(e) => {
+            setItemType(e.target.value);
+          }}
+        >
+          <option defaultValue={true} disabled selected>
+            Select item type:
+          </option>
+          {itemCategories.map((category) => {
+            return <option value={category.value}>{category.name}</option>;
+          })}
+        </Select>
+      </SelectionContainer>
+      {itemList.length !== 0 ? (
+        <SelectionContainer>
+          <Label>Choose an item:</Label>
+          <Select
+            name="itemChoice"
+            onChange={(e) => {
+              setItem(e.target.value);
+            }}
+          >
+            <option defaultValue={true} disabled selected>
+              Select an item:
+            </option>
+            {itemList.map((item) => {
+              let check = [];
+              item.flavor_text_entries.map((entry) =>
+                check.push(entry.version_group.name)
+              );
+              if (check.includes(generation)) {
+                return (
+                  <option value={item.name}>
+                    {capAndRemoveHyphen(item.name)}
+                  </option>
+                );
+              }
+            })}
+          </Select>
+        </SelectionContainer>
+      ) : (
+        <></>
+      )}
       <SelectionContainer>
         <Label>Level:</Label>
         <Input
