@@ -205,12 +205,14 @@ const PokemonPartyAddition = async (req, res) => {
     });
   }
 
+  // First, check to see if the person already has an active party
   await client.connect();
   const db = client.db("Pokemon");
   const profile = await db
     .collection("PokemonParties")
     .findOne({ trainer: trainer });
 
+  // If they do not, then create one
   if (!profile) {
     try {
       const _id = uuidv4();
@@ -245,6 +247,7 @@ const PokemonPartyAddition = async (req, res) => {
     }
   }
 
+  // If they already have an active party, just add the pokemon to their existing party
   if (profile) {
     try {
       const result = await db.collection("PokemonParties").updateOne(

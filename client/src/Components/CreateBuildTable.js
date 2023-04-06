@@ -537,12 +537,12 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
         )}
       </SelectionContainer>
       {error && error.status > 299 ? (
-        <ErrorContainer>
+        <ErrorContainer error={true}>
           We ran into a problem when submitting your Pokemon! Please check the
           following: {error.message}
         </ErrorContainer>
       ) : (
-        <></>
+        <ErrorContainer error={false}>{error.message}</ErrorContainer>
       )}
     </Container>
   );
@@ -621,10 +621,12 @@ const Button = styled.button`
 
 // Container that holds the error messages
 const ErrorContainer = styled.div`
-  margin: 1rem 0;
+  text-align: center;
+  margin: 1rem auto;
   padding: 1rem 1rem;
   font-size: 1.2rem;
   font-weight: bold;
-`;
 
-// !Proof that Pokemon was submitted + redirect to another page or Pokemon?
+  border-left: ${(props) =>
+    props.error ? "0.2rem solid red" : "0.2rem solid green"};
+`;
