@@ -143,6 +143,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     const data = {
       trainer: currentUser,
       name: pokemon.name,
+      id: pokemon.id,
       generation: generation,
       ability: ability,
       nature: nature,
@@ -536,7 +537,9 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
           <>If you wish to save your information, please sign-in.</>
         )}
       </SelectionContainer>
-      {error && error.status > 299 ? (
+      {!error ? (
+        <></>
+      ) : error && error.status > 299 ? (
         <ErrorContainer error={true}>
           We ran into a problem when submitting your Pokemon! Please check the
           following: {error.message}

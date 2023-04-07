@@ -15,7 +15,9 @@ const Header = () => {
       <Demo>
         {currentUser ? (
           <UsernameContainer>
-            <Name>Welcome, {currentUser}</Name>
+            <NameLink to={`/profile/${currentUser}`}>
+              Welcome, {currentUser}
+            </NameLink>
             <Link to={"/"}>Return Home</Link>
             <div>
               <Button
@@ -85,10 +87,16 @@ const Link = styled(NavLink)`
 `;
 
 // This will style the username
-const Name = styled.span`
+const NameLink = styled(NavLink)`
   font-size: 1.2rem;
   font-weight: bold;
   margin-left: 0.5rem;
+  text-decoration: none;
+  color: black;
+
+  &.active {
+    color: blue;
+  }
 `;
 
 // This will style the signout/signin button

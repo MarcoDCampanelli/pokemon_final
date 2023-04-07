@@ -9,6 +9,7 @@ import Homepage from "./Components/Homepage";
 import Login from "./Components/LogInPage";
 import SpecificPokemon from "./Components/SpecificPokemon";
 import IndividualAttack from "./Components/IndividualAttack";
+import Profile from "./Components/Profile";
 import Natures from "./Components/Natures";
 import Items from "./Components/Items";
 import ErrorPage from "./Components/ErrorPage";
@@ -27,6 +28,7 @@ const App = () => {
               <Route path="/signin" element={<Login />} />
               <Route path="/pokemon/:pokemon" element={<SpecificPokemon />} />
               <Route path="/attacks/:attack" element={<IndividualAttack />} />
+              <Route path="/profile/:user" element={<Profile />} />
               <Route path="/natures" element={<Natures />} />
               <Route path="/items" element={<Items />} />
               <Route path="/error" element={<ErrorPage />} />

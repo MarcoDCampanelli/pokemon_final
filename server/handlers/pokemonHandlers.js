@@ -127,6 +127,7 @@ const PokemonPartyAddition = async (req, res) => {
   const {
     trainer,
     name,
+    id,
     generation,
     ability,
     nature,
@@ -223,6 +224,7 @@ const PokemonPartyAddition = async (req, res) => {
         party: [
           {
             pokemon: name,
+            id: id,
             generation: generation,
             ability: ability,
             nature: nature,
@@ -256,6 +258,7 @@ const PokemonPartyAddition = async (req, res) => {
           $push: {
             party: {
               pokemon: name,
+              id: id,
               generation: generation,
               ability: ability,
               nature: nature,
@@ -284,4 +287,30 @@ const PokemonPartyAddition = async (req, res) => {
   client.close();
 };
 
-module.exports = { Registration, Signin, PokemonPartyAddition };
+const GetProfile = async (req, res) => {
+  const user = req.params.user;
+
+  const client = new MongoClient(MONGO_URI, options);
+
+  await client.connect();
+  const db = client.db("Pokemon");
+
+  const result = await db
+    .collection("PokemonParties")
+    .findOne({ trainer: user });
+
+  if (result) {
+    return res.status(200).json({ status: 200, success: true, data: result });
+  }
+
+  client.close();
+
+  return res.status(404).json({
+    status: 404,
+    success: false,
+    data: user,
+    message: "Trainer cannot be found",
+  });
+};
+
+module.exports = { Registration, Signin, PokemonPartyAddition, GetProfile };
