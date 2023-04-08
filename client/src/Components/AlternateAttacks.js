@@ -45,10 +45,12 @@ const AlternateAttacks = ({ pokemon, generation }) => {
     return <LoadingPage />;
   }
 
+  console.log(pokemon);
+
   return (
     <>
       <Title>Machine/Egg/Tutor Moves</Title>
-      {array.includes(generation) ? (
+      {!array.includes(generation) ? (
         <>
           This pokemon can't learn any moves by TM/HM, breeding or move tutors
         </>
