@@ -45,14 +45,13 @@ const AlternateAttacks = ({ pokemon, generation }) => {
     return <LoadingPage />;
   }
 
-  console.log(pokemon);
-
   return (
     <>
       <Title>Machine/Egg/Tutor Moves</Title>
       {!array.includes(generation) ? (
         <>
           This pokemon can't learn any moves by TM/HM, breeding or move tutors
+          in this generation.
         </>
       ) : sortable.length === 0 ? (
         <p>This Pokemon is not available this generation.</p>

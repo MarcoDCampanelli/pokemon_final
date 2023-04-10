@@ -9,6 +9,7 @@ const Profile = () => {
   const {
     currentUser,
     capAndRemoveHyphen,
+    nameExceptions,
     natures,
     natureValues,
     calculateHealth,
@@ -105,6 +106,29 @@ const Profile = () => {
     );
   }
 
+  const handleChanges = (id) => {
+    const data = {
+      trainer: currentUser,
+      ability: ability,
+      nature: nature,
+      iv: ivSpread,
+      ev: evSpread,
+      stats: [hp, atk, def, spAtk, spDef, spd],
+      attacks: attack,
+      pokemonId: id,
+    };
+
+    fetch("/pokemon/update/", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((resData) => console.log(resData));
+  };
+
   if (!profile) {
     return <LoadingPage />;
   }
@@ -112,12 +136,23 @@ const Profile = () => {
   return (
     <Container>
       {profile.party.map((member) => {
+        let array = member.pokemon.split("-");
+        let exceptions = nameExceptions.some((item) => array.includes(item));
+
         return (
           <>
             <PokemonContainer width={member.pokemon === update}>
               <InfoContainer width={member.pokemon === update}>
-                <Title>{capAndRemoveHyphen(member.pokemon)}</Title>
-                <Info>Index: #{member.id}</Info>
+                {exceptions ? (
+                  <Link to={`/pokemon/${member.pokemon.split("-")[0]}`}>
+                    {capAndRemoveHyphen(member.pokemon)}
+                  </Link>
+                ) : (
+                  <Link to={`/pokemon/${member.pokemon}`}>
+                    {capAndRemoveHyphen(member.pokemon)}
+                  </Link>
+                )}
+                <Info>Index: #{member.index}</Info>
                 <Info>Level: {member.level}</Info>
                 <Info>
                   Item:{" "}
@@ -189,7 +224,7 @@ const Profile = () => {
                 )}
                 <div>
                   <img
-                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${member.id}.png`}
+                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${member.index}.png`}
                   />
                 </div>
               </InfoContainer>
@@ -438,22 +473,29 @@ const Profile = () => {
                 )}
               </StatContainer>
             </PokemonContainer>
-            <button
-              onClick={() => {
-                setUpdate(member.pokemon);
-                handleUpdate(
-                  member.pokemon,
-                  member.nature,
-                  member.ability,
-                  member.attacks,
-                  member.ev,
-                  member.iv,
-                  member.level
-                );
-              }}
-            >
-              Click Me
-            </button>
+            <div>
+              <button
+                onClick={() => {
+                  setUpdate(member.pokemon);
+                  handleUpdate(
+                    member.pokemon,
+                    member.nature,
+                    member.ability,
+                    member.attacks,
+                    member.ev,
+                    member.iv,
+                    member.level
+                  );
+                }}
+              >
+                Click Me
+              </button>
+              <button onClick={() => handleChanges(member.entryId)}>
+                Update
+              </button>
+              <button>Delete</button>
+              <button>Post</button>
+            </div>
           </>
         );
       })}
