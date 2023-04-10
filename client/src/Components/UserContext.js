@@ -22,11 +22,13 @@ export const UserProvider = ({ children }) => {
   const [items, setItems] = useState("");
   const [itemType, setItemType] = useState("");
   useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/item-category/${itemType}/`)
-      .then((res) => res.json())
-      .then((resData) => {
-        setItems(resData.items);
-      });
+    if (itemType) {
+      fetch(`https://pokeapi.co/api/v2/item-category/${itemType}/`)
+        .then((res) => res.json())
+        .then((resData) => {
+          setItems(resData.items);
+        });
+    }
   }, [itemType]);
 
   // This will fetch a list of all natures in the game

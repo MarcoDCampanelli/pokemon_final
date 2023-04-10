@@ -19,6 +19,8 @@ const Profile = () => {
   const [profile, setProfile] = useState("");
   const [pokemon, setPokemon] = useState("");
   const [update, setUpdate] = useState("");
+  // This state is only being used if an error occurs or if an update takes place.
+  const [error, setError] = useState("");
 
   // These states are only being used if the user is updating the pokemon
   const [ability, setAbility] = useState("");
@@ -28,12 +30,14 @@ const Profile = () => {
   const [ivSpread, setIvSpread] = useState("");
   const [level, setLevel] = useState("");
 
+  // This will grab the profile of the currentUser
   useEffect(() => {
     fetch(`/profile/${currentUser}`)
       .then((res) => res.json())
       .then((resData) => setProfile(resData.data));
-  }, []);
+  }, [error]);
 
+  // This will grab the info of the pokemon selected to be updated and reset all of the states to be used in case an update happens.
   const handleUpdate = (name, nature, ability, attack, ev, iv, level) => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
       .then((res) => res.json())
@@ -47,6 +51,7 @@ const Profile = () => {
     setEvSpread(ev);
     setIvSpread(iv);
     setLevel(level);
+    setError("");
   };
 
   // These 6 variables calculate the pokemon's stat based on what is being modified
@@ -106,6 +111,7 @@ const Profile = () => {
     );
   }
 
+  // Calls the endpoint that will update the currently selected pokemon
   const handleChanges = (id) => {
     const data = {
       trainer: currentUser,
@@ -126,31 +132,34 @@ const Profile = () => {
       },
     })
       .then((res) => res.json())
-      .then((resData) => console.log(resData));
+      .then((resData) => {
+        setError(resData);
+      });
   };
 
   if (!profile) {
     return <LoadingPage />;
   }
 
+  console.log(error);
+
   return (
     <Container>
       {profile.party.map((member) => {
         let array = member.pokemon.split("-");
         let exceptions = nameExceptions.some((item) => array.includes(item));
-
         return (
           <>
             <PokemonContainer width={member.pokemon === update}>
               <InfoContainer width={member.pokemon === update}>
                 {exceptions ? (
-                  <Link to={`/pokemon/${member.pokemon.split("-")[0]}`}>
+                  <PokemonLink to={`/pokemon/${member.pokemon.split("-")[0]}`}>
                     {capAndRemoveHyphen(member.pokemon)}
-                  </Link>
+                  </PokemonLink>
                 ) : (
-                  <Link to={`/pokemon/${member.pokemon}`}>
+                  <PokemonLink to={`/pokemon/${member.pokemon}`}>
                     {capAndRemoveHyphen(member.pokemon)}
-                  </Link>
+                  </PokemonLink>
                 )}
                 <Info>Index: #{member.index}</Info>
                 <Info>Level: {member.level}</Info>
@@ -473,29 +482,51 @@ const Profile = () => {
                 )}
               </StatContainer>
             </PokemonContainer>
-            <div>
-              <button
-                onClick={() => {
-                  setUpdate(member.pokemon);
-                  handleUpdate(
-                    member.pokemon,
-                    member.nature,
-                    member.ability,
-                    member.attacks,
-                    member.ev,
-                    member.iv,
-                    member.level
-                  );
-                }}
-              >
-                Click Me
-              </button>
-              <button onClick={() => handleChanges(member.entryId)}>
-                Update
-              </button>
-              <button>Delete</button>
-              <button>Post</button>
-            </div>
+            {!error ? (
+              <></>
+            ) : error && error.status > 299 && update === member.pokemon ? (
+              <ErrorContainer error={true}>
+                We ran into a problem when submitting your Pokemon! Please check
+                the following: {error.message}
+              </ErrorContainer>
+            ) : error && update !== member.pokemon ? (
+              <></>
+            ) : (
+              <ErrorContainer error={false}>{error.message}</ErrorContainer>
+            )}
+            <ButtonContainer>
+              {pokemon && update === member.pokemon ? (
+                <></>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setUpdate(member.pokemon);
+                    handleUpdate(
+                      member.pokemon,
+                      member.nature,
+                      member.ability,
+                      member.attacks,
+                      member.ev,
+                      member.iv,
+                      member.level
+                    );
+                  }}
+                >
+                  Make Changes
+                </Button>
+              )}
+              {pokemon && update === member.pokemon ? (
+                <>
+                  <Button onClick={() => handleChanges(member.entryId)}>
+                    Update
+                  </Button>
+                  <Button>Delete</Button>
+                  <Button>Post</Button>
+                </>
+              ) : (
+                <></>
+              )}
+            </ButtonContainer>
           </>
         );
       })}
@@ -505,15 +536,18 @@ const Profile = () => {
 
 export default Profile;
 
+// This is the container that holds the entire page
 const Container = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
+// This is the container that holds each individual pokemon
 const PokemonContainer = styled.div`
   display: flex;
   margin: 1rem auto;
   border: 2px solid black;
+  overflow: hidden;
 
   width: ${(props) => (props.width ? "95%" : "40%")};
 
@@ -522,6 +556,19 @@ const PokemonContainer = styled.div`
   }
 `;
 
+// Link to the pokemon's page when clicked
+const PokemonLink = styled(Link)`
+  text-decoration: underline;
+  color: black;
+  font-weight: bold;
+  margin: 0.2rem;
+
+  &:hover {
+    background-color: lightblue;
+  }
+`;
+
+// Container holding the basic information of the pokemon (name, index, level, item, generation, nature, ability)
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -536,15 +583,18 @@ const InfoContainer = styled.div`
   }
 `;
 
+// Styled titles of each container
 const Title = styled.h1`
   font-weight: bold;
   margin: 0.5rem;
 `;
 
+// Styling for the individual divs holding separate pieces of info
 const Info = styled.div`
   margin: 0.2rem;
 `;
 
+// Container for the 4 attacks of the pokemon
 const AttackContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -560,6 +610,7 @@ const AttackContainer = styled.div`
   }
 `;
 
+// Link to the attack page of the individual attacks
 const AttackLink = styled(Link)`
   text-decoration: underline;
   color: black;
@@ -570,10 +621,12 @@ const AttackLink = styled(Link)`
   }
 `;
 
+// Styling for the individual divs holding separate pieces of info
 const IndividualAttack = styled.div`
   margin: 1rem;
 `;
 
+// Container for the stats of the pokemon
 const StatContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -629,4 +682,34 @@ const Input = styled.input`
   margin: auto;
   text-align: center;
   font-size: 1rem;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const Button = styled.button`
+  padding: 0.5rem 1rem;
+  margin: 1rem;
+  color: white;
+  background-color: blue;
+  border-radius: 10px;
+
+  &:hover {
+    background-color: paleturquoise;
+  }
+`;
+
+// Container that holds the error messages
+const ErrorContainer = styled.div`
+  text-align: center;
+  width: 80%;
+  margin: 1rem auto;
+  padding: 1rem 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+
+  border-left: ${(props) =>
+    props.error ? "0.2rem solid red" : "0.2rem solid green"};
 `;
