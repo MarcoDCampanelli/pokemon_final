@@ -151,14 +151,12 @@ const Profile = () => {
       },
     })
       .then((res) => res.json())
-      .then((resData) => console.log(resData));
+      .then((resData) => setError(resData));
   };
 
   if (!profile) {
     return <LoadingPage />;
   }
-
-  console.log(error);
 
   return (
     <Container>
