@@ -46,12 +46,14 @@ const Builds = ({ pokemonId }) => {
       .then((res) => res.json())
       .then((resData) => {
         setError(resData);
-        setPokemon("");
-        setComment("");
 
-        setTimeout(() => {
-          setError("");
-        }, 3000);
+        if (resData.status < 299) {
+          setTimeout(() => {
+            setError("");
+            setPokemon("");
+            setComment("");
+          }, 3000);
+        }
       });
   };
 
