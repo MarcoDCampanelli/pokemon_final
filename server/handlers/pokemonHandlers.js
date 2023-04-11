@@ -321,8 +321,6 @@ const UpdateBuild = async (req, res) => {
   const { trainer, ability, nature, iv, ev, stats, attacks, pokemonId } =
     req.body;
 
-  console.log(trainer, ability, nature, iv, ev, stats, attacks, pokemonId);
-
   const client = new MongoClient(MONGO_URI, options);
 
   // Several checks must take place first to see if the entered informations is valid.
@@ -435,10 +433,56 @@ const UpdateBuild = async (req, res) => {
   client.close();
 };
 
+const DeleteBuild = async (req, res) => {
+  const { trainer, pokemonId } = req.body;
+
+  const client = new MongoClient(MONGO_URI, options);
+
+  await client.connect();
+  const db = client.db("Pokemon");
+
+  const pokemon = await db
+    .collection("PokemonParties")
+    .findOne({ trainer: trainer, "party.entryId": pokemonId });
+
+  if (!pokemon) {
+    return res.status(404).json({
+      status: 404,
+      data: req.body,
+      message: "No pokemon with that information exists in this party.",
+    });
+  }
+
+  if (pokemon) {
+    try {
+      const pokemonDelete = await db.collection("PokemonParties").updateOne(
+        {
+          trainer: trainer,
+          "party.entryId": pokemonId,
+        },
+        { $pull: { party: { entryId: pokemonId } } }
+      );
+
+      if (pokemonDelete.modifiedCount > 0) {
+        return res
+          .status(201)
+          .json({ status: 201, message: "Pokemon was released successfully." });
+      }
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ status: 500, message: "An error occured, please try again" });
+    }
+  }
+
+  client.close();
+};
+
 module.exports = {
   Registration,
   Signin,
   PokemonPartyAddition,
   GetProfile,
   UpdateBuild,
+  DeleteBuild,
 };

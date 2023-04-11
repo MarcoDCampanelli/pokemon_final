@@ -137,6 +137,23 @@ const Profile = () => {
       });
   };
 
+  const handleDelete = (id) => {
+    const data = {
+      trainer: currentUser,
+      pokemonId: id,
+    };
+
+    fetch("/pokemon/delete/", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((resData) => console.log(resData));
+  };
+
   if (!profile) {
     return <LoadingPage />;
   }
@@ -520,7 +537,9 @@ const Profile = () => {
                   <Button onClick={() => handleChanges(member.entryId)}>
                     Update
                   </Button>
-                  <Button>Delete</Button>
+                  <Button onClick={() => handleDelete(member.entryId)}>
+                    Delete
+                  </Button>
                   <Button>Post</Button>
                   <Button
                     onClick={() => {
