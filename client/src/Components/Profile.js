@@ -200,8 +200,6 @@ const Profile = () => {
     return <LoadingPage />;
   }
 
-  console.log(entry);
-
   return (
     <Container>
       {profile.party.map((member) => {

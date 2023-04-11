@@ -23,7 +23,7 @@ express()
   // Endpoint called in order to sign into the website (Signin.js)
   .post("/signinUser", Signin)
 
-  // Endpoint called in order to add a pokemon to a user's party (CreateBuildTable.js)
+  // Endpoint called in order to add a pokemon to a user's party (CreateBuildTable.js and Builds.js)
   .post("/pokemonPartyAddition", PokemonPartyAddition)
 
   // Endpoint called in order to get a certain profile (Profile.js)

@@ -69,6 +69,46 @@ const Builds = ({ pokemonId }) => {
       });
   };
 
+  const handleAddToParty = (
+    name,
+    index,
+    generation,
+    ability,
+    nature,
+    level,
+    item,
+    ivSpread,
+    evSpread,
+    statSpread,
+    attackList
+  ) => {
+    const data = {
+      trainer: currentUser,
+      name: name,
+      id: index,
+      generation: generation,
+      ability: ability,
+      nature: nature,
+      level: level,
+      item: item,
+      iv: ivSpread,
+      ev: evSpread,
+      stats: statSpread,
+      attacks: attackList,
+    };
+
+    fetch("/pokemonPartyAddition", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((resData) => setError(resData))
+      .catch((error) => window.alert(error));
+  };
+
   if (!builds) {
     return <LoadingPage />;
   }
@@ -193,7 +233,25 @@ const Builds = ({ pokemonId }) => {
                 {currentUser ? (
                   <ButtonContainer>
                     {currentUser !== entry.trainer ? (
-                      <Button>Save Build</Button>
+                      <Button
+                        onClick={() =>
+                          handleAddToParty(
+                            entry.pokemon,
+                            entry.index,
+                            entry.generation,
+                            entry.ability,
+                            entry.nature,
+                            entry.level,
+                            entry.item,
+                            entry.iv,
+                            entry.ev,
+                            entry.stats,
+                            entry.attacks
+                          )
+                        }
+                      >
+                        Save Build
+                      </Button>
                     ) : (
                       <></>
                     )}
