@@ -10,6 +10,7 @@ const {
   PostBuild,
   GetBuilds,
   PostComment,
+  DeletePostedBuild,
 } = require("./handlers/pokemonHandlers");
 
 express()
@@ -42,5 +43,8 @@ express()
 
   // Endpoint called in order to add a comment to a specific pokemon's build (Builds.js)
   .patch("/pokemon/leaveComment", PostComment)
+
+  // Endpoint called in order to delete a certain build (Builds.js)
+  .delete("/pokemon/delete/:build", DeletePostedBuild)
 
   .listen(4000, () => console.log("Listening on port 4000."));

@@ -22,12 +22,6 @@ const Builds = ({ pokemonId }) => {
       });
   }, [pokemonId, error]);
 
-  if (!builds) {
-    return <LoadingPage />;
-  }
-
-  console.log(builds);
-
   // Endpoing called in order to post a comment
   const handlePost = (id) => {
     const data = {
@@ -56,6 +50,28 @@ const Builds = ({ pokemonId }) => {
         }
       });
   };
+
+  const handleDelete = (id) => {
+    fetch(`/pokemon/delete/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((resData) => {
+        setError(resData);
+
+        if (resData.status < 299) {
+          setTimeout(() => {
+            setError("");
+            setPokemon("");
+            setComment("");
+          }, 3000);
+        }
+      });
+  };
+
+  if (!builds) {
+    return <LoadingPage />;
+  }
 
   return (
     <>
@@ -182,12 +198,24 @@ const Builds = ({ pokemonId }) => {
                       <></>
                     )}
                     {currentUser === entry.trainer ? (
-                      <Button>Delete Build</Button>
+                      <Button onClick={() => handleDelete(entry._id)}>
+                        Delete Build
+                      </Button>
                     ) : (
                       <></>
                     )}
                     <Button onClick={() => setPokemon(entry._id)}>
                       Comment
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setPokemon("");
+                        setComment("");
+                        setValue(500);
+                        setError("");
+                      }}
+                    >
+                      Finish
                     </Button>
                   </ButtonContainer>
                 ) : (
@@ -366,7 +394,7 @@ const WordLimit = styled.div`
 // Container that holds the error messages
 const ErrorContainer = styled.div`
   text-align: center;
-  width: 80%;
+  width: 30%;
   margin: 1rem auto;
   padding: 1rem 1rem;
   font-size: 1.2rem;

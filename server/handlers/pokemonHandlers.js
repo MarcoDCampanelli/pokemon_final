@@ -685,6 +685,46 @@ const PostComment = async (req, res) => {
   client.close();
 };
 
+const DeletePostedBuild = async (req, res) => {
+  const { build } = req.params;
+
+  const client = new MongoClient(MONGO_URI, options);
+  console.log(build);
+  await client.connect();
+  const db = client.db("Pokemon");
+
+  const searchBuild = await db
+    .collection("CompetitiveBuilds")
+    .findOne({ _id: build });
+
+  if (!searchBuild) {
+    return res.status(404).json({
+      status: 404,
+      data: build,
+      message: "No build was found with that given id.",
+    });
+  }
+
+  if (searchBuild) {
+    try {
+      const deleteEntry = await db
+        .collection("CompetitiveBuilds")
+        .deleteOne({ _id: build });
+
+      return res
+        .status(200)
+        .json({ status: 200, message: "Build successfully deleted." });
+    } catch (err) {
+      return res.status(500).json({
+        status: 500,
+        message: "Something went wrong, please try again.",
+      });
+    }
+  }
+
+  client.close();
+};
+
 module.exports = {
   Registration,
   Signin,
@@ -695,4 +735,5 @@ module.exports = {
   PostBuild,
   GetBuilds,
   PostComment,
+  DeletePostedBuild,
 };
