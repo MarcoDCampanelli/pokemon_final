@@ -585,18 +585,46 @@ const PostBuild = async (req, res) => {
       description: description,
     });
 
+    client.close();
+
     return res
       .status(201)
       .json({ status: 201, message: "Build successfully submitted." });
   } catch (err) {
+    client.close();
+
     return res.status(409).json({
       status: 409,
       data: req.body,
       message: "Something went wrong, please try again",
     });
   }
+};
+
+const GetBuilds = async (req, res) => {
+  const { pokemon } = req.params;
+
+  const client = new MongoClient(MONGO_URI, options);
+
+  await client.connect();
+  const db = client.db("Pokemon");
+
+  const builds = await db
+    .collection("CompetitiveBuilds")
+    .find({ pokemon: { $regex: pokemon } })
+    .toArray();
+
+  if (!builds) {
+    return res.status(404).json({
+      status: 404,
+      data: pokemon,
+      message: "No build of that pokemon exist at the moment.",
+    });
+  }
 
   client.close();
+
+  return res.status(200).json({ status: 200, data: builds });
 };
 
 module.exports = {
@@ -607,4 +635,5 @@ module.exports = {
   UpdateBuild,
   DeleteBuild,
   PostBuild,
+  GetBuilds,
 };
