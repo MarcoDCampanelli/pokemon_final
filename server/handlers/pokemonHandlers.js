@@ -583,6 +583,7 @@ const PostBuild = async (req, res) => {
       stats: stats,
       attacks: attacks,
       description: description,
+      comments: [],
     });
 
     client.close();

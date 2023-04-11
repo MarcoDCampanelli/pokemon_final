@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
@@ -8,12 +8,13 @@ import Attacks from "./Attacks";
 import AlternateAttacks from "./AlternateAttacks";
 import StatTable from "./StatTable";
 import CreateBuildTable from "./CreateBuildTable";
+import Builds from "./Builds";
 import LoadingPage from "./LoadingPage";
 
 const SpecificPokemon = () => {
   const id = useParams();
   const navigate = useNavigate();
-  const { currentUser, capAndRemoveHyphen } = useContext(UserContext);
+  const { capAndRemoveHyphen } = useContext(UserContext);
   const [species, setSpecies] = useState("");
   const [pokemon, setPokemon] = useState("");
   const [builds, setBuilds] = useState("");
@@ -47,8 +48,6 @@ const SpecificPokemon = () => {
       .then((res) => res.json())
       .then((resData) => setPokemon(resData));
   };
-
-  console.log(builds);
 
   if (!species) {
     return <LoadingPage />;
@@ -238,96 +237,7 @@ const SpecificPokemon = () => {
       ) : (
         <></>
       )}
-      <BuildContainer>
-        {builds.data ? (
-          builds.data.map((entry) => {
-            return (
-              <>
-                <IndividualBuild>
-                  <InfoContainer>
-                    <Titles>{capAndRemoveHyphen(entry.pokemon)}</Titles>
-                    <Info>Trainer: {entry.trainer}</Info>
-                    <Info>Index #: {entry.index}</Info>
-                    <Info>Level: {entry.level}</Info>
-                    <Info>
-                      Item:{" "}
-                      {entry.item ? (
-                        <>{capAndRemoveHyphen(entry.item)}</>
-                      ) : (
-                        <>None</>
-                      )}
-                    </Info>
-                    <Info>
-                      Generation: {capAndRemoveHyphen(entry.generation)}
-                    </Info>
-                    <Info>Nature: {capAndRemoveHyphen(entry.nature)}</Info>
-                    <Info>Ability: {capAndRemoveHyphen(entry.ability)}</Info>
-                    <SpriteContainer>
-                      <img
-                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry.index}.png`}
-                      />
-                    </SpriteContainer>
-                  </InfoContainer>
-                  <BuildAttackContainer>
-                    <Titles>Attacks</Titles>
-                    {Object.values(entry.attacks).map((attack) => {
-                      return (
-                        <AttackLink>{capAndRemoveHyphen(attack)}</AttackLink>
-                      );
-                    })}
-                  </BuildAttackContainer>
-                  <StatContainer>
-                    <Titles>Stat Investment</Titles>
-                    <Table>
-                      <tr>
-                        <TableHead>Stat Name:</TableHead>
-                        {Object.keys(entry.iv).map((stat, index) => {
-                          return (
-                            <TableHead>{capAndRemoveHyphen(stat)}</TableHead>
-                          );
-                        })}
-                      </tr>
-                      <tr>
-                        <TableHead>IV</TableHead>
-                        {Object.values(entry.iv).map((iv) => {
-                          return <TableCell>{iv}</TableCell>;
-                        })}
-                      </tr>
-                      <tr>
-                        <TableHead>EV</TableHead>
-                        {Object.values(entry.ev).map((ev) => {
-                          return <TableCell>{ev}</TableCell>;
-                        })}
-                      </tr>
-                      <tr>
-                        <TableHead>Final Stat</TableHead>
-                        {entry.stats.map((stat) => {
-                          return <TableCell>{stat}</TableCell>;
-                        })}
-                      </tr>
-                    </Table>
-                  </StatContainer>
-                </IndividualBuild>
-                <DescriptionContainer>{entry.description}</DescriptionContainer>
-                <ButtonContainer>
-                  {currentUser !== entry.trainer ? (
-                    <Button>Save Build</Button>
-                  ) : (
-                    <></>
-                  )}
-                  {currentUser === entry.trainer ? (
-                    <Button>Delete Build</Button>
-                  ) : (
-                    <></>
-                  )}
-                </ButtonContainer>
-              </>
-            );
-          })
-        ) : (
-          <></>
-        )}
-      </BuildContainer>
+      <Builds builds={builds} />
     </Container>
   );
 };
@@ -426,7 +336,6 @@ const AttackContainer = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
-    margin: auto;
   }
 `;
 
@@ -436,102 +345,9 @@ const AttackColumn = styled.div`
   overflow-y: auto;
   max-height: 500px;
   width: 25%;
-`;
 
-const BuildContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 95%;
-  margin: 1rem auto;
-`;
-
-const IndividualBuild = styled.div`
-  display: flex;
-  margin: 1rem;
-  border: 2px solid black;
-  overflow: hidden;
-`;
-
-const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  width: 20%;
-  text-align: center;
-`;
-
-const BuildAttackContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  width: 20%;
-  border-left: 0.2rem solid black;
-  border-right: 0.2rem solid black;
-`;
-
-const Info = styled.div`
-  margin: 0.2rem;
-`;
-
-// Link to the attack page of the individual attacks
-const AttackLink = styled(Link)`
-  text-decoration: underline;
-  color: black;
-  margin: 0.2rem;
-
-  &:hover {
-    background-color: lightblue;
-  }
-`;
-
-const StatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  width: 100%;
-`;
-
-// Styling for the table
-const Table = styled.table`
-  border: 0.2rem solid black;
-  text-align: center;
-  margin: 1rem;
-`;
-
-// Styling for the main  categories of each row and column
-const TableHead = styled.th`
-  font-weight: bold;
-  border: 0.1rem solid black;
-  padding: 0.5rem;
-  vertical-align: middle;
-`;
-
-// Styling for each individual cell in the table
-const TableCell = styled.td`
-  border: 0.1rem solid black;
-  vertical-align: middle;
-`;
-
-const DescriptionContainer = styled.div`
-  text-align: center;
-  width: 80%;
-  margin: auto;
-  font-size: 1.2rem;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const Button = styled.button`
-  padding: 0.5rem 1rem;
-  margin: 1rem;
-  color: white;
-  background-color: blue;
-  border-radius: 10px;
-
-  &:hover {
-    background-color: paleturquoise;
+  @media (max-width: 768px) {
+    width: 50%;
+    margin: 2rem auto;
   }
 `;

@@ -774,11 +774,13 @@ const Input = styled.input`
   font-size: 1rem;
 `;
 
+// Styling for the container holding the buttons
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
 
+// Styling for the buttons
 const Button = styled.button`
   padding: 0.5rem 1rem;
   margin: 1rem;
@@ -804,12 +806,14 @@ const ErrorContainer = styled.div`
     props.error ? "0.2rem solid red" : "0.2rem solid green"};
 `;
 
+// Styling for the div holding the textarea
 const TextBoxContainer = styled.div`
   width: 80%;
   margin: auto;
   text-align: center;
 `;
 
+// Styling for the textarea
 const TextBox = styled.textarea`
   max-width: 90%;
   min-width: 50%;
@@ -817,6 +821,7 @@ const TextBox = styled.textarea`
   margin: 0.5rem;
 `;
 
+// Styling for the div that holds the word limit available in the comment
 const WordLimit = styled.div`
   color: ${(props) => (props.empty ? "black" : props.full ? "red" : "yellow")};
 `;
