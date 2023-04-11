@@ -16,6 +16,8 @@ const Profile = () => {
     calculateStat,
     changeNatureValues,
   } = useContext(UserContext);
+
+  // These states are used to create the profile and allow the person to update the selected pokemon
   const [profile, setProfile] = useState("");
   const [pokemon, setPokemon] = useState("");
   const [update, setUpdate] = useState("");
@@ -29,6 +31,10 @@ const Profile = () => {
   const [evSpread, setEvSpread] = useState("");
   const [ivSpread, setIvSpread] = useState("");
   const [level, setLevel] = useState("");
+
+  // These states are being used in order to describe the build
+  const [value, setValue] = useState(1000);
+  const [entry, setEntry] = useState("");
 
   // This will grab the profile of the currentUser
   useEffect(() => {
@@ -137,6 +143,7 @@ const Profile = () => {
       });
   };
 
+  // Calls the endpoint that will delete the currently selected pokemon
   const handleDelete = (id) => {
     const data = {
       trainer: currentUser,
@@ -149,6 +156,34 @@ const Profile = () => {
       headers: {
         "Content-Type": "application/json",
       },
+    })
+      .then((res) => res.json())
+      .then((resData) => setError(resData));
+  };
+
+  const handlePost = (pokemon, index, generation, item) => {
+    const data = {
+      trainer: currentUser,
+      name: pokemon,
+      id: index,
+      generation: generation,
+      ability: ability,
+      nature: nature,
+      level: level,
+      item: item,
+      iv: ivSpread,
+      ev: evSpread,
+      stats: [hp, atk, def, spAtk, spDef, spd],
+      attacks: attack,
+      description: entry,
+    };
+
+    fetch("/pokemon/postBuild", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     })
       .then((res) => res.json())
       .then((resData) => setError(resData));
@@ -497,6 +532,24 @@ const Profile = () => {
                 )}
               </StatContainer>
             </PokemonContainer>
+            {update === member.pokemon ? (
+              <TextBoxContainer>
+                <TextBox
+                  type="text"
+                  placeholder="Please describe how your build is used competitively."
+                  value={entry}
+                  onChange={(e) => {
+                    setEntry(e.target.value);
+                    setValue(1000 - e.target.value.length);
+                  }}
+                ></TextBox>
+                <WordLimit full={value < 0} empty={value > 250}>
+                  Character Limit: {value}
+                </WordLimit>
+              </TextBoxContainer>
+            ) : (
+              <></>
+            )}
             {!error ? (
               <></>
             ) : error && error.status > 299 && update === member.pokemon ? (
@@ -538,7 +591,19 @@ const Profile = () => {
                   <Button onClick={() => handleDelete(member.entryId)}>
                     Delete
                   </Button>
-                  <Button>Post</Button>
+                  <Button
+                    disabled={value < 0}
+                    onClick={() =>
+                      handlePost(
+                        member.pokemon,
+                        member.index,
+                        member.generation,
+                        member.item
+                      )
+                    }
+                  >
+                    Post
+                  </Button>
                   <Button
                     onClick={() => {
                       setUpdate("");
@@ -737,4 +802,21 @@ const ErrorContainer = styled.div`
 
   border-left: ${(props) =>
     props.error ? "0.2rem solid red" : "0.2rem solid green"};
+`;
+
+const TextBoxContainer = styled.div`
+  width: 80%;
+  margin: auto;
+  text-align: center;
+`;
+
+const TextBox = styled.textarea`
+  max-width: 90%;
+  min-width: 50%;
+  text-align: center;
+  margin: 0.5rem;
+`;
+
+const WordLimit = styled.div`
+  color: ${(props) => (props.empty ? "black" : props.full ? "red" : "yellow")};
 `;

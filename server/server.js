@@ -7,6 +7,7 @@ const {
   GetProfile,
   UpdateBuild,
   DeleteBuild,
+  PostBuild,
 } = require("./handlers/pokemonHandlers");
 
 express()
@@ -30,5 +31,8 @@ express()
 
   // Endpoint called in order to update a pokemon (Profile.js)
   .patch("/pokemon/delete/", DeleteBuild)
+
+  // Endpoint called in order to update a pokemon (Profile.js)
+  .post("/pokemon/postBuild/", PostBuild)
 
   .listen(4000, () => console.log("Listening on port 4000."));
