@@ -614,10 +614,9 @@ const GetBuilds = async (req, res) => {
     .find({ pokemon: { $regex: pokemon } })
     .toArray();
 
-  if (!builds) {
+  if (builds.length === 0) {
     return res.status(404).json({
       status: 404,
-      data: pokemon,
       message: "No build of that pokemon exist at the moment.",
     });
   }
