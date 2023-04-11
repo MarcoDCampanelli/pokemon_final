@@ -186,12 +186,21 @@ const Profile = () => {
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
-      .then((resData) => setError(resData));
+      .then((resData) => {
+        setError(resData);
+
+        if (resData.status < 299) {
+          setEntry("");
+          setValue(1000);
+        }
+      });
   };
 
   if (!profile) {
     return <LoadingPage />;
   }
+
+  console.log(entry);
 
   return (
     <Container>
@@ -607,7 +616,9 @@ const Profile = () => {
                   <Button
                     onClick={() => {
                       setUpdate("");
+                      setValue(1000);
                       setError("");
+                      setEntry("");
                     }}
                   >
                     Finish
@@ -796,7 +807,7 @@ const Button = styled.button`
 // Container that holds the error messages
 const ErrorContainer = styled.div`
   text-align: center;
-  width: 80%;
+  width: 30%;
   margin: 1rem auto;
   padding: 1rem 1rem;
   font-size: 1.2rem;

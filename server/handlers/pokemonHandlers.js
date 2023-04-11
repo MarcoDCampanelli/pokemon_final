@@ -517,7 +517,12 @@ const PostBuild = async (req, res) => {
       .status(404)
       .json({ status: 404, message: "Please select a nature." });
   }
-
+  if (description.length < 100) {
+    return res.status(404).json({
+      status: 404,
+      message: "Your comment must be at least 100 characters.",
+    });
+  }
   // This will check to see if all stat values are numbers
   let statCheck = stats.every((stat) => typeof stat === "number");
   if (!statCheck) {

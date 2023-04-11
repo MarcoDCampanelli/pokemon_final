@@ -198,7 +198,11 @@ const Builds = ({ pokemonId }) => {
                       <></>
                     )}
                     {currentUser === entry.trainer ? (
-                      <Button onClick={() => handleDelete(entry._id)}>
+                      <Button
+                        onClick={() => {
+                          handleDelete(entry._id);
+                        }}
+                      >
                         Delete Build
                       </Button>
                     ) : (
@@ -221,12 +225,25 @@ const Builds = ({ pokemonId }) => {
                 ) : (
                   <></>
                 )}
+                {/* Delete shows up for all of them.....needs to be fixed..... */}
                 {!error ? (
                   <></>
                 ) : pokemon === entry._id && error.status > 299 ? (
-                  <ErrorContainer error={true}>{error.message}</ErrorContainer>
+                  <ErrorContainer error={true}>
+                    Should be red 1: {error.message}
+                  </ErrorContainer>
+                ) : pokemon === entry._id && error.status < 299 ? (
+                  <ErrorContainer error={false}>
+                    Should be green 2 {error.message}
+                  </ErrorContainer>
+                ) : !pokemon && error.status > 299 ? (
+                  <ErrorContainer error={true}>
+                    Should be red 3:{error.message}
+                  </ErrorContainer>
                 ) : (
-                  <ErrorContainer error={false}>{error.message}</ErrorContainer>
+                  <ErrorContainer error={false}>
+                    Should be green 2 {error.message}
+                  </ErrorContainer>
                 )}
               </>
             );
