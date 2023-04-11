@@ -522,6 +522,14 @@ const Profile = () => {
                   </Button>
                   <Button>Delete</Button>
                   <Button>Post</Button>
+                  <Button
+                    onClick={() => {
+                      setUpdate("");
+                      setError("");
+                    }}
+                  >
+                    Finish
+                  </Button>
                 </>
               ) : (
                 <></>
