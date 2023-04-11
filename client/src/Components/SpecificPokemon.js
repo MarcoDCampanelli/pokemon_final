@@ -17,7 +17,6 @@ const SpecificPokemon = () => {
   const { capAndRemoveHyphen } = useContext(UserContext);
   const [species, setSpecies] = useState("");
   const [pokemon, setPokemon] = useState("");
-  const [builds, setBuilds] = useState("");
   const [generation, setGeneration] = useState("red-blue");
 
   useEffect(() => {
@@ -34,12 +33,6 @@ const SpecificPokemon = () => {
       .then((res) => res.json())
       .then((resData) => {
         setPokemon(resData);
-      });
-
-    fetch(`/pokemon/getBuilds/${id.pokemon}`)
-      .then((res) => res.json())
-      .then((resData) => {
-        setBuilds(resData);
       });
   }, [id]);
 
@@ -237,7 +230,7 @@ const SpecificPokemon = () => {
       ) : (
         <></>
       )}
-      <Builds builds={builds} />
+      <Builds pokemonId={id.pokemon} />
     </Container>
   );
 };

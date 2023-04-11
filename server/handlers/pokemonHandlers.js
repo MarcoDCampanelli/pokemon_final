@@ -627,6 +627,64 @@ const GetBuilds = async (req, res) => {
   return res.status(200).json({ status: 200, data: builds });
 };
 
+const PostComment = async (req, res) => {
+  const { postId, trainer, comment } = req.body;
+
+  const client = new MongoClient(MONGO_URI, options);
+
+  if (comment.length < 10) {
+    return res.status(404).json({
+      status: 404,
+      message: "Your comment must be at least 10 characters.",
+    });
+  }
+
+  if (!trainer) {
+    return res.status(404).json({
+      status: 404,
+      message: "You must create an account to leave a comment.",
+    });
+  }
+
+  await client.connect();
+  const db = client.db("Pokemon");
+
+  const build = await db
+    .collection("CompetitiveBuilds")
+    .findOne({ _id: postId });
+
+  if (!build) {
+    return res.status(404).json({
+      status: 404,
+      data: postId,
+      message: "No post with this id could be found.",
+    });
+  }
+
+  if (build) {
+    try {
+      const date = new Date();
+      const leaveComment = await db.collection("CompetitiveBuilds").updateOne(
+        { _id: postId },
+        {
+          $push: {
+            comments: { trainer: trainer, comment: comment, date: date },
+          },
+        }
+      );
+
+      return res.status(201).json({ status: 201, message: "Comment added!" });
+    } catch (err) {
+      return res.status(409).json({
+        status: 409,
+        message: "Something went wrong, please try again.",
+      });
+    }
+  }
+
+  client.close();
+};
+
 module.exports = {
   Registration,
   Signin,
@@ -636,4 +694,5 @@ module.exports = {
   DeleteBuild,
   PostBuild,
   GetBuilds,
+  PostComment,
 };

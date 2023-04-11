@@ -1,21 +1,59 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import { format, parseISO } from "date-fns";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 import LoadingPage from "./LoadingPage";
 
-const Builds = ({ builds }) => {
+const Builds = ({ pokemonId }) => {
   const { currentUser, capAndRemoveHyphen } = useContext(UserContext);
+  const [builds, setBuilds] = useState("");
   const [pokemon, setPokemon] = useState("");
   const [comment, setComment] = useState("");
   const [value, setValue] = useState(500);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetch(`/pokemon/getBuilds/${pokemonId}`)
+      .then((res) => res.json())
+      .then((resData) => {
+        setBuilds(resData);
+      });
+  }, [pokemonId, error]);
 
   if (!builds) {
     return <LoadingPage />;
   }
 
-  console.log(pokemon);
+  console.log(builds);
+
+  // Endpoing called in order to post a comment
+  const handlePost = (id) => {
+    const data = {
+      postId: id,
+      trainer: currentUser,
+      comment: comment,
+    };
+
+    fetch("/pokemon/leaveComment", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((resData) => {
+        setError(resData);
+        setPokemon("");
+        setComment("");
+
+        setTimeout(() => {
+          setError("");
+        }, 3000);
+      });
+  };
 
   return (
     <>
@@ -93,6 +131,23 @@ const Builds = ({ builds }) => {
                   </StatContainer>
                 </IndividualBuild>
                 <DescriptionContainer>{entry.description}</DescriptionContainer>
+                <CommentsContainer>
+                  {entry.comments.length === 0 ? (
+                    <></>
+                  ) : (
+                    entry.comments.map((entry) => {
+                      const purchaseDate = parseISO(entry.date);
+                      const date = format(purchaseDate, "MMM do Y");
+                      return (
+                        <IndividualComment>
+                          <Titles>{entry.trainer}</Titles>
+                          <Comment>{entry.comment}</Comment>
+                          <Comment>Date: {date}</Comment>
+                        </IndividualComment>
+                      );
+                    })
+                  )}
+                </CommentsContainer>
                 {pokemon === entry._id ? (
                   <TextBoxContainer>
                     <TextBox
@@ -107,24 +162,42 @@ const Builds = ({ builds }) => {
                     <WordLimit full={value < 0} empty={value > 100}>
                       Character Limit: {value}
                     </WordLimit>
-                    <Button disabled={value < 0}>Submit</Button>
+                    <Button
+                      disabled={value < 0}
+                      onClick={() => handlePost(entry._id)}
+                    >
+                      Submit
+                    </Button>
                   </TextBoxContainer>
                 ) : (
                   <></>
                 )}
-                <ButtonContainer>
-                  {currentUser !== entry.trainer ? (
-                    <Button>Save Build</Button>
-                  ) : (
-                    <></>
-                  )}
-                  {currentUser === entry.trainer ? (
-                    <Button>Delete Build</Button>
-                  ) : (
-                    <></>
-                  )}
-                  <Button onClick={() => setPokemon(entry._id)}>Comment</Button>
-                </ButtonContainer>
+                {currentUser ? (
+                  <ButtonContainer>
+                    {currentUser !== entry.trainer ? (
+                      <Button>Save Build</Button>
+                    ) : (
+                      <></>
+                    )}
+                    {currentUser === entry.trainer ? (
+                      <Button>Delete Build</Button>
+                    ) : (
+                      <></>
+                    )}
+                    <Button onClick={() => setPokemon(entry._id)}>
+                      Comment
+                    </Button>
+                  </ButtonContainer>
+                ) : (
+                  <></>
+                )}
+                {!error ? (
+                  <></>
+                ) : pokemon === entry._id && error.status > 299 ? (
+                  <ErrorContainer error={true}>{error.message}</ErrorContainer>
+                ) : (
+                  <ErrorContainer error={false}>{error.message}</ErrorContainer>
+                )}
               </>
             );
           })
@@ -286,4 +359,39 @@ const TextBox = styled.textarea`
 // Styling for the div that holds the word limit available in the comment
 const WordLimit = styled.div`
   color: ${(props) => (props.empty ? "black" : props.full ? "red" : "yellow")};
+`;
+
+// Container that holds the error messages
+const ErrorContainer = styled.div`
+  text-align: center;
+  width: 80%;
+  margin: 1rem auto;
+  padding: 1rem 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+
+  border-left: ${(props) =>
+    props.error ? "0.2rem solid red" : "0.2rem solid green"};
+`;
+
+// Container that holds all of the comments
+const CommentsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 1rem auto;
+  border: 0.2rem solid black;
+`;
+
+// Container that holds individual comments
+const IndividualComment = styled.div`
+  margin: 1rem auto;
+  width: 95%;
+  border: 0.1rem solid black;
+`;
+
+// Container that holds a single comment/date
+const Comment = styled.div`
+  text-align: left;
+  padding: 0.5rem;
 `;
