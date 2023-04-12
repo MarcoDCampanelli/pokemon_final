@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
@@ -165,16 +165,21 @@ const SpecificPokemon = () => {
             <InfoCategory>
               <IndividialStat>
                 Abilities:
-                {pokemon.abilities.map((ability, index) => {
-                  return (
-                    <p key={index}>
-                      {ability.is_hidden
-                        ? "Hidden Ability: "
-                        : `Regular Ability ${index + 1}: `}
-                      {capAndRemoveHyphen(ability.ability.name)}
-                    </p>
-                  );
-                })}
+                <AbilityContainer>
+                  {pokemon.abilities.map((ability, index) => {
+                    return (
+                      <AbilityLink
+                        to={`/abilities/${ability.ability.name}`}
+                        key={index}
+                      >
+                        {ability.is_hidden
+                          ? "Hidden Ability: "
+                          : `Regular Ability ${index + 1}: `}
+                        {capAndRemoveHyphen(ability.ability.name)}
+                      </AbilityLink>
+                    );
+                  })}
+                </AbilityContainer>
               </IndividialStat>
               <IndividialStat>
                 Type:
@@ -343,4 +348,15 @@ const AttackColumn = styled.div`
     width: 50%;
     margin: 2rem auto;
   }
+`;
+
+// Container that holds the links to the pokemon's abilities
+const AbilityContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const AbilityLink = styled(Link)`
+  text-decoration: underline;
+  color: black;
 `;
