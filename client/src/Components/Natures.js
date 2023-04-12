@@ -1,13 +1,17 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 import LoadingPage from "./LoadingPage";
 
+// This component will generate a list of all natures and their advantages/disadvantages
 const Natures = () => {
+  const navigate = useNavigate();
   const [natureList, setNatureList] = useState([]);
   const { capAndRemoveHyphen, natures } = useContext(UserContext);
 
+  // The list of natures is provided by UserContext. For each nature, a fetch request will be made and that promise stored in the array.Then, once all promises are resolved, the information will be stored in the SetNatureList
   useEffect(() => {
     const promises = [];
     if (natures) {
@@ -18,6 +22,7 @@ const Natures = () => {
             .then((resData) => {
               return resData;
             })
+            .catch((err) => navigate("/error"))
         );
       });
     }
@@ -37,34 +42,36 @@ const Natures = () => {
         by 10% and simultaneously decrease another stat by 10%.
       </Paragraph>
       <Table>
-        <tr>
-          <TableHead>Nature Name</TableHead>
-          <TableHead>Stat Increased</TableHead>
-          <TableHead>Stat Decreased</TableHead>
-        </tr>
-        {natureList.map((type) => {
-          return (
-            <tr>
-              <TableCell key={type.name}>
-                {capAndRemoveHyphen(type.name)}
-              </TableCell>
-              <TableCell>
-                {type.increased_stat === null ? (
-                  <>-</>
-                ) : (
-                  <>{capAndRemoveHyphen(type.increased_stat.name)}</>
-                )}
-              </TableCell>
-              <TableCell>
-                {type.decreased_stat === null ? (
-                  <>-</>
-                ) : (
-                  <>{capAndRemoveHyphen(type.decreased_stat.name)}</>
-                )}
-              </TableCell>
-            </tr>
-          );
-        })}
+        <thead>
+          <tr>
+            <TableHead>Nature Name</TableHead>
+            <TableHead>Stat Increased</TableHead>
+            <TableHead>Stat Decreased</TableHead>
+          </tr>
+        </thead>
+        <tbody>
+          {natureList.map((type) => {
+            return (
+              <tr key={type.name}>
+                <TableCell>{capAndRemoveHyphen(type.name)}</TableCell>
+                <TableCell>
+                  {type.increased_stat === null ? (
+                    <>-</>
+                  ) : (
+                    <>{capAndRemoveHyphen(type.increased_stat.name)}</>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {type.decreased_stat === null ? (
+                    <>-</>
+                  ) : (
+                    <>{capAndRemoveHyphen(type.decreased_stat.name)}</>
+                  )}
+                </TableCell>
+              </tr>
+            );
+          })}
+        </tbody>
       </Table>
     </Container>
   );
@@ -81,7 +88,7 @@ const Container = styled.div`
   margin: 1rem auto;
 `;
 
-// Paragrpah explaining how Natures work
+// Paragraph explaining how Natures work
 const Paragraph = styled.p`
   width: 80%;
   margin: 1rem auto;
