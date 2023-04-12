@@ -6,7 +6,7 @@ import { UserContext } from "./UserContext";
 
 const EggGroup = () => {
   const group = useParams();
-  const { capAndRemoveHyphen, nameExceptions } = useContext(UserContext);
+  const { capAndRemoveHyphen } = useContext(UserContext);
   const [eggGroup, setEggGroup] = useState("");
 
   useEffect(() => {
@@ -18,8 +18,6 @@ const EggGroup = () => {
   if (!eggGroup) {
     return <></>;
   }
-
-  console.log(eggGroup);
 
   return (
     <Container>

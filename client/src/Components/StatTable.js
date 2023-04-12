@@ -3,16 +3,18 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 
+// This component generates the Stat respresentation of the given Pokemon
 const StatTable = ({ pokemon }) => {
   const { capAndRemoveHyphen } = useContext(UserContext);
 
-  // This will calculate the stat total of the given pokemon to be used in the graphic
+  // This will calculate the stat total of the given pokemon to be used in the graphic in order to generate the relative bars for each stat
   let statTotal = [];
   pokemon.stats.map((stat) => statTotal.push(stat.base_stat));
   let total = statTotal.reduce((a, b) => {
     return a + b;
   });
 
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const maxHP = (number) => {
     return (
       Math.floor(0.01 * (2 * number + 31 + Math.floor(0.25 * 252)) * 100) +
@@ -43,6 +45,7 @@ const StatTable = ({ pokemon }) => {
       10
     );
   };
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   return (
     <Table>
@@ -56,7 +59,9 @@ const StatTable = ({ pokemon }) => {
         if (pokemon.name !== "shedinja" && stat.stat.name === "hp") {
           return (
             <tr>
-              <StatName>{capAndRemoveHyphen(stat.stat.name)}</StatName>
+              <StatName key={stat.base_stat}>
+                {capAndRemoveHyphen(stat.stat.name)}
+              </StatName>
               <Value>{stat.base_stat}</Value>
               <td>
                 <ColorDiv
@@ -108,6 +113,7 @@ const StatTable = ({ pokemon }) => {
 
 export default StatTable;
 
+// Container for the entire table
 const Table = styled.table`
   border: 0.2rem solid black;
   border-radius: 5px;
@@ -120,6 +126,7 @@ const Table = styled.table`
   }
 `;
 
+// The colored div showing the weight of a stat
 const ColorDiv = styled.div`
   background-color: ${(props) =>
     props.color >= 90 ? "green" : props.color < 50 ? "red" : "yellow"};
@@ -128,30 +135,37 @@ const ColorDiv = styled.div`
   align-items: center;
 `;
 
+// Header for the first column
 const StatNameHeader = styled.th`
   width: 20%;
 `;
 
+// List of stats in the first column
 const StatName = styled.td`
   text-align: center;
 `;
 
+// Header for the second column
 const ValueHeader = styled.th`
   width: 10%;
 `;
 
+// List of the values in the second column
 const Value = styled.td`
   text-align: center;
 `;
 
+// Title for the third column showing stat weight through bars
 const StatWeightHeader = styled.th`
   width: 50%;
 `;
 
+// Title for the fourth column
 const MinMaxHeader = styled.th`
   width: 20%;
 `;
 
+// List of the values to show min/max of a stat
 const MinMax = styled.td`
   text-align: center;
 `;

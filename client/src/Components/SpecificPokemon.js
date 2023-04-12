@@ -10,16 +10,20 @@ import StatTable from "./StatTable";
 import CreateBuildTable from "./CreateBuildTable";
 import Builds from "./Builds";
 import LoadingPage from "./LoadingPage";
-import Ability from "./Ability";
 
 const SpecificPokemon = () => {
   const id = useParams();
+  // Used to navigate to an error page
   const navigate = useNavigate();
   const { capAndRemoveHyphen } = useContext(UserContext);
+  // The species of the pokemon determines what gets initially loaded on the page
   const [species, setSpecies] = useState("");
+  // The pokemon is either set in the UseEffect if the species matches the name or is set when the person chooses a form
   const [pokemon, setPokemon] = useState("");
+  // This will default a generation to "red-blue"
   const [generation, setGeneration] = useState("red-blue");
 
+  // Page load using the species of the pokemon and will also check to see if the species name corresponds to the pokemon's name. If not, pokemon remains undefined
   useEffect(() => {
     fetch(`https://pokeapi.co/api/v2/pokemon-species/${id.pokemon}`)
       .then((res) => res.json())
@@ -37,6 +41,7 @@ const SpecificPokemon = () => {
       });
   }, [id]);
 
+  // Choose a pokemon's form and display information unique to the form
   const ChooseForm = (name) => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
       .then((res) => res.json())
@@ -46,6 +51,8 @@ const SpecificPokemon = () => {
   if (!species) {
     return <LoadingPage />;
   }
+
+  // Certain info can only be acquired from pokemon and not from species. Therefore, conditional rendering is used in these cases and the user is asked to specify a form
 
   return (
     <Container>
@@ -106,7 +113,9 @@ const SpecificPokemon = () => {
                 <IndividialStat>Height: {pokemon.height / 10}m</IndividialStat>
               </>
             ) : (
-              <>Select a form for more information</>
+              <IndividialStat>
+                Select a form for more information
+              </IndividialStat>
             )}
           </InfoCategory>
           <Titles>In-game Mechanics:</Titles>
@@ -116,7 +125,7 @@ const SpecificPokemon = () => {
             </IndividialStat>
             <IndividialStat>
               Growth Rate:{" "}
-              {/* ! DAMN YOU API!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
+              {/* Growth rate was discontinued in gen 9 in the species section so this is the temporary solution until the API is updated. */}
               {species.generation.name !== "generation-ix" ? (
                 <>{capAndRemoveHyphen(species.growth_rate.name)}</>
               ) : (
@@ -124,7 +133,7 @@ const SpecificPokemon = () => {
               )}
             </IndividialStat>
             <IndividialStat>
-              {/* ! DAMN YOU API!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
+              {/* Habitat was discontinued in gen 9 in the species section so this is the temporary solution until the API is updated. */}
               Habitat:{" "}
               {species.generation.name === "generation-ix" ||
               species.habitat === null ? (
@@ -148,19 +157,22 @@ const SpecificPokemon = () => {
           <InfoCategory>
             <IndividialStat>
               Egg Groups:
-              <AbilityContainer>
+              <LinksContainer>
                 {species.egg_groups.map((group) => {
                   if (group.name === "no-eggs") {
                     return <>No known egg group</>;
                   } else {
                     return (
-                      <AbilityLink to={`/eggGroups/${group.name}`}>
+                      <AbilityEggLink
+                        to={`/eggGroups/${group.name}`}
+                        key={group.name}
+                      >
                         {capAndRemoveHyphen(group.name)}
-                      </AbilityLink>
+                      </AbilityEggLink>
                     );
                   }
                 })}
-              </AbilityContainer>
+              </LinksContainer>
             </IndividialStat>
 
             <IndividialStat>
@@ -172,31 +184,35 @@ const SpecificPokemon = () => {
             <InfoCategory>
               <IndividialStat>
                 Abilities:
-                <AbilityContainer>
+                <LinksContainer>
                   {pokemon.abilities.map((ability, index) => {
                     return (
-                      <AbilityLink
+                      <AbilityEggLink
                         to={`/abilities/${ability.ability.name}`}
-                        key={index}
+                        key={ability.ability.name}
                       >
                         {ability.is_hidden
                           ? "Hidden Ability: "
                           : `Regular Ability ${index + 1}: `}
                         {capAndRemoveHyphen(ability.ability.name)}
-                      </AbilityLink>
+                      </AbilityEggLink>
                     );
                   })}
-                </AbilityContainer>
+                </LinksContainer>
               </IndividialStat>
               <IndividialStat>
                 Type:
                 {pokemon.types.map((type) => {
-                  return <p>{capAndRemoveHyphen(type.type.name)} </p>;
+                  return (
+                    <p key={type.type.name}>
+                      {capAndRemoveHyphen(type.type.name)}{" "}
+                    </p>
+                  );
                 })}
               </IndividialStat>
             </InfoCategory>
           ) : (
-            <>Select a form for more information</>
+            <IndividialStat>Select a form for more information</IndividialStat>
           )}
         </PokemonInfoContainer>
       </PokemonContainer>
@@ -204,13 +220,16 @@ const SpecificPokemon = () => {
         {species.varieties.length !== 1 ? (
           <>
             <Label>Select a form:</Label>
-            <Select onChange={(e) => ChooseForm(e.target.value)}>
-              <option selected disabled>
+            <Select
+              defaultValue={"default"}
+              onChange={(e) => ChooseForm(e.target.value)}
+            >
+              <option value={"default"} disabled>
                 Select a form
               </option>
               {species.varieties.map((type) => {
                 return (
-                  <option value={type.pokemon.name}>
+                  <option value={type.pokemon.name} key={type.pokemon.name}>
                     {capAndRemoveHyphen(type.pokemon.name)}
                   </option>
                 );
@@ -225,7 +244,7 @@ const SpecificPokemon = () => {
       {pokemon ? <GenerationSelect setGeneration={setGeneration} /> : <></>}
       {pokemon ? (
         <>
-          <AttackContainer>
+          <AttackBuildContainer>
             <AttackColumn>
               <Attacks pokemon={pokemon} generation={generation} />
             </AttackColumn>
@@ -237,7 +256,7 @@ const SpecificPokemon = () => {
               pokemon={pokemon}
               generation={generation}
             />
-          </AttackContainer>
+          </AttackBuildContainer>
         </>
       ) : (
         <></>
@@ -255,13 +274,13 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-// Styling for titles
+// Styling for titles of each category and the Pokemon's name
 const Titles = styled.h1`
   font-weight: bold;
   margin: 0.3rem;
 `;
 
-// Container that will hold the box containing the images and the information of the pokemon
+// Container that will hold the box containing both the sprites and the information
 const PokemonContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -271,7 +290,7 @@ const PokemonContainer = styled.div`
   margin: 1rem auto;
 `;
 
-// The left sided div that holds the images
+// The left sided div that holds the images and the sprites
 const ArtContainer = styled.div`
   width: 30%;
   padding: auto;
@@ -302,7 +321,7 @@ const PokemonInfoContainer = styled.div`
   flex-direction: column;
 `;
 
-// Container holding the the information for a specific category
+// Container holding the the information for a specific category (physical description, in-game mechanics, hatching info, abilities and type)
 const InfoCategory = styled.div`
   display: flex;
   flex-direction: row;
@@ -312,12 +331,25 @@ const InfoCategory = styled.div`
   margin: 0.5rem;
 `;
 
-// Container for each stat and div
+// Container for each individual piece of info in the right-side column
 const IndividialStat = styled.div`
   padding: 0.2rem 0.5rem;
 `;
 
-// Container holding the buttons that allow you to choose a form
+// Flex column container to hold and info containing links
+const LinksContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+// Styling for links used in the pokemon's info table
+const AbilityEggLink = styled(Link)`
+  text-decoration: underline;
+  color: black;
+  margin: 0.5rem auto;
+`;
+
+// Container holding the button that allows you to choose a form
 const FormContainer = styled.div`
   text-align: center;
 `;
@@ -334,7 +366,8 @@ const Select = styled.select`
   border-radius: 5px;
 `;
 
-const AttackContainer = styled.div`
+// Container that holds the list of attacks by level up, special attacks, and the createBuild table
+const AttackBuildContainer = styled.div`
   display: flex;
   overflow: hidden;
   justify-content: space-around;
@@ -344,6 +377,7 @@ const AttackContainer = styled.div`
   }
 `;
 
+// The attack columns that hold the two type of attacks (level-up/special)
 const AttackColumn = styled.div`
   margin: 0.5rem;
   text-align: center;
@@ -355,15 +389,4 @@ const AttackColumn = styled.div`
     width: 50%;
     margin: 2rem auto;
   }
-`;
-
-// Container that holds the links to the pokemon's abilities
-const AbilityContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const AbilityLink = styled(Link)`
-  text-decoration: underline;
-  color: black;
 `;
