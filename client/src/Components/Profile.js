@@ -207,8 +207,8 @@ const Profile = () => {
         let exceptions = nameExceptions.some((item) => array.includes(item));
         return (
           <>
-            <PokemonContainer width={member.pokemon === update}>
-              <InfoContainer width={member.pokemon === update}>
+            <PokemonContainer width={member.entryId === update}>
+              <InfoContainer width={member.entryId === update}>
                 {exceptions ? (
                   <PokemonLink to={`/pokemon/${member.pokemon.split("-")[0]}`}>
                     {capAndRemoveHyphen(member.pokemon)}
@@ -230,7 +230,7 @@ const Profile = () => {
                 </Info>
                 <Info>Generation: {capAndRemoveHyphen(member.generation)}</Info>
 
-                {member.pokemon !== update ? (
+                {member.entryId !== update ? (
                   <Info>Nature: {capAndRemoveHyphen(member.nature)}</Info>
                 ) : (
                   <>
@@ -261,7 +261,7 @@ const Profile = () => {
                   </>
                 )}
 
-                {member.pokemon !== update ? (
+                {member.entryId !== update ? (
                   <Info>Ability: {capAndRemoveHyphen(member.ability)}</Info>
                 ) : (
                   <>
@@ -294,9 +294,9 @@ const Profile = () => {
                   />
                 </div>
               </InfoContainer>
-              <AttackContainer width={member.pokemon === update}>
+              <AttackContainer width={member.entryId === update}>
                 <Title>Attacks</Title>
-                {member.pokemon !== update ? (
+                {member.entryId !== update ? (
                   <>
                     {Object.values(member.attacks).map((attack) => {
                       return (
@@ -441,9 +441,9 @@ const Profile = () => {
                   </>
                 )}
               </AttackContainer>
-              <StatContainer width={member.pokemon === update}>
+              <StatContainer width={member.entryId === update}>
                 <Title>Stat Totals</Title>
-                {member.pokemon !== update ? (
+                {member.entryId !== update ? (
                   <>
                     {Object.keys(member.iv).map((stat, index) => {
                       return (
@@ -539,7 +539,7 @@ const Profile = () => {
                 )}
               </StatContainer>
             </PokemonContainer>
-            {update === member.pokemon ? (
+            {update === member.entryId ? (
               <TextBoxContainer>
                 <TextBox
                   type="text"
@@ -559,23 +559,23 @@ const Profile = () => {
             )}
             {!error ? (
               <></>
-            ) : error && error.status > 299 && update === member.pokemon ? (
+            ) : error && error.status > 299 && update === member.entryId ? (
               <ErrorContainer error={true}>
                 We ran into a problem when submitting your Pokemon! Please check
                 the following: {error.message}
               </ErrorContainer>
-            ) : error && update !== member.pokemon ? (
+            ) : error && update !== member.entryId ? (
               <></>
             ) : (
               <ErrorContainer error={false}>{error.message}</ErrorContainer>
             )}
             <ButtonContainer>
-              {pokemon && update === member.pokemon ? (
+              {pokemon && update === member.entryId ? (
                 <></>
               ) : (
                 <Button
                   onClick={() => {
-                    setUpdate(member.pokemon);
+                    setUpdate(member.entryId);
                     handleUpdate(
                       member.pokemon,
                       member.nature,
@@ -590,7 +590,7 @@ const Profile = () => {
                   Make Changes
                 </Button>
               )}
-              {pokemon && update === member.pokemon ? (
+              {pokemon && update === member.entryId ? (
                 <>
                   <Button onClick={() => handleChanges(member.entryId)}>
                     Update
