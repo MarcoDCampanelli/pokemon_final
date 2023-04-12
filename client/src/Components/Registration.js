@@ -4,7 +4,7 @@ import { UserContext } from "./UserContext";
 
 import styled from "styled-components";
 
-// This component contains the code for the user to create an account for the first time.
+// This component allows the user to register a new account
 const Registration = () => {
   const registration = {
     user: "",
@@ -13,7 +13,9 @@ const Registration = () => {
   };
 
   const { setCurrentUser } = useContext(UserContext);
+  // State used to hold the new user's info
   const [newUser, setNewUser] = useState(registration);
+  // State used to hold any errors the server may respond with
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -32,16 +34,21 @@ const Registration = () => {
       .then((res) => res.json())
       .then((resData) => {
         if (resData.status === 201) {
+          // Stores the new user in local storage
           window.localStorage.setItem(
             "currentUser",
             JSON.stringify(resData.data)
           );
+          //  Sets current user to this new user
           setCurrentUser(resData.data);
+          // Navigates us to the home page
           navigate("/");
         } else {
+          // Stores errors returned by the server
           setError(resData.message);
         }
-      });
+      })
+      .catch((err) => navigate("/error"));
   };
 
   return (

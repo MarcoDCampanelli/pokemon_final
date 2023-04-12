@@ -30,12 +30,14 @@ const Login = () => {
 
 export default Login;
 
+// Container for the entire page including the form and the button to go to registration or sign-in
 const LogInContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
 `;
 
+// Styling for the button
 const Button = styled.button`
   width: 20%;
   margin: auto;
@@ -49,6 +51,7 @@ const Button = styled.button`
   }
 `;
 
+// Styling for the question of whether the user has or doesn't have an account
 const Question = styled.h3`
   margin: 0.5rem;
 `;

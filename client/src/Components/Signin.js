@@ -12,8 +12,10 @@ const Signin = () => {
     password: "",
   };
 
-  const { setCurrentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  // State used in the POST request
   const [returningUser, setReturningUser] = useState(signin);
+  // Holds the error in order to display it to the user
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -32,17 +34,27 @@ const Signin = () => {
       .then((res) => res.json())
       .then((resData) => {
         if (resData.status === 200) {
+          // This will store the currentUser into localStorage so it won't be lost on every reload
           window.localStorage.setItem(
             "currentUser",
             JSON.stringify(resData.data)
           );
+          // This sets the current user
           setCurrentUser(resData.data);
+          // Upon sign-in, navigate to the homePage
           navigate("/");
         } else {
+          // Stores errors returned by the server
           setError(resData.message);
         }
-      });
+      })
+      .catch((err) => navigate("/error"));
   };
+
+  // If the user is signed in, they can't return to this page
+  if (currentUser) {
+    navigate("/");
+  }
 
   return (
     <SigninContainer>
@@ -154,7 +166,7 @@ const Button = styled.button`
   }
 `;
 
-// Styling for the box displaying the possible responses from the server
+// Styling for the box displaying the possible errors from the server
 const ErrorMessage = styled.div`
   margin: 0.5rem auto;
   padding: 1rem;

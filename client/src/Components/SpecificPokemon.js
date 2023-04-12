@@ -11,6 +11,7 @@ import CreateBuildTable from "./CreateBuildTable";
 import Builds from "./Builds";
 import LoadingPage from "./LoadingPage";
 
+// This component generates the page of a single pokemon
 const SpecificPokemon = () => {
   const id = useParams();
   // Used to navigate to an error page
@@ -45,7 +46,10 @@ const SpecificPokemon = () => {
   const ChooseForm = (name) => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
       .then((res) => res.json())
-      .then((resData) => setPokemon(resData));
+      .then((resData) => setPokemon(resData))
+      .catch((err) => {
+        navigate("/error");
+      });
   };
 
   if (!species) {
