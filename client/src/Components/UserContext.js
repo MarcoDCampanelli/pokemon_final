@@ -286,6 +286,9 @@ export const UserProvider = ({ children }) => {
     "droopy",
     "stretchy",
     "plumage",
+    "starter",
+    "gmax",
+    "totem",
   ];
 
   return (
