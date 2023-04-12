@@ -8,6 +8,7 @@ const Footer = () => {
       <Link to={"/natures"}>Natures</Link>
       <Link to={"/items"}>Item List</Link>
       <Link to={"/abilities"}>Ability List</Link>
+      <Link to={"/eggGroups"}>Egg Group List</Link>
     </Container>
   );
 };

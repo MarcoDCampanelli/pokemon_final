@@ -10,6 +10,7 @@ import StatTable from "./StatTable";
 import CreateBuildTable from "./CreateBuildTable";
 import Builds from "./Builds";
 import LoadingPage from "./LoadingPage";
+import Ability from "./Ability";
 
 const SpecificPokemon = () => {
   const id = useParams();
@@ -146,14 +147,20 @@ const SpecificPokemon = () => {
           <Titles>Hatching Information:</Titles>
           <InfoCategory>
             <IndividialStat>
-              Egg Groups:{" "}
-              {species.egg_groups.map((group) => {
-                if (group.name === "no-eggs") {
-                  return <>No known egg group</>;
-                } else {
-                  return <div>{capAndRemoveHyphen(group.name)}</div>;
-                }
-              })}
+              Egg Groups:
+              <AbilityContainer>
+                {species.egg_groups.map((group) => {
+                  if (group.name === "no-eggs") {
+                    return <>No known egg group</>;
+                  } else {
+                    return (
+                      <AbilityLink to={`/eggGroups/${group.name}`}>
+                        {capAndRemoveHyphen(group.name)}
+                      </AbilityLink>
+                    );
+                  }
+                })}
+              </AbilityContainer>
             </IndividialStat>
 
             <IndividialStat>

@@ -14,6 +14,8 @@ import Natures from "./Components/Natures";
 import Items from "./Components/Items";
 import Abilities from "./Components/Abilities";
 import Ability from "./Components/Ability";
+import EggGroups from "./Components/EggGroups";
+import EggGroup from "./Components/EggGroup";
 import ErrorPage from "./Components/ErrorPage";
 import Footer from "./Components/Footer";
 
@@ -35,6 +37,8 @@ const App = () => {
               <Route path="/items" element={<Items />} />
               <Route path="/abilities" element={<Abilities />} />
               <Route path="/abilities/:ability" element={<Ability />} />
+              <Route path="/eggGroups" element={<EggGroups />} />
+              <Route path="/eggGroups/:group" element={<EggGroup />} />
               <Route path="/error" element={<ErrorPage />} />
             </Routes>
           </Body>

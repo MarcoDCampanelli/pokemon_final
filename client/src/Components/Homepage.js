@@ -39,6 +39,12 @@ const Homepage = () => {
     }
   };
 
+  const handleAbilitySearch = () => {
+    if (ability.length > 0) {
+      navigate(`/abilities/${ability.replaceAll(" ", "-")}`);
+    }
+  };
+
   if (!pokemonList) {
     return <>Loading...</>;
   }
@@ -82,9 +88,11 @@ const Homepage = () => {
           <Inputs
             type="text"
             placeholder="Ability"
-            onChange={(e) => setAbility(e.target.value)}
+            onChange={(e) => setAbility(e.target.value.toLowerCase())}
           ></Inputs>
-          <SearchButton>Search</SearchButton>
+          <SearchButton onClick={() => handleAbilitySearch()}>
+            Search
+          </SearchButton>
         </SearchContainer>
       </HomepageContainer>
       <div>

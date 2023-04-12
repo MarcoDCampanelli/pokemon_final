@@ -40,7 +40,7 @@ const Ability = () => {
         <Title>Ability Description:</Title>
         {abilities.effect_entries.map((entry) => {
           if (entry.language.name === "en") {
-            return <div>{entry.effect}</div>;
+            return <Description>{entry.effect}</Description>;
           }
         })}
       </div>
@@ -75,6 +75,11 @@ const Title = styled.h1`
 const PokemonContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const Description = styled.div`
+  width: 60%;
+  margin: auto;
 `;
 
 // Link to the pokemon's page when clicked
