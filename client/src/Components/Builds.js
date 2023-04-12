@@ -9,7 +9,11 @@ import LoadingPage from "./LoadingPage";
 const Builds = ({ pokemonId }) => {
   const { currentUser, capAndRemoveHyphen } = useContext(UserContext);
   const [builds, setBuilds] = useState("");
+  // The following 2 states are here to be set in order to make sure the error message is displayed in the right spot
+  // deletePokemon is used when saving / deleting a certain entry
   const [pokemon, setPokemon] = useState("");
+  const [deletePokemon, setDeletePokemon] = useState("");
+
   const [comment, setComment] = useState("");
   const [value, setValue] = useState(500);
   const [error, setError] = useState("");
@@ -46,7 +50,8 @@ const Builds = ({ pokemonId }) => {
             setError("");
             setPokemon("");
             setComment("");
-          }, 3000);
+            setValue(500);
+          }, 2000);
         }
       });
   };
@@ -64,7 +69,7 @@ const Builds = ({ pokemonId }) => {
             setError("");
             setPokemon("");
             setComment("");
-          }, 3000);
+          }, 2000);
         }
       });
   };
@@ -105,7 +110,15 @@ const Builds = ({ pokemonId }) => {
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
-      .then((resData) => setError(resData))
+      .then((resData) => {
+        setError(resData);
+
+        if (resData.status < 299) {
+          setTimeout(() => {
+            setError("");
+          }, 2000);
+        }
+      })
       .catch((error) => window.alert(error));
   };
 
@@ -234,7 +247,8 @@ const Builds = ({ pokemonId }) => {
                   <ButtonContainer>
                     {currentUser !== entry.trainer ? (
                       <Button
-                        onClick={() =>
+                        onClick={() => {
+                          setDeletePokemon(entry._id);
                           handleAddToParty(
                             entry.pokemon,
                             entry.index,
@@ -247,8 +261,8 @@ const Builds = ({ pokemonId }) => {
                             entry.ev,
                             entry.stats,
                             entry.attacks
-                          )
-                        }
+                          );
+                        }}
                       >
                         Save Build
                       </Button>
@@ -258,6 +272,7 @@ const Builds = ({ pokemonId }) => {
                     {currentUser === entry.trainer ? (
                       <Button
                         onClick={() => {
+                          setDeletePokemon(entry._id);
                           handleDelete(entry._id);
                         }}
                       >
@@ -266,7 +281,14 @@ const Builds = ({ pokemonId }) => {
                     ) : (
                       <></>
                     )}
-                    <Button onClick={() => setPokemon(entry._id)}>
+                    <Button
+                      onClick={() => {
+                        setPokemon(entry._id);
+                        setComment("");
+                        setValue(500);
+                        setError("");
+                      }}
+                    >
                       Comment
                     </Button>
                     <Button
@@ -283,25 +305,27 @@ const Builds = ({ pokemonId }) => {
                 ) : (
                   <></>
                 )}
-                {/* Delete shows up for all of them.....needs to be fixed..... */}
                 {!error ? (
                   <></>
                 ) : pokemon === entry._id && error.status > 299 ? (
-                  <ErrorContainer error={true}>
-                    Should be red 1: {error.message}
-                  </ErrorContainer>
+                  <ErrorContainer error={true}>{error.message}</ErrorContainer>
                 ) : pokemon === entry._id && error.status < 299 ? (
-                  <ErrorContainer error={false}>
-                    Should be green 2 {error.message}
-                  </ErrorContainer>
-                ) : !pokemon && error.status > 299 ? (
-                  <ErrorContainer error={true}>
-                    Should be red 3:{error.message}
-                  </ErrorContainer>
+                  <ErrorContainer error={false}>{error.message}</ErrorContainer>
                 ) : (
-                  <ErrorContainer error={false}>
-                    Should be green 2 {error.message}
-                  </ErrorContainer>
+                  <></>
+                )}
+                {!error ? (
+                  <></>
+                ) : !pokemon &&
+                  error.status > 299 &&
+                  deletePokemon === entry._id ? (
+                  <ErrorContainer error={true}>{error.message}</ErrorContainer>
+                ) : !pokemon &&
+                  error.status < 299 &&
+                  deletePokemon === entry._id ? (
+                  <ErrorContainer error={false}>{error.message}</ErrorContainer>
+                ) : (
+                  <></>
                 )}
               </>
             );
