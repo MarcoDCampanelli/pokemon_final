@@ -578,6 +578,7 @@ const Profile = () => {
             ) : (
               <></>
             )}
+            {/* If there is no error, display nothing. If there is an error, check whether the status is greater than 299 and that the entryId matches the pokemon being updated.If so, show the error. If the entryId doesn't match the pokemon, show nothing. If it does match, show the successful message.  */}
             {!error ? (
               <></>
             ) : error && error.status > 299 && update === member.entryId ? (
