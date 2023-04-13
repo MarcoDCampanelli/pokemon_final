@@ -35,6 +35,8 @@ const Profile = () => {
   const [evSpread, setEvSpread] = useState("");
   const [ivSpread, setIvSpread] = useState("");
   const [level, setLevel] = useState("");
+  // This state is only being used to organize the attacks in alphabetical order
+  const [generation, setGeneration] = useState("");
 
   // These states are being used in order to describe/post the build
   const [value, setValue] = useState(1000);
@@ -49,7 +51,16 @@ const Profile = () => {
   }, [error]);
 
   // This will grab the info of the pokemon selected to be updated and set all of the states to those of the selected Pokemon
-  const handleUpdate = (name, nature, ability, attack, ev, iv, level) => {
+  const handleUpdate = (
+    name,
+    nature,
+    ability,
+    attack,
+    ev,
+    iv,
+    level,
+    generation
+  ) => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
       .then((res) => res.json())
       .then((resData) => {
@@ -64,6 +75,7 @@ const Profile = () => {
     setIvSpread(iv);
     setLevel(level);
     setError("");
+    setGeneration(generation);
   };
 
   // These 6 variables and functions calculate the pokemon's stat based on what is being modified
@@ -122,6 +134,33 @@ const Profile = () => {
       natureValues.spd
     );
   }
+
+  // This will allow the natures to be rendered in alphabetical order
+  let natureArray = [];
+  if (natures) {
+    natures.map((nature) => {
+      natureArray.push(nature);
+    });
+    natureArray.sort((a, b) => {
+      return a.localeCompare(b);
+    });
+  }
+
+  // This will allow the attacks to be rendered in alphabetical order and remove any duplicates
+  let attackArray = [];
+  if (pokemon && generation) {
+    pokemon.moves.map((move) => {
+      return move.version_group_details.map((version) => {
+        if (version.version_group.name === generation) {
+          return attackArray.push(move.move.name);
+        }
+      });
+    });
+    attackArray.sort((a, b) => {
+      return a.localeCompare(b);
+    });
+  }
+  let uniqueAttacks = [...new Set(attackArray)];
 
   // Calls the endpoint that will update the currently selected pokemon
   const handleChanges = (id) => {
@@ -258,14 +297,12 @@ const Profile = () => {
                     >
                       <option disabled>Select a nature</option>
                       {natures &&
-                        natures.map((nature) => {
-                          {
-                            return (
-                              <option value={nature} key={nature}>
-                                {capAndRemoveHyphen(nature)}
-                              </option>
-                            );
-                          }
+                        natureArray.map((nature) => {
+                          return (
+                            <option value={nature} key={nature}>
+                              {capAndRemoveHyphen(nature)}
+                            </option>
+                          );
                         })}
                     </Select>
                   </>
@@ -283,25 +320,22 @@ const Profile = () => {
                       <option disabled>Select an ability</option>
                       {pokemon &&
                         pokemon.abilities.map((ability) => {
-                          {
-                            return (
-                              <option
-                                value={ability.ability.name}
-                                selected={
-                                  ability.ability.name === member.ability
-                                }
-                                key={ability.ability.name}
-                              >
-                                {capAndRemoveHyphen(ability.ability.name)}
-                              </option>
-                            );
-                          }
+                          return (
+                            <option
+                              value={ability.ability.name}
+                              selected={ability.ability.name === member.ability}
+                              key={ability.ability.name}
+                            >
+                              {capAndRemoveHyphen(ability.ability.name)}
+                            </option>
+                          );
                         })}
                     </Select>
                   </>
                 )}
                 <div>
                   <img
+                    alt={"Pokemon sprite not available"}
                     src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${member.index}.png`}
                   />
                 </div>
@@ -312,7 +346,10 @@ const Profile = () => {
                   <>
                     {Object.values(member.attacks).map((attack) => {
                       return (
-                        <AttackLink to={`/attacks/${attack}`} key={attack}>
+                        <AttackLink
+                          to={`/attacks/${attack}`}
+                          key={member.entryId + attack}
+                        >
                           {capAndRemoveHyphen(attack)}
                         </AttackLink>
                       );
@@ -330,25 +367,16 @@ const Profile = () => {
                       >
                         <option disabled>Select an attack:</option>
                         {pokemon &&
-                          pokemon.moves.map((move) => {
-                            return move.version_group_details.map((version) => {
-                              if (
-                                version.version_group.name === member.generation
-                              ) {
-                                return (
-                                  <option
-                                    value={move.move.name}
-                                    selected={
-                                      move.move.name === member.attacks.atk1
-                                    }
-                                  >
-                                    {capAndRemoveHyphen(move.move.name)}
-                                  </option>
-                                );
-                              } else {
-                                <></>;
-                              }
-                            });
+                          uniqueAttacks.map((attack) => {
+                            return (
+                              <option
+                                value={attack}
+                                selected={attack === member.attacks.atk1}
+                                key={`Attack1:${attack}`}
+                              >
+                                {capAndRemoveHyphen(attack)}
+                              </option>
+                            );
                           })}
                       </Select>
                     </IndividualAttack>
@@ -362,23 +390,16 @@ const Profile = () => {
                       >
                         <option disabled>Select an attack:</option>
                         {pokemon &&
-                          pokemon.moves.map((move) => {
-                            return move.version_group_details.map((version) => {
-                              if (
-                                version.version_group.name === member.generation
-                              ) {
-                                return (
-                                  <option
-                                    value={move.move.name}
-                                    selected={
-                                      move.move.name === member.attacks.atk2
-                                    }
-                                  >
-                                    {capAndRemoveHyphen(move.move.name)}
-                                  </option>
-                                );
-                              }
-                            });
+                          uniqueAttacks.map((attack) => {
+                            return (
+                              <option
+                                value={attack}
+                                selected={attack === member.attacks.atk2}
+                                key={`Attack2:${attack}`}
+                              >
+                                {capAndRemoveHyphen(attack)}
+                              </option>
+                            );
                           })}
                       </Select>
                     </IndividualAttack>
@@ -392,23 +413,16 @@ const Profile = () => {
                       >
                         <option disabled>Select an attack:</option>
                         {pokemon &&
-                          pokemon.moves.map((move) => {
-                            return move.version_group_details.map((version) => {
-                              if (
-                                version.version_group.name === member.generation
-                              ) {
-                                return (
-                                  <option
-                                    value={move.move.name}
-                                    selected={
-                                      move.move.name === member.attacks.atk3
-                                    }
-                                  >
-                                    {capAndRemoveHyphen(move.move.name)}
-                                  </option>
-                                );
-                              }
-                            });
+                          uniqueAttacks.map((attack) => {
+                            return (
+                              <option
+                                value={attack}
+                                selected={attack === member.attacks.atk3}
+                                key={`Attack3:${attack}`}
+                              >
+                                {capAndRemoveHyphen(attack)}
+                              </option>
+                            );
                           })}
                       </Select>
                     </IndividualAttack>
@@ -422,23 +436,16 @@ const Profile = () => {
                       >
                         <option disabled>Select an attack:</option>
                         {pokemon &&
-                          pokemon.moves.map((move) => {
-                            return move.version_group_details.map((version) => {
-                              if (
-                                version.version_group.name === member.generation
-                              ) {
-                                return (
-                                  <option
-                                    value={move.move.name}
-                                    selected={
-                                      move.move.name === member.attacks.atk4
-                                    }
-                                  >
-                                    {capAndRemoveHyphen(move.move.name)}
-                                  </option>
-                                );
-                              }
-                            });
+                          uniqueAttacks.map((attack) => {
+                            return (
+                              <option
+                                value={attack}
+                                selected={attack === member.attacks.atk4}
+                                key={`Attack4:${attack}`}
+                              >
+                                {capAndRemoveHyphen(attack)}
+                              </option>
+                            );
                           })}
                       </Select>
                     </IndividualAttack>
@@ -451,7 +458,7 @@ const Profile = () => {
                   <>
                     {Object.keys(member.iv).map((stat, index) => {
                       return (
-                        <div>
+                        <div key={`Final:${stat}`}>
                           {capAndRemoveHyphen(stat)} : {member.stats[index]}
                         </div>
                       );
@@ -459,86 +466,96 @@ const Profile = () => {
                   </>
                 ) : (
                   <Table>
-                    <tr>
-                      <TableHead>Stat Name:</TableHead>
-                      {Object.keys(member.iv).map((stat, index) => {
-                        return (
-                          <TableHead>{capAndRemoveHyphen(stat)}</TableHead>
-                        );
-                      })}
-                    </tr>
-                    <tr>
-                      <TableHead>Base Stat</TableHead>
-                      {pokemon &&
-                        pokemon.stats.map((stat) => {
-                          return <TableCell>{stat.base_stat}</TableCell>;
-                        })}
-                    </tr>
-                    <tr>
-                      <TableHead>IV</TableHead>
-                      {pokemon &&
-                        Object.values(ivSpread).map((iv, index) => {
-                          let keys = Object.keys(ivSpread);
+                    <thead>
+                      <tr>
+                        <TableHead>Stat Name:</TableHead>
+                        {Object.keys(member.iv).map((stat, index) => {
                           return (
-                            <TableCell>
-                              <Input
-                                type="number"
-                                min="0"
-                                max="31"
-                                defaultValue={iv}
-                                onChange={(e) => {
-                                  setIvSpread({
-                                    ...ivSpread,
-                                    [keys[index]]: parseInt(e.target.value),
-                                  });
-                                }}
-                              ></Input>
-                            </TableCell>
+                            <TableHead key={`Name:${stat}`}>
+                              {capAndRemoveHyphen(stat)}
+                            </TableHead>
                           );
                         })}
-                    </tr>
-                    <tr>
-                      <TableHead>EV</TableHead>
-                      {pokemon &&
-                        Object.values(evSpread).map((ev, index) => {
-                          let keys = Object.keys(evSpread);
-                          return (
-                            <TableCell>
-                              <Input
-                                type="number"
-                                min="0"
-                                max="31"
-                                defaultValue={ev}
-                                onChange={(e) => {
-                                  setEvSpread({
-                                    ...evSpread,
-                                    [keys[index]]: parseInt(e.target.value),
-                                  });
-                                }}
-                              ></Input>
-                            </TableCell>
-                          );
-                        })}
-                    </tr>
-                    <tr>
-                      <TableHead>Final Stat Value</TableHead>
-                      {pokemon ? (
-                        <>
-                          {pokemon.name === "shedinja" ? (
-                            <TableCell>1</TableCell>
-                          ) : (
-                            <TableCell>{hp}</TableCell>
-                          )}
-                          <TableCell>{atk}</TableCell>
-                          <TableCell>{def}</TableCell>
-                          <TableCell>{spAtk}</TableCell>
-                          <TableCell>{spDef}</TableCell>
-                          <TableCell>{spd}</TableCell>
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </tr>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <TableHead>Base Stat</TableHead>
+                        {pokemon &&
+                          pokemon.stats.map((stat) => {
+                            return (
+                              <TableCell key={`BaseStat:${stat.stat.name}`}>
+                                {stat.base_stat}
+                              </TableCell>
+                            );
+                          })}
+                      </tr>
+                      <tr>
+                        <TableHead>IV</TableHead>
+                        {pokemon &&
+                          Object.values(ivSpread).map((iv, index) => {
+                            let keys = Object.keys(ivSpread);
+                            return (
+                              <TableCell key={`IV:${index}`}>
+                                <Input
+                                  type="number"
+                                  min="0"
+                                  max="31"
+                                  defaultValue={iv}
+                                  onChange={(e) => {
+                                    setIvSpread({
+                                      ...ivSpread,
+                                      [keys[index]]: parseInt(e.target.value),
+                                    });
+                                  }}
+                                ></Input>
+                              </TableCell>
+                            );
+                          })}
+                      </tr>
+                      <tr>
+                        <TableHead>EV</TableHead>
+                        {pokemon &&
+                          Object.values(evSpread).map((ev, index) => {
+                            let keys = Object.keys(evSpread);
+                            return (
+                              <TableCell key={`EV:${index}`}>
+                                <Input
+                                  type="number"
+                                  min="0"
+                                  max="31"
+                                  defaultValue={ev}
+                                  onChange={(e) => {
+                                    setEvSpread({
+                                      ...evSpread,
+                                      [keys[index]]: parseInt(e.target.value),
+                                    });
+                                  }}
+                                ></Input>
+                              </TableCell>
+                            );
+                          })}
+                      </tr>
+                      <tr>
+                        <TableHead>Final Stat Value</TableHead>
+                        {pokemon ? (
+                          <>
+                            {pokemon.name === "shedinja" ? (
+                              <TableCell>1</TableCell>
+                            ) : (
+                              <TableCell>{hp}</TableCell>
+                            )}
+                            <TableCell>{atk}</TableCell>
+                            <TableCell>{def}</TableCell>
+                            <TableCell>{spAtk}</TableCell>
+                            <TableCell>{spDef}</TableCell>
+                            <TableCell>{spd}</TableCell>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </tr>
+                    </tbody>
                   </Table>
                 )}
               </StatContainer>
@@ -618,7 +635,8 @@ const Profile = () => {
                       member.attacks,
                       member.ev,
                       member.iv,
-                      member.level
+                      member.level,
+                      member.generation
                     );
                   }}
                 >
