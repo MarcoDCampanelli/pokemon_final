@@ -139,7 +139,7 @@ const Profile = () => {
   let natureArray = [];
   if (natures) {
     natures.map((nature) => {
-      natureArray.push(nature);
+      return natureArray.push(nature);
     });
     natureArray.sort((a, b) => {
       return a.localeCompare(b);
@@ -153,6 +153,8 @@ const Profile = () => {
       return move.version_group_details.map((version) => {
         if (version.version_group.name === generation) {
           return attackArray.push(move.move.name);
+        } else {
+          <></>;
         }
       });
     });

@@ -117,6 +117,8 @@ const IndividualAttack = () => {
                     <PokedexEntry>{entry.flavor_text}</PokedexEntry>
                   </PokedexEntryContainer>
                 );
+              } else {
+                return <></>;
               }
             })}
           </ListParent>
