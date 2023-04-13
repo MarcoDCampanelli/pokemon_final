@@ -317,6 +317,7 @@ const GetProfile = async (req, res) => {
   });
 };
 
+// Handler to be called if an update takes place after the original build is saved to a user's profile
 const UpdateBuild = async (req, res) => {
   const { trainer, ability, nature, iv, ev, stats, attacks, pokemonId } =
     req.body;
@@ -324,7 +325,7 @@ const UpdateBuild = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
   // Several checks must take place first to see if the entered informations is valid.
-  // 1. IV, EV and attacks need to be defined and can't be empty
+  // 1. IV, EV, ability, nature and attacks need to be defined and can't be empty
   if (!iv || !ev || !attacks) {
     return res
       .status(404)
@@ -390,6 +391,7 @@ const UpdateBuild = async (req, res) => {
   await client.connect();
   const db = client.db("Pokemon");
 
+  // Find the pokemon based on it's entryId
   const pokemon = await db
     .collection("PokemonParties")
     .findOne({ trainer: trainer, "party.entryId": pokemonId });
@@ -402,6 +404,7 @@ const UpdateBuild = async (req, res) => {
     });
   }
 
+  // Updates all fields with the new information
   if (pokemon) {
     try {
       const pokemonUpdate = await db.collection("PokemonParties").updateOne(
@@ -433,6 +436,7 @@ const UpdateBuild = async (req, res) => {
   client.close();
 };
 
+// Handler used in order to remove a pokemon from a party
 const DeleteBuild = async (req, res) => {
   const { trainer, pokemonId } = req.body;
 
@@ -453,6 +457,7 @@ const DeleteBuild = async (req, res) => {
     });
   }
 
+  // If the pokemon is found, pull it from the party
   if (pokemon) {
     try {
       const pokemonDelete = await db.collection("PokemonParties").updateOne(
@@ -478,6 +483,7 @@ const DeleteBuild = async (req, res) => {
   client.close();
 };
 
+// Handler used in order to create a build that can be viewed by other users of the site
 const PostBuild = async (req, res) => {
   const {
     trainer,
@@ -495,12 +501,10 @@ const PostBuild = async (req, res) => {
     description,
   } = req.body;
 
-  console.log(req.body);
-
   const client = new MongoClient(MONGO_URI, options);
 
   // Several checks must take place first to see if the entered informations is valid.
-  // 1. IV, EV and attacks need to be defined and can't be empty
+  // 1. IV, EV, ability, nature, and attacks need to be defined and can't be empty
   if (!iv || !ev || !attacks) {
     return res
       .status(404)
@@ -517,6 +521,7 @@ const PostBuild = async (req, res) => {
       .status(404)
       .json({ status: 404, message: "Please select a nature." });
   }
+  // 2. The description needs to be at least 100 characters to properly describe the build.
   if (description.length < 100) {
     return res.status(404).json({
       status: 404,
@@ -572,6 +577,9 @@ const PostBuild = async (req, res) => {
   const db = client.db("Pokemon");
   const _id = uuidv4();
 
+  // This will create a build to be posted with a unique id and the name of the trainer who created it.
+  // Other information is identical to what is created for the user's personal use (nature, abilities, etc.)
+  // Special inclusions are the description and the array holding any future comments.
   try {
     const build = await db.collection("CompetitiveBuilds").insertOne({
       _id,
@@ -591,19 +599,17 @@ const PostBuild = async (req, res) => {
       comments: [],
     });
 
-    client.close();
-
     return res
       .status(201)
       .json({ status: 201, message: "Build successfully submitted." });
   } catch (err) {
-    client.close();
-
     return res.status(409).json({
       status: 409,
       data: req.body,
       message: "Something went wrong, please try again",
     });
+  } finally {
+    client.close();
   }
 };
 

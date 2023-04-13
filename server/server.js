@@ -32,7 +32,7 @@ express()
   // Endpoint called in order to update a pokemon (Profile.js)
   .patch("/pokemon/update/", UpdateBuild)
 
-  // Endpoint called in order to update a pokemon (Profile.js)
+  // Endpoint called in order to delete a pokemon from a user's party. Since the party still exists, a patch is used.(Profile.js)
   .patch("/pokemon/delete/", DeleteBuild)
 
   // Endpoint called in order to post a certain pokemon build (Profile.js)

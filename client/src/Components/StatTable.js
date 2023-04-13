@@ -49,64 +49,72 @@ const StatTable = ({ pokemon }) => {
 
   return (
     <Table>
-      <tr>
-        <StatNameHeader>Stat Name</StatNameHeader>
-        <ValueHeader>Value</ValueHeader>
-        <StatWeightHeader>Stat Weight</StatWeightHeader>
-        <MinMaxHeader>Min/Max Value (L100)</MinMaxHeader>
-      </tr>
-      {pokemon.stats.map((stat) => {
-        if (pokemon.name !== "shedinja" && stat.stat.name === "hp") {
-          return (
-            <tr>
-              <StatName key={stat.base_stat}>
-                {capAndRemoveHyphen(stat.stat.name)}
-              </StatName>
-              <Value>{stat.base_stat}</Value>
-              <td>
-                <ColorDiv
-                  color={stat.base_stat}
-                  style={{ width: `${(stat.base_stat / total) * 100 * 2}%` }}
-                ></ColorDiv>
-              </td>
-              <MinMax>
-                {minHP(stat.base_stat)} / {maxHP(stat.base_stat)}
-              </MinMax>
-            </tr>
-          );
-        }
-        if (pokemon.name === "shedinja" && stat.stat.name === "hp") {
-          return (
-            <tr>
-              <StatName>{capAndRemoveHyphen(stat.stat.name)}</StatName>
-              <Value>{stat.base_stat}</Value>
-              <td>
-                <ColorDiv
-                  color={stat.base_stat}
-                  style={{ width: `${(stat.base_stat / total) * 100 * 2}%` }}
-                ></ColorDiv>
-              </td>
-              <MinMax>1 / 1</MinMax>
-            </tr>
-          );
-        } else {
-          return (
-            <tr>
-              <StatName>{capAndRemoveHyphen(stat.stat.name)}</StatName>
-              <Value>{stat.base_stat}</Value>
-              <td>
-                <ColorDiv
-                  color={stat.base_stat}
-                  style={{ width: `${(stat.base_stat / total) * 100 * 2}%` }}
-                ></ColorDiv>
-              </td>
-              <MinMax>
-                {minStat(stat.base_stat)} / {maxStat(stat.base_stat)}
-              </MinMax>
-            </tr>
-          );
-        }
-      })}
+      <thead>
+        <tr>
+          <StatNameHeader>Stat Name</StatNameHeader>
+          <ValueHeader>Value</ValueHeader>
+          <StatWeightHeader>Stat Weight</StatWeightHeader>
+          <MinMaxHeader>Min/Max Value (L100)</MinMaxHeader>
+        </tr>
+      </thead>
+      <tbody>
+        {pokemon.stats.map((stat) => {
+          if (pokemon.name !== "shedinja" && stat.stat.name === "hp") {
+            return (
+              <tr>
+                <StatName key={stat.stat.name}>
+                  {capAndRemoveHyphen(stat.stat.name)}
+                </StatName>
+                <Value>{stat.base_stat}</Value>
+                <td>
+                  <ColorDiv
+                    color={stat.base_stat}
+                    style={{ width: `${(stat.base_stat / total) * 100 * 2}%` }}
+                  ></ColorDiv>
+                </td>
+                <MinMax>
+                  {minHP(stat.base_stat)} / {maxHP(stat.base_stat)}
+                </MinMax>
+              </tr>
+            );
+          }
+          if (pokemon.name === "shedinja" && stat.stat.name === "hp") {
+            return (
+              <tr>
+                <StatName key={stat.stat.name}>
+                  {capAndRemoveHyphen(stat.stat.name)}
+                </StatName>
+                <Value>{stat.base_stat}</Value>
+                <td>
+                  <ColorDiv
+                    color={stat.base_stat}
+                    style={{ width: `${(stat.base_stat / total) * 100 * 2}%` }}
+                  ></ColorDiv>
+                </td>
+                <MinMax>1 / 1</MinMax>
+              </tr>
+            );
+          } else {
+            return (
+              <tr>
+                <StatName key={stat.stat.name}>
+                  {capAndRemoveHyphen(stat.stat.name)}
+                </StatName>
+                <Value>{stat.base_stat}</Value>
+                <td>
+                  <ColorDiv
+                    color={stat.base_stat}
+                    style={{ width: `${(stat.base_stat / total) * 100 * 2}%` }}
+                  ></ColorDiv>
+                </td>
+                <MinMax>
+                  {minStat(stat.base_stat)} / {maxStat(stat.base_stat)}
+                </MinMax>
+              </tr>
+            );
+          }
+        })}
+      </tbody>
     </Table>
   );
 };

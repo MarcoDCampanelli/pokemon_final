@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 import LoadingPage from "./LoadingPage";
 
+// This component creates the profile of the signed in user
 const Profile = () => {
   const {
     currentUser,
@@ -16,10 +17,13 @@ const Profile = () => {
     calculateStat,
     changeNatureValues,
   } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  // These states are used to create the profile and allow the person to update the selected pokemon
+  // This state holds the profile of the signed in user
   const [profile, setProfile] = useState("");
+  // This state holds the information of the Pokemon being updated in order to shuffle through their abilities/attacks
   const [pokemon, setPokemon] = useState("");
+  // This update is set to the Pokemon's unique _id in order to only allow one build to be changed at a time
   const [update, setUpdate] = useState("");
   // This state is only being used if an error occurs or if an update takes place.
   const [error, setError] = useState("");
@@ -32,27 +36,29 @@ const Profile = () => {
   const [ivSpread, setIvSpread] = useState("");
   const [level, setLevel] = useState("");
 
-  // These states are being used in order to describe the build
+  // These states are being used in order to describe/post the build
   const [value, setValue] = useState(1000);
   const [entry, setEntry] = useState("");
 
-  // This will grab the profile of the currentUser
+  // This will grab the profile of the currentUser and update whenever a new error message is rendered due to an update
   useEffect(() => {
     fetch(`/profile/${currentUser}`)
       .then((res) => res.json())
-      .then((resData) => setProfile(resData.data));
+      .then((resData) => setProfile(resData.data))
+      .catch((err) => navigate("/error"));
   }, [error]);
 
-  // This will grab the info of the pokemon selected to be updated and reset all of the states to be used in case an update happens.
+  // This will grab the info of the pokemon selected to be updated and set all of the states to those of the selected Pokemon
   const handleUpdate = (name, nature, ability, attack, ev, iv, level) => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
       .then((res) => res.json())
       .then((resData) => {
         setPokemon(resData);
-      });
+      })
+      .catch((err) => navigate("/error"));
 
-    setNature(nature);
     setAbility(ability);
+    setNature(nature);
     setAttack(attack);
     setEvSpread(ev);
     setIvSpread(iv);
@@ -60,7 +66,7 @@ const Profile = () => {
     setError("");
   };
 
-  // These 6 variables calculate the pokemon's stat based on what is being modified
+  // These 6 variables and functions calculate the pokemon's stat based on what is being modified
   let hp = "";
   let atk = "";
   let def = "";
@@ -140,7 +146,8 @@ const Profile = () => {
       .then((res) => res.json())
       .then((resData) => {
         setError(resData);
-      });
+      })
+      .catch((err) => navigate("/error"));
   };
 
   // Calls the endpoint that will delete the currently selected pokemon
@@ -158,9 +165,11 @@ const Profile = () => {
       },
     })
       .then((res) => res.json())
-      .then((resData) => setError(resData));
+      .then((resData) => setError(resData))
+      .catch((err) => navigate("/error"));
   };
 
+  // Calls the endpoint in order to post an actual build as described by a user
   const handlePost = (pokemon, index, generation, item) => {
     const data = {
       trainer: currentUser,
@@ -193,7 +202,8 @@ const Profile = () => {
           setEntry("");
           setValue(1000);
         }
-      });
+      })
+      .catch((err) => navigate("/error"));
   };
 
   if (!profile) {
@@ -203,11 +213,15 @@ const Profile = () => {
   return (
     <Container>
       {profile.party.map((member) => {
+        // This is necessary in order to use the Pokemon's name as a link to other pages since the saved build may use the mega/gmax name instead of the species name. The extra words are filtered.
         let array = member.pokemon.split("-");
         let exceptions = nameExceptions.some((item) => array.includes(item));
         return (
           <>
-            <PokemonContainer width={member.entryId === update}>
+            <PokemonContainer
+              width={member.entryId === update}
+              key={member.entryId}
+            >
               <InfoContainer width={member.entryId === update}>
                 {exceptions ? (
                   <PokemonLink to={`/pokemon/${member.pokemon.split("-")[0]}`}>
@@ -236,22 +250,18 @@ const Profile = () => {
                   <>
                     <Label>Nature:</Label>
                     <Select
+                      defaultValue={member.nature}
                       onChange={(e) => {
                         changeNatureValues(e.target.value);
                         setNature(e.target.value);
                       }}
                     >
-                      <option defaultValue={true} disabled selected>
-                        Select a nature
-                      </option>
+                      <option disabled>Select a nature</option>
                       {natures &&
                         natures.map((nature) => {
                           {
                             return (
-                              <option
-                                value={nature}
-                                selected={nature === member.nature}
-                              >
+                              <option value={nature} key={nature}>
                                 {capAndRemoveHyphen(nature)}
                               </option>
                             );
@@ -266,10 +276,11 @@ const Profile = () => {
                 ) : (
                   <>
                     <Label>Ability:</Label>
-                    <Select onChange={(e) => setAbility(e.target.value)}>
-                      <option defaultValue={true} disabled>
-                        Select an ability
-                      </option>
+                    <Select
+                      defaultValue={member.ability}
+                      onChange={(e) => setAbility(e.target.value)}
+                    >
+                      <option disabled>Select an ability</option>
                       {pokemon &&
                         pokemon.abilities.map((ability) => {
                           {
@@ -279,6 +290,7 @@ const Profile = () => {
                                 selected={
                                   ability.ability.name === member.ability
                                 }
+                                key={ability.ability.name}
                               >
                                 {capAndRemoveHyphen(ability.ability.name)}
                               </option>
@@ -300,7 +312,7 @@ const Profile = () => {
                   <>
                     {Object.values(member.attacks).map((attack) => {
                       return (
-                        <AttackLink to={`/attacks/${attack}`}>
+                        <AttackLink to={`/attacks/${attack}`} key={attack}>
                           {capAndRemoveHyphen(attack)}
                         </AttackLink>
                       );
@@ -316,9 +328,7 @@ const Profile = () => {
                           setAttack({ ...attack, atk1: e.target.value })
                         }
                       >
-                        <option defaultValue={true} disabled selected>
-                          Select an attack:
-                        </option>
+                        <option disabled>Select an attack:</option>
                         {pokemon &&
                           pokemon.moves.map((move) => {
                             return move.version_group_details.map((version) => {
@@ -350,9 +360,7 @@ const Profile = () => {
                           setAttack({ ...attack, atk2: e.target.value })
                         }
                       >
-                        <option defaultValue={true} disabled selected>
-                          Select an attack:
-                        </option>
+                        <option disabled>Select an attack:</option>
                         {pokemon &&
                           pokemon.moves.map((move) => {
                             return move.version_group_details.map((version) => {
@@ -382,9 +390,7 @@ const Profile = () => {
                           setAttack({ ...attack, atk3: e.target.value })
                         }
                       >
-                        <option defaultValue={true} disabled selected>
-                          Select an attack:
-                        </option>
+                        <option disabled>Select an attack:</option>
                         {pokemon &&
                           pokemon.moves.map((move) => {
                             return move.version_group_details.map((version) => {
@@ -414,9 +420,7 @@ const Profile = () => {
                           setAttack({ ...attack, atk4: e.target.value })
                         }
                       >
-                        <option defaultValue={true} disabled selected>
-                          Select an attack:
-                        </option>
+                        <option disabled>Select an attack:</option>
                         {pokemon &&
                           pokemon.moves.map((move) => {
                             return move.version_group_details.map((version) => {
@@ -571,26 +575,6 @@ const Profile = () => {
             )}
             <ButtonContainer>
               {pokemon && update === member.entryId ? (
-                <></>
-              ) : (
-                <Button
-                  onClick={() => {
-                    setUpdate(member.entryId);
-                    handleUpdate(
-                      member.pokemon,
-                      member.nature,
-                      member.ability,
-                      member.attacks,
-                      member.ev,
-                      member.iv,
-                      member.level
-                    );
-                  }}
-                >
-                  Make Changes
-                </Button>
-              )}
-              {pokemon && update === member.entryId ? (
                 <>
                   <Button onClick={() => handleChanges(member.entryId)}>
                     Update
@@ -617,13 +601,29 @@ const Profile = () => {
                       setValue(1000);
                       setError("");
                       setEntry("");
+                      setPokemon("");
                     }}
                   >
                     Finish
                   </Button>
                 </>
               ) : (
-                <></>
+                <Button
+                  onClick={() => {
+                    setUpdate(member.entryId);
+                    handleUpdate(
+                      member.pokemon,
+                      member.nature,
+                      member.ability,
+                      member.attacks,
+                      member.ev,
+                      member.iv,
+                      member.level
+                    );
+                  }}
+                >
+                  Make Changes
+                </Button>
               )}
             </ButtonContainer>
           </>
@@ -641,17 +641,36 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-// This is the container that holds each individual pokemon
+// This is the container that holds each individual pokemon.
 const PokemonContainer = styled.div`
   display: flex;
   margin: 1rem auto;
   border: 2px solid black;
   overflow: hidden;
 
+  /* If the pokemon is being updated, the width is expanded to allow for more room. */
   width: ${(props) => (props.width ? "95%" : "40%")};
 
+  /* Flex direction is switched to column on smaller screens */
   @media (max-width: 768px) {
     flex-direction: column;
+  }
+`;
+
+// Container holding the basic information of the pokemon (name, index, level, item, generation, nature, ability)
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  text-align: center;
+
+  /* If the pokemon is being updated, the width is shortened since less room is needed. */
+  width: ${(props) => (props.width ? "20%" : "40%")};
+
+  /* Width is adjusted on smaller screens to take up entire div in column view */
+  @media (max-width: 912px) {
+    margin: auto;
+    width: 100%;
   }
 `;
 
@@ -667,76 +686,9 @@ const PokemonLink = styled(Link)`
   }
 `;
 
-// Container holding the basic information of the pokemon (name, index, level, item, generation, nature, ability)
-const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  text-align: center;
-
-  width: ${(props) => (props.width ? "20%" : "40%")};
-
-  @media (max-width: 912px) {
-    margin: auto;
-    width: 80%;
-  }
-`;
-
-// Styled titles of each container
-const Title = styled.h1`
-  font-weight: bold;
-  margin: 0.5rem;
-`;
-
 // Styling for the individual divs holding separate pieces of info
 const Info = styled.div`
   margin: 0.2rem;
-`;
-
-// Container for the 4 attacks of the pokemon
-const AttackContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  width: 30%;
-  border-left: 0.2rem solid black;
-  border-right: 0.2rem solid black;
-
-  @media (max-width: 912px) {
-    margin: 0 auto;
-    border: none;
-    width: 80%;
-  }
-`;
-
-// Link to the attack page of the individual attacks
-const AttackLink = styled(Link)`
-  text-decoration: underline;
-  color: black;
-  margin: 0.2rem;
-
-  &:hover {
-    background-color: lightblue;
-  }
-`;
-
-// Styling for the individual divs holding separate pieces of info
-const IndividualAttack = styled.div`
-  margin: 1rem;
-`;
-
-// Container for the stats of the pokemon
-const StatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-
-  width: ${(props) => (props.width ? "50%" : "30%")};
-
-  @media (max-width: 912px) {
-    margin: 0 auto;
-    width: 80%;
-  }
 `;
 
 // Styling for the labels (ability, nature, level and attacks)
@@ -750,6 +702,61 @@ const Select = styled.select`
   border-radius: 5px;
   width: 50%;
   margin: auto;
+`;
+
+// Container for the 4 attacks of the pokemon
+const AttackContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 30%;
+  border-left: 0.2rem solid black;
+  border-right: 0.2rem solid black;
+
+  /* On smaller screens, since the flex is display, the borders are no longer needed */
+  @media (max-width: 912px) {
+    margin: 0 auto;
+    border: none;
+    width: 100%;
+  }
+`;
+
+// Styled titles of the Attacks and Stat Totals Container
+const Title = styled.h1`
+  font-weight: bold;
+  margin: 0.5rem;
+`;
+
+// Link to the attack page of the individual attacks
+const AttackLink = styled(Link)`
+  text-decoration: underline;
+  color: black;
+  margin: 0.2rem;
+
+  &:hover {
+    background-color: lightblue;
+  }
+`;
+
+// Styling for the individual divs holding the label and select of each attack
+const IndividualAttack = styled.div`
+  margin: 1rem;
+`;
+
+// Container for the stats of the pokemon
+const StatContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  /* When being updated, the width increases to 50% since it is the largest section */
+  width: ${(props) => (props.width ? "50%" : "30%")};
+
+  /* On smaller screen, it takes up the full with since the flex orientration is column */
+  @media (max-width: 912px) {
+    margin: 0 auto;
+    width: 100%;
+  }
 `;
 
 // Styling for the table
@@ -802,19 +809,6 @@ const Button = styled.button`
   }
 `;
 
-// Container that holds the error messages
-const ErrorContainer = styled.div`
-  text-align: center;
-  width: 30%;
-  margin: 1rem auto;
-  padding: 1rem 1rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-
-  border-left: ${(props) =>
-    props.error ? "0.2rem solid red" : "0.2rem solid green"};
-`;
-
 // Styling for the div holding the textarea
 const TextBoxContainer = styled.div`
   width: 80%;
@@ -833,4 +827,17 @@ const TextBox = styled.textarea`
 // Styling for the div that holds the word limit available in the comment
 const WordLimit = styled.div`
   color: ${(props) => (props.empty ? "black" : props.full ? "red" : "yellow")};
+`;
+
+// Container that holds the error messages
+const ErrorContainer = styled.div`
+  text-align: center;
+  width: 30%;
+  margin: 1rem auto;
+  padding: 1rem 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+
+  border-left: ${(props) =>
+    props.error ? "0.2rem solid red" : "0.2rem solid green"};
 `;

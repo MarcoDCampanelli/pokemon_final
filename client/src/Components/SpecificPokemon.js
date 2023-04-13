@@ -70,6 +70,7 @@ const SpecificPokemon = () => {
             />
           ) : (
             <img
+              alt={"Pokemon unavailable"}
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${species.id}.png`}
             />
           )}
