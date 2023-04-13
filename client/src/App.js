@@ -59,5 +59,5 @@ const SiteContainer = styled.div`
 
 // This will ensure that the footer stays on the bottom during a loading state
 const Body = styled.div`
-  min-height: 100vh;
+  min-height: 85vh;
 `;

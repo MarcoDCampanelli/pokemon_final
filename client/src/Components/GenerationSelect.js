@@ -3,6 +3,7 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 
+// This component creates the label/select for the generation on the specific pokemon page using the generations chosen in UserContext
 const GenerationSelect = ({ setGeneration }) => {
   const { generations } = useContext(UserContext);
 
@@ -11,15 +12,20 @@ const GenerationSelect = ({ setGeneration }) => {
       <Label>Select the Pokemon Game:</Label>
       <Select
         name="generation"
+        defaultValue={true}
         onChange={(e) => {
           setGeneration(e.target.value);
         }}
       >
-        <option defaultValue={true} disabled>
+        <option value={true} disabled>
           Select a game:
         </option>
         {generations.map((generation) => {
-          return <option value={generation.value}>{generation.name}</option>;
+          return (
+            <option value={generation.value} key={generation.name}>
+              {generation.name}
+            </option>
+          );
         })}
       </Select>
     </Container>
@@ -32,14 +38,13 @@ export default GenerationSelect;
 const Container = styled.div`
   display: flex;
   margin: 0.5rem;
-  align-items: middle;
   justify-content: center;
   align-items: center;
 `;
 
 // Styling for the labels
 const Label = styled.label`
-  margin: 0rem 0.5rem;
+  margin: 0 0.5rem;
 `;
 
 // Styling for the labels

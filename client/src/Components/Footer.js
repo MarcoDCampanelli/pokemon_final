@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 
 import styled from "styled-components";
 
+// This component renders the footer so that it appears on every page
 const Footer = () => {
   return (
     <Container>
@@ -15,17 +16,19 @@ const Footer = () => {
 
 export default Footer;
 
+// Container that holds all of the links in the footer
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 10vh;
-  border-top: 0.2rem solid black;
+  text-align: center;
+  border-top: 0.1rem solid black;
 `;
 
+// Links to various pages
 const Link = styled(NavLink)`
-  text-decoration: none;
+  text-decoration: underline;
   color: black;
-  margin: 0.2rem 1rem;
+  margin: 0.5rem auto;
 
   &.active {
     color: blue;

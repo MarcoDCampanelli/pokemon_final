@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
+import LoadingPage from "./LoadingPage";
 
+// This component will render the homepage including the search bars and a pagination of pokemon for people who don't know the franchise.
 const Homepage = () => {
   const { capAndRemoveHyphen } = useContext(UserContext);
   const navigate = useNavigate();
@@ -24,21 +26,25 @@ const Homepage = () => {
       .then((res) => res.json())
       .then((resData) => {
         setPokemonList(resData.results);
-      });
+      })
+      .catch((err) => navigate("/error"));
   }, [offset]);
 
+  // If something is typed, regardless of caps and -, search pokemon
   const handlePokemonSearch = () => {
     if (pokemon.length > 0) {
       navigate(`/pokemon/${pokemon.replaceAll(" ", "-")}`);
     }
   };
 
+  // If something is typed, regardless of caps and -, search attack
   const handleAttackSearch = () => {
     if (attack.length > 0) {
       navigate(`/attacks/${attack.replaceAll(" ", "-")}`);
     }
   };
 
+  // If something is typed, regardless of caps and -, search ability
   const handleAbilitySearch = () => {
     if (ability.length > 0) {
       navigate(`/abilities/${ability.replaceAll(" ", "-")}`);
@@ -46,7 +52,7 @@ const Homepage = () => {
   };
 
   if (!pokemonList) {
-    return <>Loading...</>;
+    return <LoadingPage />;
   }
 
   return (
@@ -95,107 +101,88 @@ const Homepage = () => {
           </SearchButton>
         </SearchContainer>
       </HomepageContainer>
-      <div>
-        <ButtonContainer>
-          <Button
-            disabled={offset === 0}
-            onClick={() => {
-              setOffset(offset - postsPerPage);
-            }}
-          >
-            Previous
-          </Button>
-          <Button
-            disabled={pokemonList.length < postsPerPage}
-            onClick={() => {
-              setOffset(offset + postsPerPage);
-            }}
-          >
-            Next
-          </Button>
-        </ButtonContainer>
-        <PokemonContainer>
-          {pokemonList.map((pokemon, index) => {
-            return (
-              <IndividualPokemonContainer key={index}>
-                <PokemonName to={`/pokemon/${pokemon.name}`}>
-                  {capAndRemoveHyphen(pokemon.name)}
-                </PokemonName>
-                <Sprite
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                    index + 1 + offset
-                  }.png`}
-                />
-              </IndividualPokemonContainer>
-            );
-          })}
-        </PokemonContainer>
-      </div>
+      <ButtonContainer>
+        <Button
+          disabled={offset === 0}
+          onClick={() => {
+            setOffset(offset - postsPerPage);
+          }}
+        >
+          Previous
+        </Button>
+        <Button
+          disabled={pokemonList.length < postsPerPage}
+          onClick={() => {
+            setOffset(offset + postsPerPage);
+          }}
+        >
+          Next
+        </Button>
+      </ButtonContainer>
+      <PokemonContainer>
+        {pokemonList.map((pokemon, index) => {
+          return (
+            <IndividualPokemonContainer key={index}>
+              <PokemonName to={`/pokemon/${pokemon.name}`}>
+                {capAndRemoveHyphen(pokemon.name)}
+              </PokemonName>
+              <Sprite
+                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                  index + 1 + offset
+                }.png`}
+              />
+            </IndividualPokemonContainer>
+          );
+        })}
+      </PokemonContainer>
     </>
   );
 };
 
 export default Homepage;
 
-const ButtonContainer = styled.div`
-  margin: 0.5rem;
+// Container for the top half of the homepage container the search icons
+const HomepageContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-`;
-
-// This is the container for the list of pokemon being paginated
-const PokemonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  padding: 1rem;
-`;
-
-// Container for the individual pokemon
-const IndividualPokemonContainer = styled.div`
+  flex-direction: column;
   text-align: center;
-  width: 10%;
-  border: 2px solid black;
-  margin: 0.2rem auto;
-  overflow: hidden;
+`;
+
+// Main title of the website
+const Title = styled.h1`
+  font-size: 3rem;
+  margin: 1rem;
+`;
+
+// Individual search containers
+const SearchContainer = styled.div`
+  width: 40%;
+  margin: 0.1rem auto;
+  text-align: right;
+  border: 0.1rem solid black;
+  border-radius: 5px;
+
+  /* On smaller screens center the text to allow for more room */
+  @media (max-width: 768px) {
+    width: 80%;
+    text-align: center;
+  }
+`;
+
+// Styling for the labels
+const Label = styled.label`
+  margin: 0rem 0.5rem;
+  font-weight: bold;
+`;
+
+// Stylings for the inputs
+const Inputs = styled.input`
+  margin-right: 1rem;
+  width: 30%;
+  padding: 0.5rem;
 
   @media (max-width: 768px) {
-    width: 20%;
-  }
-
-  @media (max-width: 480px) {
     width: 25%;
-  }
-`;
-
-// Styled image of the sprite of the pokemon
-const Sprite = styled.img`
-  width: 50%;
-`;
-
-// Styled name of the pokemon
-const PokemonName = styled(Link)`
-  display: block;
-  text-decoration: none;
-  font-weight: bold;
-  color: black;
-
-  &:hover {
-    color: lightblue;
-  }
-`;
-
-// Styling for the Next/Previous button
-const Button = styled.button`
-  width: 20%;
-  margin: 2rem auto;
-  padding: 0.5rem;
-  border-radius: 5px;
-  overflow: hidden;
-
-  &:hover {
-    color: white;
-    background-color: lightblue;
   }
 `;
 
@@ -217,49 +204,66 @@ const SearchButton = styled.button`
   }
 `;
 
-// Container for the top half of the homepage
-const HomepageContainer = styled.div`
+// The container that holds the pagination buttons
+const ButtonContainer = styled.div`
+  margin: 0.5rem;
   display: flex;
-  flex-direction: column;
-  text-align: center;
+  justify-content: space-between;
 `;
 
-// Main title
-const Title = styled.h1`
-  font-size: 3rem;
-  margin: 1rem;
-`;
-
-// Individual search containers
-const SearchContainer = styled.div`
-  width: 40%;
-  margin: 0.1rem auto;
-  text-align: right;
-  border: 0.1rem solid black;
+// Styling for the Next/Previous button
+const Button = styled.button`
+  width: 20%;
+  margin: 2rem auto;
+  padding: 0.5rem;
   border-radius: 5px;
+  overflow: hidden;
 
-  @media (max-width: 768px) {
-    text-align: center;
+  &:hover {
+    color: white;
+    background-color: lightblue;
   }
 `;
 
-// Styling for the labels
-const Label = styled.label`
-  margin: 0rem 0.5rem;
-  font-weight: bold;
+// This is the container for the list of pokemon being paginated
+const PokemonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 1rem;
+`;
 
+// Container for the individual pokemon
+const IndividualPokemonContainer = styled.div`
+  text-align: center;
+  width: 10%;
+  border: 2px solid black;
+  margin: 0.2rem auto;
+  overflow: hidden;
+
+  /* The smaller the screen becomes, the large the icon should be to maintain a certain level of visibility, but less icons will be rendered per line */
   @media (max-width: 768px) {
     width: 20%;
   }
-`;
 
-// Stylings for the inputs
-const Inputs = styled.input`
-  margin-right: 1rem;
-  width: 30%;
-  padding: 0.5rem;
-
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     width: 25%;
   }
+`;
+
+// Styled name of the pokemon
+const PokemonName = styled(Link)`
+  display: block;
+  text-decoration: none;
+  font-weight: bold;
+  color: black;
+
+  &:hover {
+    color: lightblue;
+  }
+`;
+
+// Styled image of the sprite of the pokemon
+const Sprite = styled.img`
+  width: 50%;
 `;

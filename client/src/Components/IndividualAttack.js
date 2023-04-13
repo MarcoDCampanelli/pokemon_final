@@ -1,20 +1,25 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 import LoadingPage from "./LoadingPage";
 
+// This component will create a page for a specific attack
 const IndividualAttack = () => {
   const id = useParams();
   const { capAndRemoveHyphen, nameExceptions } = useContext(UserContext);
   const [attack, setAttack] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`https://pokeapi.co/api/v2/move/${id.attack}/`).then((res) => {
-      res.json().then((resData) => {
-        setAttack(resData);
-      });
+      res
+        .json()
+        .then((resData) => {
+          setAttack(resData);
+        })
+        .catch((err) => navigate("/error"));
     });
   }, [id]);
 
@@ -56,7 +61,7 @@ const IndividualAttack = () => {
         <AbilityDescriptionContainer>
           {attack.effect_entries.map((entry) => {
             return (
-              <span>
+              <span key={entry.effect}>
                 {entry.effect.replace(
                   "$effect_chance% ",
                   `${attack.effect_chance}% `
@@ -79,13 +84,19 @@ const IndividualAttack = () => {
               );
               if (exceptions) {
                 return (
-                  <ListElement to={`/pokemon/${pokemon.name.split("-")[0]}`}>
+                  <ListElement
+                    to={`/pokemon/${pokemon.name.split("-")[0]}`}
+                    key={pokemon.name}
+                  >
                     {capAndRemoveHyphen(pokemon.name)}
                   </ListElement>
                 );
               } else {
                 return (
-                  <ListElement to={`/pokemon/${pokemon.name}`}>
+                  <ListElement
+                    to={`/pokemon/${pokemon.name}`}
+                    key={pokemon.name}
+                  >
                     {capAndRemoveHyphen(pokemon.name)}
                   </ListElement>
                 );
@@ -99,7 +110,7 @@ const IndividualAttack = () => {
             {attack.flavor_text_entries.map((entry) => {
               if (entry.language.name === "en") {
                 return (
-                  <PokedexEntryContainer>
+                  <PokedexEntryContainer key={entry.version_group.name}>
                     <PokedexGeneration>
                       {capAndRemoveHyphen(entry.version_group.name)}
                     </PokedexGeneration>
@@ -117,7 +128,7 @@ const IndividualAttack = () => {
 
 export default IndividualAttack;
 
-// Overall Container
+// Overall Container for the whole page
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -130,7 +141,7 @@ const MoveName = styled.h1`
   text-align: center;
 `;
 
-// Contains all of the infomation about the move
+// Contains all of the infomation about the move at the top of the page
 const MoveInformation = styled.div`
   display: flex;
   flex-direction: column;
@@ -138,12 +149,13 @@ const MoveInformation = styled.div`
   margin: auto;
   border: 0.1rem solid black;
 
+  /* On smaller screens, the width is increased */
   @media (max-width: 768px) {
     width: 75%;
   }
 `;
 
-// Styling for the horizontal titles in the table
+// Styling for the horizontal titles in the table (separate for border reasons)
 const TableTitles = styled.div`
   text-align: center;
   width: 100%;
@@ -152,7 +164,7 @@ const TableTitles = styled.div`
   font-weight: bold;
 `;
 
-// Styling for the main info of the attack (accuracy, power, pp, priority, damage)
+// Container for the main info of the attack (accuracy, power, pp, priority, damage)
 const MoveStatsContainer = styled.div`
   display: flex;
   text-align: center;
@@ -167,7 +179,7 @@ const MoveStat = styled.div`
   text-align: center;
 `;
 
-// Individual boxes
+// Individual boxes inside of the MoveStatsContainer
 const MoveStatContainer = styled.div`
   border-right: 0.1rem solid black;
   overflow: hidden;
@@ -175,7 +187,7 @@ const MoveStatContainer = styled.div`
   width: 20%;
 `;
 
-// Last box in the column relating to the box above
+// Last box in the column relating to the box above (no border required for this one)
 const MoveStatContainerLast = styled.div`
   width: 20%;
   padding: 0.5rem;
@@ -192,6 +204,10 @@ const ListContainer = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 // Container for list of pokemon
@@ -200,14 +216,17 @@ const IndividualListContainer = styled.div`
   max-height: 900px;
   overflow: auto;
   margin: 3rem 1rem;
-`;
+  width: 20%;
 
-// Container for list of entries
-const IndividualListContainerDescriptions = styled.div`
-  position: relative;
-  top: 0;
-  margin: 3rem 1rem;
-  overflow: auto;
+  /* On smaller screens, the width is increased */
+  @media (max-width: 980px) {
+    width: 50%;
+  }
+
+  /* On smaller screens when flex-directio is column, set width to auto in order to center it */
+  @media (max-width: 768px) {
+    margin: auto;
+  }
 `;
 
 // Titles for the list of pokemon / entries
@@ -240,23 +259,32 @@ const ListElement = styled(Link)`
   }
 `;
 
+// Container for list of entries
+const IndividualListContainerDescriptions = styled.div`
+  position: relative;
+  top: 0;
+  margin: 3rem 1rem;
+  overflow: auto;
+`;
+
 // Styling for the li elements in the list of entries
 const PokedexEntryContainer = styled.li`
-  width: 98%;
   display: flex;
   margin: 0.5rem auto;
-  padding: 0.5rem 0;
   border: 0.1rem solid black;
   border-radius: 5px;
 `;
 
+// Styling for the div that holds the generation name
 const PokedexGeneration = styled.div`
   max-width: 20%;
   min-width: 20%;
+  padding: 0.5rem 0;
   border-right: 1px solid black;
   overflow: hidden;
 `;
 
+// Styling for the description of the attack
 const PokedexEntry = styled.div`
-  padding-left: 0.5rem;
+  padding: 0.5rem 0 0.5rem 0.5rem;
 `;

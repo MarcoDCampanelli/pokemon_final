@@ -5,18 +5,19 @@ import { useNavigate, NavLink } from "react-router-dom";
 import Banner from "../assets/Banner.jpg";
 import styled from "styled-components";
 
+// This component renders the header that is always present on the website
 const Header = () => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   return (
     <HeaderContainer>
-      <Image src={Banner} />
+      <Image src={Banner} alt={"Banner"} />
       <Demo>
         {currentUser ? (
           <UsernameContainer>
             <NameLink to={`/profile/${currentUser}`}>
-              Welcome, {currentUser}
+              Welcome, <Underline>{currentUser}</Underline>
             </NameLink>
             <Link to={"/"}>Return Home</Link>
             <div>
@@ -31,14 +32,12 @@ const Header = () => {
             </div>
           </UsernameContainer>
         ) : (
-          <SigninContainer>
-            <div>
-              <Link to={"/"}>Return Home</Link>
-            </div>
+          <UsernameContainer>
+            <Link to={"/"}>Return Home</Link>
             <div>
               <Button onClick={() => navigate("/signin")}>Sign In</Button>
             </div>
-          </SigninContainer>
+          </UsernameContainer>
         )}
       </Demo>
     </HeaderContainer>
@@ -64,7 +63,7 @@ const Image = styled.img`
   height: 15vh;
 `;
 
-// Anything else that I want to belong to the header that isn't the image needs to be in here and given a position of relative
+// Anything else that I want to belong to the header that isn't the image needs to be in here and given a position of relative. Without it, everything else would also have an opacity of 0.5
 const Demo = styled.div`
   position: relative;
 `;
@@ -74,6 +73,23 @@ const UsernameContainer = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0 1rem;
+`;
+
+// This will style the username
+const NameLink = styled(NavLink)`
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+
+  &.active {
+    color: blue;
+  }
+`;
+
+// This will only underline the name of the signed in user
+const Underline = styled.span`
+  text-decoration: underline;
 `;
 
 // Stlying for the NavLink
@@ -86,22 +102,8 @@ const Link = styled(NavLink)`
   }
 `;
 
-// This will style the username
-const NameLink = styled(NavLink)`
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-left: 0.5rem;
-  text-decoration: none;
-  color: black;
-
-  &.active {
-    color: blue;
-  }
-`;
-
 // This will style the signout/signin button
 const Button = styled.button`
-  margin-right: 0.5rem;
   padding: 0.5rem;
   border-radius: 5px;
   overflow: hidden;
@@ -110,10 +112,4 @@ const Button = styled.button`
     color: white;
     background-color: lightblue;
   }
-`;
-
-const SigninContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 0 1rem;
 `;
