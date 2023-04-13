@@ -1,15 +1,17 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
-import LoadingPage from "./LoadingPage";
 
+// This component is used to render the list of items depending on a given category
 const Items = () => {
   const [itemList, setItemList] = useState([]);
-  const [itemCategory, setItemCategory] = useState("");
   const { capAndRemoveHyphen, items, setItemType, itemCategories } =
     useContext(UserContext);
+  const navigate = useNavigate();
 
+  //Using the list from UserContext, a fetch request for each item will be done. Once completed, it will be stored in itemList
   useEffect(() => {
     const promises = [];
     if (items) {
@@ -20,6 +22,7 @@ const Items = () => {
             .then((resData) => {
               return resData;
             })
+            .catch((err) => navigate("/error"))
         );
       });
     }
@@ -30,21 +33,34 @@ const Items = () => {
     <Container>
       <SelectionContainer>
         <Label>Select Item Category:</Label>
-        <Select name="items" onChange={(e) => setItemType(e.target.value)}>
-          <option defaultValue={true}>Select item type:</option>
+        <Select
+          name="items"
+          defaultValue={true}
+          onChange={(e) => setItemType(e.target.value)}
+        >
+          <option value={true} disabled>
+            Select item type:
+          </option>
           {itemCategories.map((category) => {
-            return <option value={category.value}>{category.name}</option>;
+            return (
+              <option value={category.value} key={category.name}>
+                {category.name}
+              </option>
+            );
           })}
         </Select>
       </SelectionContainer>
       {items ? (
         itemList.map((item) => {
           return (
-            <IndividualItem>
+            <IndividualItem key={item.name}>
               <Name>
                 <span>{capAndRemoveHyphen(item.name)}</span>
                 <ImageContainer>
-                  <img src={item.sprites.default} />
+                  <img
+                    alt={"Item sprite not available"}
+                    src={item.sprites.default}
+                  />
                 </ImageContainer>
               </Name>
               <Description>
@@ -58,7 +74,9 @@ const Items = () => {
           );
         })
       ) : (
-        <></>
+        <DefaultMessage>
+          Select an item category to browse those items.
+        </DefaultMessage>
       )}
     </Container>
   );
@@ -70,34 +88,6 @@ export default Items;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-// Container for individual Item
-const IndividualItem = styled.div`
-  display: flex;
-  border: 0.2rem solid black;
-  border-radius: 5px;
-  margin: 0.5rem auto;
-  width: 80%;
-  text-align: center;
-`;
-
-// Name of the item
-const Name = styled.div`
-  max-width: 20%;
-  min-width: 20%;
-  border-right: 1px solid black;
-`;
-
-// Image container
-const ImageContainer = styled.div`
-  text-align: center;
-`;
-
-// Description of the item's effect in battle
-const Description = styled.div`
-  margin: auto;
-  padding: 0.5rem;
 `;
 
 // Container for the label and select options
@@ -116,4 +106,38 @@ const Select = styled.select`
   padding: 0.5rem;
   border: 0.2rem solid black;
   border-radius: 5px;
+`;
+
+// Container for individual Item
+const IndividualItem = styled.div`
+  display: flex;
+  border: 0.2rem solid black;
+  border-radius: 5px;
+  margin: 0.5rem auto;
+  width: 80%;
+  text-align: center;
+`;
+
+// Name of the item (left side column)
+const Name = styled.div`
+  max-width: 20%;
+  min-width: 20%;
+  border-right: 1px solid black;
+`;
+
+// Image container to center the img of the item
+const ImageContainer = styled.div`
+  text-align: center;
+`;
+
+// Description of the item's effect in battle
+const Description = styled.div`
+  margin: auto;
+  padding: 0.5rem;
+`;
+
+// Container for the default message before a category is selected
+const DefaultMessage = styled.div`
+  text-align: center;
+  margin: 10rem auto;
 `;

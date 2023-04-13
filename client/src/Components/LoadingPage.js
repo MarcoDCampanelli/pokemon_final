@@ -3,6 +3,7 @@ import Pikachu from "../assets/running pikachu.gif";
 
 import styled, { keyframes } from "styled-components";
 
+// This component renders the loading screen during fetches
 const LoadingPage = () => {
   return (
     <Container>
@@ -15,6 +16,7 @@ const LoadingPage = () => {
 
 export default LoadingPage;
 
+// This holds the entire page
 const Container = styled.div`
   display: flex;
   flex-direction: row;
@@ -23,6 +25,7 @@ const Container = styled.div`
   margin: 10rem 0;
 `;
 
+// This is the animation being used for the Pokeball
 const Rotation = keyframes`
   0% {
     rotate: 0deg;
@@ -32,10 +35,12 @@ const Rotation = keyframes`
   }
 `;
 
+// Styling for the pikachus who are running (gifs)
 const PikachuImage = styled.img`
   width: 10%;
 `;
 
+// Styling for the Pokeball in the center in order to make it spin indefinitely
 const Image = styled.img`
   width: 10%;
   animation-name: ${Rotation};
