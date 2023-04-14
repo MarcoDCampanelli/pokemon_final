@@ -5,13 +5,17 @@ import styled from "styled-components";
 import { UserContext } from "./UserContext";
 import LoadingPage from "./LoadingPage";
 
+// This component will render a list of attacks that the pokemon learns through breeding/tms/hms and tutors
 const AlternateAttacks = ({ pokemon, generation }) => {
   const { capAndRemoveHyphen } = useContext(UserContext);
 
   // Create an array of the Pokemon's attacks and the method in which those attacks are learned
   const attacks = {};
 
-  // Map over the attacks of a pokemon. If te attack can be learned in the selected generation (and isn't a level-up attack), push it into the attacks object and include the method that it is learned in.
+  // This array is used to see whether the pokemon learns any moves this generation. If yes, but the previous sortable array is empty, then the pokemon is part of the generation, but can't learn any tm/hm/egg/tutor moves
+  let array = [];
+
+  // Map over the attacks of a pokemon. If the attack can be learned in the selected generation (and isn't a level-up attack), push it into the attacks object and include the method that it is learned in.
   pokemon.moves.map((move) => {
     return move.version_group_details.map((version) => {
       if (
@@ -19,6 +23,12 @@ const AlternateAttacks = ({ pokemon, generation }) => {
         version.move_learn_method.name !== "level-up"
       ) {
         return (attacks[move.move.name] = version.move_learn_method.name);
+      }
+      if (
+        version.version_group.name === generation &&
+        version.move_learn_method.name === "level-up"
+      ) {
+        return array.push(move.move.name);
       }
     });
   });
@@ -32,15 +42,6 @@ const AlternateAttacks = ({ pokemon, generation }) => {
     });
   }
 
-  // This array is used to see whether the pokemon learns any moves this generation. If yes, but the previous sortable array is empty, then the pokemon is part of the generation, but can't learn any tm/hm/egg/tutor moves
-  let array = [];
-
-  pokemon.moves.map((move) =>
-    move.version_group_details.map((version) =>
-      array.push(version.version_group.name)
-    )
-  );
-
   if (!pokemon) {
     return <LoadingPage />;
   }
@@ -48,13 +49,13 @@ const AlternateAttacks = ({ pokemon, generation }) => {
   return (
     <>
       <Title>Machine/Egg/Tutor Moves</Title>
-      {!array.includes(generation) ? (
-        <>
+      {array.length === 0 && sortable.length === 0 ? (
+        <p>This Pokemon is not available this generation.</p>
+      ) : sortable.length === 0 ? (
+        <p>
           This pokemon can't learn any moves by TM/HM, breeding or move tutors
           in this generation.
-        </>
-      ) : sortable.length === 0 ? (
-        <p>This Pokemon is not available this generation.</p>
+        </p>
       ) : (
         sortable.map((moveCombo) => {
           return (
@@ -68,7 +69,10 @@ const AlternateAttacks = ({ pokemon, generation }) => {
                   <>Tutor</>
                 )}
               </Level>
-              <Move to={`/attacks/${moveCombo[0]}`}>
+              <Move
+                to={`/attacks/${moveCombo[0]}`}
+                key={`SpecialAttack:${moveCombo[0]}`}
+              >
                 {capAndRemoveHyphen(moveCombo[0])}
               </Move>
             </Container>
@@ -81,6 +85,12 @@ const AlternateAttacks = ({ pokemon, generation }) => {
 
 export default AlternateAttacks;
 
+// Styling for the title of the list
+const Title = styled.p`
+  font-weight: bold;
+`;
+
+// Container that holds the list of attacks and their learn method
 const Container = styled.div`
   display: flex;
   flex-direction: row;
@@ -91,10 +101,7 @@ const Container = styled.div`
   border-radius: 5px;
 `;
 
-const Title = styled.p`
-  font-weight: bold;
-`;
-
+// Styling for the div that holds the learn method
 const Level = styled.div`
   text-align: left;
   margin-left: 0.1rem;
@@ -103,6 +110,7 @@ const Level = styled.div`
   font-weight: bold;
 `;
 
+// Styling for the link to each special attack
 const Move = styled(Link)`
   text-decoration: none;
   color: black;
