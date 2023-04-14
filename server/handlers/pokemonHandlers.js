@@ -142,7 +142,7 @@ const PokemonPartyAddition = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
 
   // Several checks must take place first to see if the entered informations is valid.
-  // 1. IV, EV and attacks need to be defined and can't be empty
+  // 1. IV, EV, nature and attacks need to be defined and can't be empty
   if (!iv || !ev || !attacks) {
     return res
       .status(404)

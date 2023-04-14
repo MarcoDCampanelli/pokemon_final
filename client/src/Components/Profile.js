@@ -525,7 +525,7 @@ const Profile = () => {
                                 <Input
                                   type="number"
                                   min="0"
-                                  max="31"
+                                  max="252"
                                   defaultValue={ev}
                                   onChange={(e) => {
                                     setEvSpread({

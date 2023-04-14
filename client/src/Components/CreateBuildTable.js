@@ -1,9 +1,11 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { UserContext } from "./UserContext";
 import LoadingPage from "./LoadingPage";
 
+// This is the table that allows the user to create their own build for a pokemon
 const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
   const {
     currentUser,
@@ -17,6 +19,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     setItemType,
     items,
   } = useContext(UserContext);
+  const navigate = useNavigate();
 
   // This will fetch the items that the user has decided to scroll through
   const [itemList, setItemList] = useState("");
@@ -30,6 +33,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
             .then((resData) => {
               return resData;
             })
+            .catch((err) => navigate("/error"))
         );
       });
     }
@@ -92,6 +96,17 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
   const [item, setItem] = useState();
   const [error, setError] = useState("");
 
+  // This will allow the natures to be rendered in alphabetical order
+  let natureArray = [];
+  if (natures) {
+    natures.map((nature) => {
+      return natureArray.push(nature);
+    });
+    natureArray.sort((a, b) => {
+      return a.localeCompare(b);
+    });
+  }
+
   // These 6 variables calculate the pokemon's stat based on what is being modified
   let hp = calculateHealth(
     pokemon.stats[0].base_stat,
@@ -135,10 +150,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     natureValues.spd
   );
 
-  if (!pokemon) {
-    return <LoadingPage />;
-  }
-
+  // This will call the endpoint that adds a pokemon to a user's party
   const handlePost = () => {
     const data = {
       trainer: currentUser,
@@ -164,200 +176,116 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
     })
       .then((res) => res.json())
       .then((resData) => setError(resData))
-      .catch((error) => window.alert(error));
+      .catch((error) => navigate("/error"));
   };
+
+  if (!pokemon) {
+    return <LoadingPage />;
+  }
 
   return (
     <Container>
       <Table>
-        <tr>
-          <TableHead>Stat Name</TableHead>
-          {pokemonStats.map((stat) => {
-            return <TableHead>{capAndRemoveHyphen(stat.stat.name)}</TableHead>;
-          })}
-        </tr>
-        <tr>
-          <TableHead>Stat Value</TableHead>
-          {pokemonStats.map((stat) => {
-            return <TableCell>{stat.base_stat}</TableCell>;
-          })}
-        </tr>
-        <tr>
-          <TableHead>IV Value</TableHead>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="31"
-              value={pokemonIv.hp}
-              onChange={(e) =>
-                setPokemonIv({ ...pokemonIv, hp: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="31"
-              value={pokemonIv.atk}
-              onChange={(e) =>
-                setPokemonIv({ ...pokemonIv, atk: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="31"
-              value={pokemonIv.def}
-              onChange={(e) =>
-                setPokemonIv({ ...pokemonIv, def: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="31"
-              value={pokemonIv.spAtk}
-              onChange={(e) =>
-                setPokemonIv({ ...pokemonIv, spAtk: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="31"
-              value={pokemonIv.spDef}
-              onChange={(e) =>
-                setPokemonIv({ ...pokemonIv, spDef: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="31"
-              value={pokemonIv.spd}
-              onChange={(e) =>
-                setPokemonIv({ ...pokemonIv, spd: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-        </tr>
-        <tr>
-          <TableHead>EV Value</TableHead>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="252"
-              value={pokemonEv.hp}
-              onChange={(e) =>
-                setPokemonEv({ ...pokemonEv, hp: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="252"
-              value={pokemonEv.atk}
-              onChange={(e) =>
-                setPokemonEv({ ...pokemonEv, atk: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="252"
-              value={pokemonEv.def}
-              onChange={(e) =>
-                setPokemonEv({ ...pokemonEv, def: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="252"
-              value={pokemonEv.spAtk}
-              onChange={(e) =>
-                setPokemonEv({ ...pokemonEv, spAtk: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="252"
-              value={pokemonEv.spDef}
-              onChange={(e) =>
-                setPokemonEv({ ...pokemonEv, spDef: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-          <TableCell>
-            <Input
-              type="number"
-              min="0"
-              max="252"
-              value={pokemonEv.spd}
-              onChange={(e) =>
-                setPokemonEv({ ...pokemonEv, spd: parseInt(e.target.value) })
-              }
-              required
-            ></Input>
-          </TableCell>
-        </tr>
-        <tr>
-          <TableHead>Final Stat Value</TableHead>
-          <TableCell>
-            {pokemon.name !== "shedinja" ? <>{hp}</> : <>1</>}
-          </TableCell>
-          <TableCell>{atk}</TableCell>
-          <TableCell>{def}</TableCell>
-          <TableCell>{spAtk}</TableCell>
-          <TableCell>{spDef}</TableCell>
-          <TableCell>{spd}</TableCell>
-        </tr>
+        <thead>
+          <tr>
+            <TableHead>Stat Name</TableHead>
+            {pokemonStats.map((stat) => {
+              return (
+                <TableHead key={`CreateBuildHead:${stat.stat.name}`}>
+                  {capAndRemoveHyphen(stat.stat.name)}
+                </TableHead>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <TableHead>Stat Value</TableHead>
+            {pokemonStats.map((stat) => {
+              return (
+                <TableCell key={`CreateBuildStatValue:${stat.stat.name}`}>
+                  {stat.base_stat}
+                </TableCell>
+              );
+            })}
+          </tr>
+          <tr>
+            <TableHead>IV Value</TableHead>
+            {Object.keys(ivSpread).map((iv, index) => {
+              let keys = Object.keys(ivSpread);
+              return (
+                <TableCell key={`CreateBuildIV:${iv}`}>
+                  <Input
+                    type="number"
+                    min="0"
+                    max="31"
+                    value={pokemonIv[iv]}
+                    onChange={(e) =>
+                      setPokemonIv({
+                        ...pokemonIv,
+                        [keys[index]]: parseInt(e.target.value),
+                      })
+                    }
+                    required
+                  ></Input>
+                </TableCell>
+              );
+            })}
+          </tr>
+          <tr>
+            <TableHead>EV Value</TableHead>
+            {Object.keys(evSpread).map((ev, index) => {
+              let keys = Object.keys(evSpread);
+              return (
+                <TableCell key={`CreateBuildEV:${ev}`}>
+                  <Input
+                    type="number"
+                    min="0"
+                    max="252"
+                    value={pokemonEv[ev]}
+                    onChange={(e) =>
+                      setPokemonEv({
+                        ...pokemonEv,
+                        [keys[index]]: parseInt(e.target.value),
+                      })
+                    }
+                    required
+                  ></Input>
+                </TableCell>
+              );
+            })}
+          </tr>
+          <tr>
+            <TableHead>Final Stat Value</TableHead>
+            <TableCell>
+              {pokemon.name !== "shedinja" ? <>{hp}</> : <>1</>}
+            </TableCell>
+            <TableCell>{atk}</TableCell>
+            <TableCell>{def}</TableCell>
+            <TableCell>{spAtk}</TableCell>
+            <TableCell>{spDef}</TableCell>
+            <TableCell>{spd}</TableCell>
+          </tr>
+        </tbody>
       </Table>
       <SelectionContainer>
         <Label>Select an Ability:</Label>
         <Select
+          defaultValue={true}
           name="ability"
           onChange={(e) => {
             setAbility(e.target.value);
           }}
         >
-          <option selected disabled>
+          <option value={true} disabled>
             Select an ability
           </option>
           {pokemon.abilities.map((ability) => {
             return (
-              <option value={ability.ability.name}>
+              <option
+                value={ability.ability.name}
+                key={`CreateBuildAbility:${ability.ability.name}`}
+              >
                 {capAndRemoveHyphen(ability.ability.name)}
               </option>
             );
@@ -367,33 +295,46 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
       <SelectionContainer>
         <Label>Select a Nature:</Label>
         <Select
+          defaultValue={true}
           name="nature"
           onChange={(e) => {
             setNature(e.target.value);
             changeNatureValues(e.target.value);
           }}
         >
-          <option selected disabled>
+          <option value={true} disabled>
             Select a nature
           </option>
-          {natures.map((nature) => {
-            return <option value={nature}>{capAndRemoveHyphen(nature)}</option>;
+          {natureArray.map((nature) => {
+            return (
+              <option value={nature} key={`CreateBuildNature:${nature}`}>
+                {capAndRemoveHyphen(nature)}
+              </option>
+            );
           })}
         </Select>
       </SelectionContainer>
       <SelectionContainer>
         <Label>Select an Item Category:</Label>
         <Select
+          defaultValue={true}
           name="item"
           onChange={(e) => {
             setItemType(e.target.value);
           }}
         >
-          <option defaultValue={true} disabled selected>
+          <option value={true} disabled selected>
             Select item type:
           </option>
           {itemCategories.map((category) => {
-            return <option value={category.value}>{category.name}</option>;
+            return (
+              <option
+                value={category.value}
+                key={`CreateBuildItem:${category.name}`}
+              >
+                {category.name}
+              </option>
+            );
           })}
         </Select>
       </SelectionContainer>
@@ -401,12 +342,13 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
         <SelectionContainer>
           <Label>Choose an item:</Label>
           <Select
+            defaultValue={true}
             name="itemChoice"
             onChange={(e) => {
               setItem(e.target.value);
             }}
           >
-            <option defaultValue={true} disabled selected>
+            <option value={true} disabled selected>
               Select an item:
             </option>
             {itemList.map((item) => {
@@ -416,7 +358,10 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
               );
               if (check.includes(generation)) {
                 return (
-                  <option value={item.name}>
+                  <option
+                    value={item.name}
+                    key={`CreateBuildSpecItem:${item.name}`}
+                  >
                     {capAndRemoveHyphen(item.name)}
                   </option>
                 );
@@ -441,6 +386,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
       <SelectionContainer>
         <Label>Attack #1:</Label>
         <Select
+          defaultValue={true}
           name="attack"
           onChange={(e) =>
             setPokemonAttacks({
@@ -449,12 +395,15 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
             })
           }
         >
-          <option selected disabled>
+          <option value={true} disabled>
             Select an attack:
           </option>
           {sortable.map((moveCombo) => {
             return (
-              <option value={moveCombo[0]}>
+              <option
+                value={moveCombo[0]}
+                key={`CreateBuildAttack1:${moveCombo[0]}`}
+              >
                 {capAndRemoveHyphen(moveCombo[0])}
               </option>
             );
@@ -464,6 +413,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
       <SelectionContainer>
         <Label>Attack #2:</Label>
         <Select
+          defaultValue={true}
           name="attack"
           onChange={(e) =>
             setPokemonAttacks({
@@ -472,12 +422,15 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
             })
           }
         >
-          <option selected disabled>
+          <option value={true} disabled>
             Select an attack:
           </option>
           {sortable.map((moveCombo) => {
             return (
-              <option value={moveCombo[0]}>
+              <option
+                value={moveCombo[0]}
+                key={`CreateBuildAttack2:${moveCombo[0]}`}
+              >
                 {capAndRemoveHyphen(moveCombo[0])}
               </option>
             );
@@ -487,6 +440,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
       <SelectionContainer>
         <Label>Attack #3:</Label>
         <Select
+          defaultValue={true}
           name="attack"
           onChange={(e) =>
             setPokemonAttacks({
@@ -495,12 +449,15 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
             })
           }
         >
-          <option selected disabled>
+          <option value={true} disabled>
             Select an attack:
           </option>
           {sortable.map((moveCombo) => {
             return (
-              <option value={moveCombo[0]}>
+              <option
+                value={moveCombo[0]}
+                key={`CreateBuildAttack3:${moveCombo[0]}`}
+              >
                 {capAndRemoveHyphen(moveCombo[0])}
               </option>
             );
@@ -510,6 +467,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
       <SelectionContainer>
         <Label>Attack #4:</Label>
         <Select
+          defaultValue={true}
           name="attack"
           onChange={(e) =>
             setPokemonAttacks({
@@ -518,12 +476,15 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
             })
           }
         >
-          <option selected disabled>
+          <option value={true} disabled>
             Select an attack:
           </option>
           {sortable.map((moveCombo) => {
             return (
-              <option value={moveCombo[0]}>
+              <option
+                value={moveCombo[0]}
+                key={`CreateBuildAttack4:${moveCombo[0]}`}
+              >
                 {capAndRemoveHyphen(moveCombo[0])}
               </option>
             );
@@ -590,7 +551,7 @@ const Input = styled.input`
   font-size: 1rem;
 `;
 
-// Container for each of the selection options (ability, nature, level and attacks)
+// Container for each of the selection options (ability, nature, items, level and attacks)
 const SelectionContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -604,7 +565,7 @@ const Label = styled.label`
   margin: 0rem 0.5rem;
 `;
 
-// Stlying for the select options (ability, nature, attacks)
+// Stlying for the select options (ability, nature, items, attacks)
 const Select = styled.select`
   padding: 0.5rem;
   border-radius: 5px;
