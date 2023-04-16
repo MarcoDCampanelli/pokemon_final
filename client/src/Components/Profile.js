@@ -251,6 +251,8 @@ const Profile = () => {
     return <LoadingPage />;
   }
 
+  console.log(attack);
+
   return (
     <Container>
       {profile.party.map((member) => {
@@ -343,11 +345,11 @@ const Profile = () => {
                 <Title>Attacks</Title>
                 {member.entryId !== update ? (
                   <>
-                    {Object.values(member.attacks).map((attack) => {
+                    {Object.values(member.attacks).map((attack, index) => {
                       return (
                         <AttackLink
                           to={`/attacks/${attack}`}
-                          key={member.entryId + attack}
+                          key={`AttackList:${index}`}
                         >
                           {capAndRemoveHyphen(attack)}
                         </AttackLink>
@@ -364,7 +366,7 @@ const Profile = () => {
                           setAttack({ ...attack, atk1: e.target.value })
                         }
                       >
-                        <option disabled>Select an attack:</option>
+                        <option value={""}>Select an attack:</option>
                         {pokemon &&
                           uniqueAttacks.map((attack) => {
                             return (
@@ -387,7 +389,7 @@ const Profile = () => {
                           setAttack({ ...attack, atk2: e.target.value })
                         }
                       >
-                        <option disabled>Select an attack:</option>
+                        <option value={""}>Select an attack:</option>
                         {pokemon &&
                           uniqueAttacks.map((attack) => {
                             return (
@@ -410,7 +412,7 @@ const Profile = () => {
                           setAttack({ ...attack, atk3: e.target.value })
                         }
                       >
-                        <option disabled>Select an attack:</option>
+                        <option value={""}>Select an attack:</option>
                         {pokemon &&
                           uniqueAttacks.map((attack) => {
                             return (
@@ -433,7 +435,7 @@ const Profile = () => {
                           setAttack({ ...attack, atk4: e.target.value })
                         }
                       >
-                        <option disabled>Select an attack:</option>
+                        <option value={""}>Select an attack:</option>
                         {pokemon &&
                           uniqueAttacks.map((attack) => {
                             return (

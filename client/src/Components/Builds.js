@@ -234,7 +234,7 @@ const Builds = ({ pokemonId }) => {
                 </StatContainer>
               </IndividualBuild>
               <DescriptionContainer>{entry.description}</DescriptionContainer>
-              <CommentsContainer>
+              <CommentsContainer border={entry.comments.length === 0}>
                 {entry.comments.length === 0 ? (
                   <></>
                 ) : (
@@ -506,7 +506,8 @@ const CommentsContainer = styled.div`
   flex-direction: column;
   width: 80%;
   margin: 1rem auto;
-  border: 0.2rem solid black;
+
+  border: ${(props) => (props.border ? "none" : "0.2rem solid black")};
 `;
 
 // Container that holds individual comments

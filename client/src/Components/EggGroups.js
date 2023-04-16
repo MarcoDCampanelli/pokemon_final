@@ -30,6 +30,14 @@ const EggGroups = () => {
   return (
     <EggGroupsContainer>
       <Title>Egg Groups:</Title>
+      <Paragraph>
+        Every Pokemon belongs to at least one egg group. Pokemon in the same egg
+        group can breed and will produce an offspring of the same species as the
+        mother, unless one of the Pokemon is Ditto, in which case the offspring
+        will be of the same species as the other Pokemon. Some Pokemon belong to
+        multiple egg groups. Pokemon who cannot breed, belong to the No Eggs
+        group.
+      </Paragraph>
       {eggGroupsList.results.map((group) => {
         return (
           <EggGroupLink to={`/eggGroups/${group.name}`} key={group.name}>
@@ -54,6 +62,12 @@ const EggGroupsContainer = styled.div`
 const Title = styled.h1`
   margin: 1rem auto;
   font-weight: bold;
+`;
+
+// Paragraph explaining how EggGroups work
+const Paragraph = styled.p`
+  width: 80%;
+  margin: 1rem auto;
 `;
 
 // Link to the pokemon's page when clicked

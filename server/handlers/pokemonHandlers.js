@@ -46,16 +46,26 @@ const Registration = async (req, res) => {
   const db = client.db("Pokemon");
 
   // First, check to see if the user already exists
-  const result = await db
-    .collection("Users")
-    .findOne({ user: user, email: email });
+  const resultName = await db.collection("Users").findOne({ user: user });
 
   // If the name/email is already taken, return the following
-  if (result) {
+  if (resultName) {
     return res.status(406).json({
       status: 406,
-      data: { user, email },
-      message: "Sorry, a user with that name and email already exist.",
+      data: { user },
+      message: "Sorry, a user with that name already exists.",
+    });
+  }
+
+  // First, check to see if the user already exists
+  const resultEmail = await db.collection("Users").findOne({ email: email });
+
+  // If the name/email is already taken, return the following
+  if (resultEmail) {
+    return res.status(406).json({
+      status: 406,
+      data: { email },
+      message: "Sorry, a user with that email already exists.",
     });
   }
 
@@ -194,15 +204,18 @@ const PokemonPartyAddition = async (req, res) => {
   }
 
   // This will ensure that attacks aren't repeated and are all unique
-  let attackArray = Array.from(new Set(Object.values(attacks)));
+  let listAttacks = Object.values(attacks).filter((word) => word !== "");
+  let attackArray = Array.from(
+    new Set(Object.values(attacks).filter((word) => word !== ""))
+  );
   let attackCheck =
-    attackArray.length === 4 && attackArray.every((attack) => attack !== "");
+    attackArray.length === listAttacks.length && listAttacks.length >= 1;
 
   if (!attackCheck) {
     return res.status(404).json({
       status: 404,
       message:
-        "You are required to select 4 unique move slots for this Pokemon.",
+        "Your Pokemon must have at least 1 attack. All attacks must be unique.",
     });
   }
 
@@ -377,15 +390,18 @@ const UpdateBuild = async (req, res) => {
   }
 
   // This will ensure that attacks aren't repeated and are all unique
-  let attackArray = Array.from(new Set(Object.values(attacks)));
+  let listAttacks = Object.values(attacks).filter((word) => word !== "");
+  let attackArray = Array.from(
+    new Set(Object.values(attacks).filter((word) => word !== ""))
+  );
   let attackCheck =
-    attackArray.length === 4 && attackArray.every((attack) => attack !== "");
+    attackArray.length === listAttacks.length && listAttacks.length >= 1;
 
   if (!attackCheck) {
     return res.status(404).json({
       status: 404,
       message:
-        "You are required to select 4 unique move slots for this Pokemon.",
+        "Your Pokemon must have at least 1 attack. All attacks must be unique.",
     });
   }
 
@@ -562,18 +578,21 @@ const PostBuild = async (req, res) => {
   }
 
   // This will ensure that attacks aren't repeated and are all unique
-  let attackArray = Array.from(new Set(Object.values(attacks)));
+  let listAttacks = Object.values(attacks).filter((word) => word !== "");
+  let attackArray = Array.from(
+    new Set(Object.values(attacks).filter((word) => word !== ""))
+  );
   let attackCheck =
-    attackArray.length === 4 && attackArray.every((attack) => attack !== "");
+    attackArray.length === listAttacks.length && listAttacks.length >= 1;
 
   if (!attackCheck) {
     return res.status(404).json({
       status: 404,
       message:
-        "You are required to select 4 unique move slots for this Pokemon.",
+        "Your Pokemon must have at least 1 attack. All attacks must be unique.",
     });
   }
-
+  console.log(attacks);
   await client.connect();
   const db = client.db("Pokemon");
   const _id = uuidv4();

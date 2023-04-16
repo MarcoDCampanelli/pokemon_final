@@ -30,6 +30,14 @@ const Abilities = () => {
   return (
     <AbilityContainer>
       <Title>Abilities</Title>
+      <Paragraph>
+        Every Pokemon has access to at least one ability which helps them in
+        battle and sometimes even outside of battle. These abilities may
+        activate immediately upon entering battle or can be triggered after a
+        certain condition is fulfilled. Some Pokemon may naturally have 2
+        abilities which are randomly acquired. Certain Pokemon even have hidden
+        abilities which are usually more powerful and harder to obtain!
+      </Paragraph>
       {abilityList.results.map((ability) => {
         return (
           <AbilityLink
@@ -57,6 +65,12 @@ const AbilityContainer = styled.div`
 const Title = styled.h1`
   margin: 1rem auto;
   font-weight: bold;
+`;
+
+// Paragraph explaining how Abilities work
+const Paragraph = styled.p`
+  width: 80%;
+  margin: 1rem auto;
 `;
 
 // Link to the pokemon's page when clicked
