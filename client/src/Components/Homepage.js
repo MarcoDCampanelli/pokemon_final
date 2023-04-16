@@ -17,9 +17,10 @@ const Homepage = () => {
   const [pokemon, setPokemon] = useState("");
   const [attack, setAttack] = useState("");
   const [ability, setAbility] = useState("");
-  // !!!!!!Testing to finish the autocomplete search
+  //  This state is used to hold all of the suggestions while typing
   const [suggestions, setSuggestions] = useState("");
 
+  // This will filter the pokemon that match what is being typed and add it to the suggestions state
   const filterSuggestions = (typed) => {
     const pokemonMatches = pokemonList.filter((monster) => {
       if (monster.name.includes(typed.toLowerCase())) {
@@ -29,14 +30,15 @@ const Homepage = () => {
     setSuggestions(pokemonMatches);
   };
 
+  // Onchange in the input, this function will be executed to generate the list. If what's being typed is only 2 characters or less, nothing is shown
   const handleSuggestions = (typed) => {
-    if (pokemon.length > 2) {
+    if (typed.length > 2) {
       return filterSuggestions(typed);
     }
-    setSuggestions([]);
+    if (typed.length <= 2) {
+      return setSuggestions([]);
+    }
   };
-
-  // !End of tests
 
   // This endpoint is used from the PokeAPI to grab a list of all Pokemon and all of their forms based off of species
   useEffect(() => {
@@ -96,7 +98,7 @@ const Homepage = () => {
                   setPokemon(e.target.value.toLowerCase());
                 }}
               ></Inputs>
-              <UlElement>
+              <UlElement border={suggestions.length > 0}>
                 {suggestions.length > 0 ? (
                   suggestions.map((suggestion) => {
                     return (
@@ -229,6 +231,8 @@ const UlElement = styled.ul`
   border: 0.1rem solid grey;
   width: 99%;
   margin-left: 0.5%;
+
+  border: ${(props) => (props.border ? "0.05rem solid grey" : "none")};
 
   /* This media query is added to keep the li elements under the input when the page is smaller */
   @media (max-width: 768px) {
