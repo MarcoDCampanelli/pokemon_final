@@ -11,24 +11,42 @@ const Homepage = () => {
   const navigate = useNavigate();
   // The first 3 states are used for Pagination
   const [pokemonList, setPokemonList] = useState("");
-  const [offset, setOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const [postsPerPage, setPostsPerPage] = useState(45);
   // The following states are used in the search bars
   const [pokemon, setPokemon] = useState("");
   const [attack, setAttack] = useState("");
   const [ability, setAbility] = useState("");
+  // !!!!!!Testing to finish the autocomplete search
+  const [suggestions, setSuggestions] = useState("");
+
+  const filterSuggestions = (typed) => {
+    const pokemonMatches = pokemonList.filter((monster) => {
+      if (monster.name.includes(typed.toLowerCase())) {
+        return true;
+      }
+    });
+    setSuggestions(pokemonMatches);
+  };
+
+  const handleSuggestions = (typed) => {
+    if (pokemon.length > 2) {
+      return filterSuggestions(typed);
+    }
+    setSuggestions([]);
+  };
+
+  // !End of tests
 
   // This endpoint is used from the PokeAPI to grab a list of all Pokemon and all of their forms based off of species
   useEffect(() => {
-    fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/?offset=${offset}&limit=${postsPerPage}`
-    )
+    fetch(`https://pokeapi.co/api/v2/pokemon-species/?offset=0&limit=1010`)
       .then((res) => res.json())
       .then((resData) => {
         setPokemonList(resData.results);
       })
       .catch((err) => navigate("/error"));
-  }, [offset]);
+  }, []);
 
   // If something is typed, regardless of caps and -, search pokemon
   const handlePokemonSearch = () => {
@@ -51,6 +69,13 @@ const Homepage = () => {
     }
   };
 
+  //This will set the index of the last and first post I wish to display
+  const indexOfLastPost = (currentPage + 1) * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  // currentPosts will slice the data state to hold only the posts we want to see.
+  // We will map over currentPosts instead of mapping over data
+  const currentPosts = pokemonList.slice(indexOfFirstPost, indexOfLastPost);
+
   if (!pokemonList) {
     return <LoadingPage />;
   }
@@ -64,7 +89,10 @@ const Homepage = () => {
           <Inputs
             type="text"
             placeholder="Pokemon"
-            onChange={(e) => setPokemon(e.target.value.toLowerCase())}
+            onChange={(e) => {
+              handleSuggestions(e.target.value);
+              setPokemon(e.target.value.toLowerCase());
+            }}
           ></Inputs>
           <SearchButton
             onClick={() => {
@@ -103,32 +131,33 @@ const Homepage = () => {
       </HomepageContainer>
       <ButtonContainer>
         <Button
-          disabled={offset === 0}
+          disabled={currentPage === 0}
           onClick={() => {
-            setOffset(offset - postsPerPage);
+            setCurrentPage(currentPage - 1);
           }}
         >
           Previous
         </Button>
         <Button
-          disabled={pokemonList.length < postsPerPage}
+          disabled={currentPosts.length < postsPerPage}
           onClick={() => {
-            setOffset(offset + postsPerPage);
+            setCurrentPage(currentPage + 1);
           }}
         >
           Next
         </Button>
       </ButtonContainer>
       <PokemonContainer>
-        {pokemonList.map((pokemon, index) => {
+        {currentPosts.map((pokemon, index) => {
           return (
             <IndividualPokemonContainer key={index}>
               <PokemonName to={`/pokemon/${pokemon.name}`}>
                 {capAndRemoveHyphen(pokemon.name)}
               </PokemonName>
               <Sprite
+                alt={"Pokemon not found"}
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                  index + 1 + offset
+                  index + 1 + postsPerPage * currentPage
                 }.png`}
               />
             </IndividualPokemonContainer>
@@ -140,6 +169,30 @@ const Homepage = () => {
 };
 
 export default Homepage;
+
+// const TestUl = styled.ul`
+//   list-style: none;
+//   position: absolute;
+//   width: 90%;
+//   margin-left: 5%;
+// `;
+
+// const TestLi = styled.li``;
+
+// const TestDiv = styled.div`
+//   display: inline-block;
+//   position: relative;
+//   background-color: yellow;
+
+//   @media (max-width: 768px) {
+//     width: 25%;
+//   }
+// `;
+
+// const TestInput = styled.input`
+//   width: 80%;
+//   padding: 0.5rem 0;
+// `;
 
 // Container for the top half of the homepage container the search icons
 const HomepageContainer = styled.div`
@@ -185,6 +238,29 @@ const Inputs = styled.input`
     width: 25%;
   }
 `;
+
+// !Testing
+const StyledListContainer = styled.ul`
+  display: flex;
+  flex-direction: column;
+  /* margin-right: 1rem; */
+`;
+
+const ListElement = styled.li`
+  list-style: none;
+  padding: 0.5rem;
+  border: 0.1rem solid black;
+  width: 30%;
+  margin-left: 63%;
+  background-color: yellow;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    width: 25%;
+  }
+`;
+
+// !Testing
 
 // Styling for the Search button
 const SearchButton = styled.button`
