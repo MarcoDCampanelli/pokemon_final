@@ -613,6 +613,7 @@ const PostBuild = async (req, res) => {
   }
 };
 
+// Handler called in order to return a list of all builds containing that pokemon's name, whether it's a mega, gmax form, etc
 const GetBuilds = async (req, res) => {
   const { pokemon } = req.params;
 
@@ -638,11 +639,13 @@ const GetBuilds = async (req, res) => {
   return res.status(200).json({ status: 200, data: builds });
 };
 
+// Handler to post a comment on a particular build
 const PostComment = async (req, res) => {
   const { postId, trainer, comment } = req.body;
 
   const client = new MongoClient(MONGO_URI, options);
 
+  // Check to see if the comment is at least 10 characters
   if (comment.length < 10) {
     return res.status(404).json({
       status: 404,
@@ -650,6 +653,7 @@ const PostComment = async (req, res) => {
     });
   }
 
+  // If the person somehow not a user but has access to the button, return this error
   if (!trainer) {
     return res.status(404).json({
       status: 404,
@@ -672,6 +676,7 @@ const PostComment = async (req, res) => {
     });
   }
 
+  // If the build is found, push the new comment into the array
   if (build) {
     try {
       const date = new Date();
@@ -696,11 +701,12 @@ const PostComment = async (req, res) => {
   client.close();
 };
 
+// Handler to delete a build if you are the creator of said build
 const DeletePostedBuild = async (req, res) => {
   const { build } = req.params;
 
   const client = new MongoClient(MONGO_URI, options);
-  console.log(build);
+
   await client.connect();
   const db = client.db("Pokemon");
 
@@ -716,6 +722,7 @@ const DeletePostedBuild = async (req, res) => {
     });
   }
 
+  // If the build exists, delete it
   if (searchBuild) {
     try {
       const deleteEntry = await db

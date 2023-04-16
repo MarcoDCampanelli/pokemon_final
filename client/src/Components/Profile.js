@@ -471,7 +471,7 @@ const Profile = () => {
                     <thead>
                       <tr>
                         <TableHead>Stat Name:</TableHead>
-                        {Object.keys(member.iv).map((stat, index) => {
+                        {Object.keys(member.iv).map((stat) => {
                           return (
                             <TableHead key={`Name:${stat}`}>
                               {capAndRemoveHyphen(stat)}
