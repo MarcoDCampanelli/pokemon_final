@@ -139,239 +139,237 @@ const Builds = ({ pokemonId }) => {
   }
 
   return (
-    <>
-      <BuildContainer>
-        {builds.data ? (
-          builds.data.map((entry, index) => {
-            return (
-              <>
-                <IndividualBuild key={`entry:${index}`}>
-                  <InfoContainer>
-                    <Titles>{capAndRemoveHyphen(entry.pokemon)}</Titles>
-                    <Info>Trainer: {entry.trainer}</Info>
-                    <Info>Index #: {entry.index}</Info>
-                    <Info>Level: {entry.level}</Info>
-                    <Info>
-                      Item:{" "}
-                      {entry.item ? (
-                        <>{capAndRemoveHyphen(entry.item)}</>
-                      ) : (
-                        <>None</>
-                      )}
-                    </Info>
-                    <Info>
-                      Generation: {capAndRemoveHyphen(entry.generation)}
-                    </Info>
-                    <Info>Nature: {capAndRemoveHyphen(entry.nature)}</Info>
-                    <Info>Ability: {capAndRemoveHyphen(entry.ability)}</Info>
-                    <SpriteContainer>
-                      <img
-                        alt={"Pokemon"}
-                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry.index}.png`}
-                      />
-                    </SpriteContainer>
-                  </InfoContainer>
-                  <BuildAttackContainer>
-                    <Titles>Attacks</Titles>
-                    {Object.values(entry.attacks).map((attack) => {
-                      return (
-                        <AttackLink
-                          to={`/attacks/${attack}`}
-                          key={`PostedBuild:${attack}`}
-                        >
-                          {capAndRemoveHyphen(attack)}
-                        </AttackLink>
-                      );
-                    })}
-                  </BuildAttackContainer>
-                  <StatContainer>
-                    <Titles>Stat Investment</Titles>
-                    <Table>
-                      <thead>
-                        <tr>
-                          <TableHead>Stat Name:</TableHead>
-                          {Object.keys(entry.iv).map((stat) => {
-                            return (
-                              <TableHead key={`PostedBuildTitle:${stat}`}>
-                                {capAndRemoveHyphen(stat)}
-                              </TableHead>
-                            );
-                          })}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <TableHead>IV</TableHead>
-                          {Object.values(entry.iv).map((iv, index) => {
-                            return (
-                              <TableCell key={`PostedBuildIV:${index}`}>
-                                {iv}
-                              </TableCell>
-                            );
-                          })}
-                        </tr>
-                        <tr>
-                          <TableHead>EV</TableHead>
-                          {Object.values(entry.ev).map((ev, index) => {
-                            return (
-                              <TableCell key={`PostedBuildEV:${index}`}>
-                                {ev}
-                              </TableCell>
-                            );
-                          })}
-                        </tr>
-                        <tr>
-                          <TableHead>Final Stat</TableHead>
-                          {entry.stats.map((stat) => {
-                            return (
-                              <TableCell key={`PostedBuildFinalStat:${stat}`}>
-                                {stat}
-                              </TableCell>
-                            );
-                          })}
-                        </tr>
-                      </tbody>
-                    </Table>
-                  </StatContainer>
-                </IndividualBuild>
-                <DescriptionContainer>{entry.description}</DescriptionContainer>
-                <CommentsContainer>
-                  {entry.comments.length === 0 ? (
-                    <></>
-                  ) : (
-                    entry.comments.map((comment, index) => {
-                      const purchaseDate = parseISO(comment.date);
-                      const date = format(purchaseDate, "MMM do Y");
-
-                      return (
-                        <IndividualComment key={entry._id + index}>
-                          <Titles>{comment.trainer}</Titles>
-                          <Comment>{comment.comment}</Comment>
-                          <Comment>Date: {date}</Comment>
-                        </IndividualComment>
-                      );
-                    })
-                  )}
-                </CommentsContainer>
-                {pokemon === entry._id ? (
-                  <TextBoxContainer>
-                    <TextBox
-                      type="text"
-                      placeholder="Please leave a comment."
-                      value={comment}
-                      onChange={(e) => {
-                        setComment(e.target.value);
-                        setValue(500 - e.target.value.length);
-                      }}
-                    ></TextBox>
-                    <WordLimit full={value < 0} empty={value > 100}>
-                      Character Limit: {value}
-                    </WordLimit>
-                    <Button
-                      disabled={value < 0}
-                      onClick={() => handlePost(entry._id)}
-                    >
-                      Submit
-                    </Button>
-                  </TextBoxContainer>
-                ) : (
-                  <></>
-                )}
-                {/* Only logged in users can comment/save builds. If the currentUser is the same person who made the build, they'll be able to delete it. If not, they can save it for themselves. */}
-                {currentUser ? (
-                  <ButtonContainer>
-                    {currentUser !== entry.trainer ? (
-                      <Button
-                        onClick={() => {
-                          setDeletePokemon(entry._id);
-                          handleAddToParty(
-                            entry.pokemon,
-                            entry.index,
-                            entry.generation,
-                            entry.ability,
-                            entry.nature,
-                            entry.level,
-                            entry.item,
-                            entry.iv,
-                            entry.ev,
-                            entry.stats,
-                            entry.attacks
+    <BuildContainer>
+      {builds.data ? (
+        builds.data.map((entry, index) => {
+          return (
+            <div key={`entry:${index}`}>
+              <IndividualBuild>
+                <InfoContainer>
+                  <Titles>{capAndRemoveHyphen(entry.pokemon)}</Titles>
+                  <Info>Trainer: {entry.trainer}</Info>
+                  <Info>Index #: {entry.index}</Info>
+                  <Info>Level: {entry.level}</Info>
+                  <Info>
+                    Item:{" "}
+                    {entry.item ? (
+                      <>{capAndRemoveHyphen(entry.item)}</>
+                    ) : (
+                      <>None</>
+                    )}
+                  </Info>
+                  <Info>
+                    Generation: {capAndRemoveHyphen(entry.generation)}
+                  </Info>
+                  <Info>Nature: {capAndRemoveHyphen(entry.nature)}</Info>
+                  <Info>Ability: {capAndRemoveHyphen(entry.ability)}</Info>
+                  <SpriteContainer>
+                    <img
+                      alt={"Pokemon"}
+                      src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${entry.index}.png`}
+                    />
+                  </SpriteContainer>
+                </InfoContainer>
+                <BuildAttackContainer>
+                  <Titles>Attacks</Titles>
+                  {Object.values(entry.attacks).map((attack) => {
+                    return (
+                      <AttackLink
+                        to={`/attacks/${attack}`}
+                        key={`PostedBuild:${attack}`}
+                      >
+                        {capAndRemoveHyphen(attack)}
+                      </AttackLink>
+                    );
+                  })}
+                </BuildAttackContainer>
+                <StatContainer>
+                  <Titles>Stat Investment</Titles>
+                  <Table>
+                    <thead>
+                      <tr>
+                        <TableHead>Stat Name:</TableHead>
+                        {Object.keys(entry.iv).map((stat) => {
+                          return (
+                            <TableHead key={`PostedBuildTitle:${stat}`}>
+                              {capAndRemoveHyphen(stat)}
+                            </TableHead>
                           );
-                        }}
-                      >
-                        Save Build
-                      </Button>
-                    ) : (
-                      <></>
-                    )}
-                    {currentUser === entry.trainer ? (
-                      <Button
-                        onClick={() => {
-                          setDeletePokemon(entry._id);
-                          handleDelete(entry._id);
-                        }}
-                      >
-                        Delete Build
-                      </Button>
-                    ) : (
-                      <></>
-                    )}
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <TableHead>IV</TableHead>
+                        {Object.values(entry.iv).map((iv, index) => {
+                          return (
+                            <TableCell key={`PostedBuildIV:${index}`}>
+                              {iv}
+                            </TableCell>
+                          );
+                        })}
+                      </tr>
+                      <tr>
+                        <TableHead>EV</TableHead>
+                        {Object.values(entry.ev).map((ev, index) => {
+                          return (
+                            <TableCell key={`PostedBuildEV:${index}`}>
+                              {ev}
+                            </TableCell>
+                          );
+                        })}
+                      </tr>
+                      <tr>
+                        <TableHead>Final Stat</TableHead>
+                        {entry.stats.map((stat) => {
+                          return (
+                            <TableCell key={`PostedBuildFinalStat:${stat}`}>
+                              {stat}
+                            </TableCell>
+                          );
+                        })}
+                      </tr>
+                    </tbody>
+                  </Table>
+                </StatContainer>
+              </IndividualBuild>
+              <DescriptionContainer>{entry.description}</DescriptionContainer>
+              <CommentsContainer>
+                {entry.comments.length === 0 ? (
+                  <></>
+                ) : (
+                  entry.comments.map((comment, index) => {
+                    const purchaseDate = parseISO(comment.date);
+                    const date = format(purchaseDate, "MMM do Y");
+
+                    return (
+                      <IndividualComment key={entry._id + index}>
+                        <Titles>{comment.trainer}</Titles>
+                        <Comment>{comment.comment}</Comment>
+                        <Comment>Date: {date}</Comment>
+                      </IndividualComment>
+                    );
+                  })
+                )}
+              </CommentsContainer>
+              {pokemon === entry._id ? (
+                <TextBoxContainer>
+                  <TextBox
+                    type="text"
+                    placeholder="Please leave a comment."
+                    value={comment}
+                    onChange={(e) => {
+                      setComment(e.target.value);
+                      setValue(500 - e.target.value.length);
+                    }}
+                  ></TextBox>
+                  <WordLimit full={value < 0} empty={value > 100}>
+                    Character Limit: {value}
+                  </WordLimit>
+                  <Button
+                    disabled={value < 0}
+                    onClick={() => handlePost(entry._id)}
+                  >
+                    Submit
+                  </Button>
+                </TextBoxContainer>
+              ) : (
+                <></>
+              )}
+              {/* Only logged in users can comment/save builds. If the currentUser is the same person who made the build, they'll be able to delete it. If not, they can save it for themselves. */}
+              {currentUser ? (
+                <ButtonContainer>
+                  {currentUser !== entry.trainer ? (
                     <Button
                       onClick={() => {
-                        setPokemon(entry._id);
-                        setComment("");
-                        setValue(500);
-                        setError("");
+                        setDeletePokemon(entry._id);
+                        handleAddToParty(
+                          entry.pokemon,
+                          entry.index,
+                          entry.generation,
+                          entry.ability,
+                          entry.nature,
+                          entry.level,
+                          entry.item,
+                          entry.iv,
+                          entry.ev,
+                          entry.stats,
+                          entry.attacks
+                        );
                       }}
                     >
-                      Comment
+                      Save Build
                     </Button>
+                  ) : (
+                    <></>
+                  )}
+                  {currentUser === entry.trainer ? (
                     <Button
                       onClick={() => {
-                        setPokemon("");
-                        setComment("");
-                        setValue(500);
-                        setError("");
+                        setDeletePokemon(entry._id);
+                        handleDelete(entry._id);
                       }}
                     >
-                      Finish
+                      Delete Build
                     </Button>
-                  </ButtonContainer>
-                ) : (
-                  <></>
-                )}
-                {/* If there is no error, show nothing. If the error exists and the pokemon state === entry._id, and the status is an error, display error, else display success message, else display nothing.  */}
-                {!error ? (
-                  <></>
-                ) : pokemon === entry._id && error.status > 299 ? (
-                  <ErrorContainer error={true}>{error.message}</ErrorContainer>
-                ) : pokemon === entry._id && error.status < 299 ? (
-                  <ErrorContainer error={false}>{error.message}</ErrorContainer>
-                ) : (
-                  <></>
-                )}
-                {/* If there is no error, show nothing. If the error exists and the deletePokemon state === entry._id, and the status is an error, display error, else display success message, else display nothing.  */}
-                {!error ? (
-                  <></>
-                ) : !pokemon &&
-                  error.status > 299 &&
-                  deletePokemon === entry._id ? (
-                  <ErrorContainer error={true}>{error.message}</ErrorContainer>
-                ) : !pokemon &&
-                  error.status < 299 &&
-                  deletePokemon === entry._id ? (
-                  <ErrorContainer error={false}>{error.message}</ErrorContainer>
-                ) : (
-                  <></>
-                )}
-              </>
-            );
-          })
-        ) : (
-          <></>
-        )}
-      </BuildContainer>
-    </>
+                  ) : (
+                    <></>
+                  )}
+                  <Button
+                    onClick={() => {
+                      setPokemon(entry._id);
+                      setComment("");
+                      setValue(500);
+                      setError("");
+                    }}
+                  >
+                    Comment
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setPokemon("");
+                      setComment("");
+                      setValue(500);
+                      setError("");
+                    }}
+                  >
+                    Finish
+                  </Button>
+                </ButtonContainer>
+              ) : (
+                <></>
+              )}
+              {/* If there is no error, show nothing. If the error exists and the pokemon state === entry._id, and the status is an error, display error, else display success message, else display nothing.  */}
+              {!error ? (
+                <></>
+              ) : pokemon === entry._id && error.status > 299 ? (
+                <ErrorContainer error={true}>{error.message}</ErrorContainer>
+              ) : pokemon === entry._id && error.status < 299 ? (
+                <ErrorContainer error={false}>{error.message}</ErrorContainer>
+              ) : (
+                <></>
+              )}
+              {/* If there is no error, show nothing. If the error exists and the deletePokemon state === entry._id, and the status is an error, display error, else display success message, else display nothing.  */}
+              {!error ? (
+                <></>
+              ) : !pokemon &&
+                error.status > 299 &&
+                deletePokemon === entry._id ? (
+                <ErrorContainer error={true}>{error.message}</ErrorContainer>
+              ) : !pokemon &&
+                error.status < 299 &&
+                deletePokemon === entry._id ? (
+                <ErrorContainer error={false}>{error.message}</ErrorContainer>
+              ) : (
+                <></>
+              )}
+            </div>
+          );
+        })
+      ) : (
+        <></>
+      )}
+    </BuildContainer>
   );
 };
 
