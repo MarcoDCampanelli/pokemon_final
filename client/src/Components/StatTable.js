@@ -5,7 +5,8 @@ import { UserContext } from "./UserContext";
 
 // This component generates the Stat respresentation of the given Pokemon
 const StatTable = ({ pokemon }) => {
-  const { capAndRemoveHyphen } = useContext(UserContext);
+  const { capAndRemoveHyphen, calculateStat, calculateHealth } =
+    useContext(UserContext);
 
   // This will calculate the stat total of the given pokemon to be used in the graphic in order to generate the relative bars for each stat
   let statTotal = [];
@@ -13,39 +14,6 @@ const StatTable = ({ pokemon }) => {
   let total = statTotal.reduce((a, b) => {
     return a + b;
   });
-
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  const maxHP = (number) => {
-    return (
-      Math.floor(0.01 * (2 * number + 31 + Math.floor(0.25 * 252)) * 100) +
-      100 +
-      10
-    );
-  };
-
-  const maxStat = (number) => {
-    return Math.floor(
-      (Math.floor(0.01 * (2 * number + 31 + Math.floor(0.25 * 252)) * 100) +
-        5) *
-        1.1
-    );
-  };
-
-  const minStat = (number) => {
-    return Math.floor(
-      (Math.floor(0.01 * (2 * number + 0 + Math.floor(0.25 * 0)) * 100) + 5) *
-        0.9
-    );
-  };
-
-  const minHP = (number) => {
-    return (
-      Math.floor(0.01 * (2 * number + 0 + Math.floor(0.25 * 0)) * 100) +
-      100 +
-      10
-    );
-  };
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   return (
     <Table>
@@ -61,10 +29,8 @@ const StatTable = ({ pokemon }) => {
         {pokemon.stats.map((stat) => {
           if (pokemon.name !== "shedinja" && stat.stat.name === "hp") {
             return (
-              <tr>
-                <StatName key={stat.stat.name}>
-                  {capAndRemoveHyphen(stat.stat.name)}
-                </StatName>
+              <tr key={stat.stat.name}>
+                <StatName>{capAndRemoveHyphen(stat.stat.name)}</StatName>
                 <Value>{stat.base_stat}</Value>
                 <td>
                   <ColorDiv
@@ -73,17 +39,16 @@ const StatTable = ({ pokemon }) => {
                   ></ColorDiv>
                 </td>
                 <MinMax>
-                  {minHP(stat.base_stat)} / {maxHP(stat.base_stat)}
+                  {calculateHealth(stat.base_stat, 0, 0, 100)} /{" "}
+                  {calculateHealth(stat.base_stat, 31, 252, 100)}
                 </MinMax>
               </tr>
             );
           }
           if (pokemon.name === "shedinja" && stat.stat.name === "hp") {
             return (
-              <tr>
-                <StatName key={stat.stat.name}>
-                  {capAndRemoveHyphen(stat.stat.name)}
-                </StatName>
+              <tr key={stat.stat.name}>
+                <StatName>{capAndRemoveHyphen(stat.stat.name)}</StatName>
                 <Value>{stat.base_stat}</Value>
                 <td>
                   <ColorDiv
@@ -96,10 +61,8 @@ const StatTable = ({ pokemon }) => {
             );
           } else {
             return (
-              <tr>
-                <StatName key={stat.stat.name}>
-                  {capAndRemoveHyphen(stat.stat.name)}
-                </StatName>
+              <tr key={stat.stat.name}>
+                <StatName>{capAndRemoveHyphen(stat.stat.name)}</StatName>
                 <Value>{stat.base_stat}</Value>
                 <td>
                   <ColorDiv
@@ -108,7 +71,8 @@ const StatTable = ({ pokemon }) => {
                   ></ColorDiv>
                 </td>
                 <MinMax>
-                  {minStat(stat.base_stat)} / {maxStat(stat.base_stat)}
+                  {calculateStat(stat.base_stat, 0, 0, 100, 0.9)} /{" "}
+                  {calculateStat(stat.base_stat, 31, 252, 100, 1.1)}
                 </MinMax>
               </tr>
             );

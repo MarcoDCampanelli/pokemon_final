@@ -154,7 +154,7 @@ const Profile = () => {
         if (version.version_group.name === generation) {
           return attackArray.push(move.move.name);
         } else {
-          <></>;
+          return <></>;
         }
       });
     });
@@ -258,11 +258,8 @@ const Profile = () => {
         let array = member.pokemon.split("-");
         let exceptions = nameExceptions.some((item) => array.includes(item));
         return (
-          <>
-            <PokemonContainer
-              width={member.entryId === update}
-              key={member.entryId}
-            >
+          <div key={member.entryId}>
+            <PokemonContainer width={member.entryId === update}>
               <InfoContainer width={member.entryId === update}>
                 {exceptions ? (
                   <PokemonLink to={`/pokemon/${member.pokemon.split("-")[0]}`}>
@@ -647,7 +644,7 @@ const Profile = () => {
                 </Button>
               )}
             </ButtonContainer>
-          </>
+          </div>
         );
       })}
     </Container>

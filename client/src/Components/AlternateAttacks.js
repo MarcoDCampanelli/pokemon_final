@@ -59,7 +59,7 @@ const AlternateAttacks = ({ pokemon, generation }) => {
       ) : (
         sortable.map((moveCombo) => {
           return (
-            <Container>
+            <Container key={`SpecialAttack:${moveCombo[0]}`}>
               <Level>
                 {moveCombo[1] === "machine" ? (
                   <>TM/HM</>
@@ -69,10 +69,7 @@ const AlternateAttacks = ({ pokemon, generation }) => {
                   <>Tutor</>
                 )}
               </Level>
-              <Move
-                to={`/attacks/${moveCombo[0]}`}
-                key={`SpecialAttack:${moveCombo[0]}`}
-              >
+              <Move to={`/attacks/${moveCombo[0]}`}>
                 {capAndRemoveHyphen(moveCombo[0])}
               </Move>
             </Container>

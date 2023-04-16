@@ -46,14 +46,11 @@ const Attacks = ({ pokemon, generation }) => {
       ) : (
         sortable.map((moveCombo) => {
           return (
-            <Container>
+            <Container key={`AttackList:${moveCombo[0]}`}>
               <Level>
                 {moveCombo[1] !== 0 ? <>Lvl:{moveCombo[1]}</> : <>Evo</>}
               </Level>
-              <Move
-                to={`/attacks/${moveCombo[0]}`}
-                key={`AttackList:${moveCombo[0]}`}
-              >
+              <Move to={`/attacks/${moveCombo[0]}`}>
                 {capAndRemoveHyphen(moveCombo[0])}
               </Move>
             </Container>

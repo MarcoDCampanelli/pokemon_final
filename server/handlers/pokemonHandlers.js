@@ -291,6 +291,7 @@ const PokemonPartyAddition = async (req, res) => {
   client.close();
 };
 
+// Handler called to return the information about a certain user's profile
 const GetProfile = async (req, res) => {
   const user = req.params.user;
 
@@ -628,8 +629,8 @@ const GetBuilds = async (req, res) => {
     .toArray();
 
   if (builds.length === 0) {
-    return res.status(404).json({
-      status: 404,
+    return res.status(200).json({
+      status: 200,
       message: "No build of that pokemon exist at the moment.",
     });
   }
