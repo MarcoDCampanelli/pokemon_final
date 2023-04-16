@@ -251,8 +251,6 @@ const Profile = () => {
     return <LoadingPage />;
   }
 
-  console.log(attack);
-
   return (
     <Container>
       {profile.party.map((member) => {
