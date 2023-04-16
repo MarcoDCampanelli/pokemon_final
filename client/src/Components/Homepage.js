@@ -85,15 +85,34 @@ const Homepage = () => {
       <HomepageContainer>
         <Title>Competitive Pokemon Builds</Title>
         <SearchContainer>
-          <Label>Search Pokemon:</Label>
-          <Inputs
-            type="text"
-            placeholder="Pokemon"
-            onChange={(e) => {
-              handleSuggestions(e.target.value);
-              setPokemon(e.target.value.toLowerCase());
-            }}
-          ></Inputs>
+          <AlignInputs>
+            <Label>Search Pokemon:</Label>
+            <SuggestionContainer>
+              <Inputs
+                type="text"
+                placeholder="Pokemon"
+                onChange={(e) => {
+                  handleSuggestions(e.target.value);
+                  setPokemon(e.target.value.toLowerCase());
+                }}
+              ></Inputs>
+              <UlElement>
+                {suggestions.length > 0 ? (
+                  suggestions.map((suggestion) => {
+                    return (
+                      <ListElement key={`ListSelect:${suggestion.name}`}>
+                        <AutoLinkPokemon to={`/pokemon/${suggestion.name}`}>
+                          {capAndRemoveHyphen(suggestion.name)}
+                        </AutoLinkPokemon>
+                      </ListElement>
+                    );
+                  })
+                ) : (
+                  <></>
+                )}
+              </UlElement>
+            </SuggestionContainer>
+          </AlignInputs>
           <SearchButton
             onClick={() => {
               handlePokemonSearch();
@@ -103,12 +122,14 @@ const Homepage = () => {
           </SearchButton>
         </SearchContainer>
         <SearchContainer>
-          <Label>Search Attack:</Label>
-          <Inputs
-            type="text"
-            placeholder="Attack"
-            onChange={(e) => setAttack(e.target.value.toLowerCase())}
-          ></Inputs>
+          <AlignInputs>
+            <Label>Search Attack:</Label>
+            <Inputs
+              type="text"
+              placeholder="Attack"
+              onChange={(e) => setAttack(e.target.value.toLowerCase())}
+            ></Inputs>
+          </AlignInputs>
           <SearchButton
             onClick={() => {
               handleAttackSearch();
@@ -118,12 +139,14 @@ const Homepage = () => {
           </SearchButton>
         </SearchContainer>
         <SearchContainer>
-          <Label>Search Ability:</Label>
-          <Inputs
-            type="text"
-            placeholder="Ability"
-            onChange={(e) => setAbility(e.target.value.toLowerCase())}
-          ></Inputs>
+          <AlignInputs>
+            <Label>Search Ability:</Label>
+            <Inputs
+              type="text"
+              placeholder="Ability"
+              onChange={(e) => setAbility(e.target.value.toLowerCase())}
+            ></Inputs>
+          </AlignInputs>
           <SearchButton onClick={() => handleAbilitySearch()}>
             Search
           </SearchButton>
@@ -170,30 +193,6 @@ const Homepage = () => {
 
 export default Homepage;
 
-// const TestUl = styled.ul`
-//   list-style: none;
-//   position: absolute;
-//   width: 90%;
-//   margin-left: 5%;
-// `;
-
-// const TestLi = styled.li``;
-
-// const TestDiv = styled.div`
-//   display: inline-block;
-//   position: relative;
-//   background-color: yellow;
-
-//   @media (max-width: 768px) {
-//     width: 25%;
-//   }
-// `;
-
-// const TestInput = styled.input`
-//   width: 80%;
-//   padding: 0.5rem 0;
-// `;
-
 // Container for the top half of the homepage container the search icons
 const HomepageContainer = styled.div`
   display: flex;
@@ -209,17 +208,55 @@ const Title = styled.h1`
 
 // Individual search containers
 const SearchContainer = styled.div`
+  display: flex;
   width: 40%;
   margin: 0.1rem auto;
-  text-align: right;
+  justify-content: space-between;
   border: 0.1rem solid black;
   border-radius: 5px;
+`;
 
-  /* On smaller screens center the text to allow for more room */
+// This container ensures that the dropdown elements appear in the right place and don't extend out of the container
+const SuggestionContainer = styled.div`
+  display: inline-block;
+  position: relative;
+`;
+
+// Styled ul element
+const UlElement = styled.ul`
+  list-style: none;
+  position: absolute;
+  border: 0.1rem solid grey;
+  width: 99%;
+  margin-left: 0.5%;
+
+  /* This media query is added to keep the li elements under the input when the page is smaller */
   @media (max-width: 768px) {
-    width: 80%;
-    text-align: center;
+    width: 50%;
+    margin-left: 25%;
   }
+`;
+
+// Styling for each li element in the list
+const ListElement = styled.li`
+  padding: 0.5rem 0;
+  background-color: white;
+  margin: auto;
+
+  &:hover {
+    background-color: lightgrey;
+  }
+`;
+
+const AutoLinkPokemon = styled(Link)`
+  text-decoration: none;
+  color: black;
+`;
+
+// This container will ensure that the labels and the inputs align
+const AlignInputs = styled.div`
+  margin: auto;
+  width: 100%;
 `;
 
 // Styling for the labels
@@ -228,39 +265,15 @@ const Label = styled.label`
   font-weight: bold;
 `;
 
-// Stylings for the inputs
+// Styling for the inputs
 const Inputs = styled.input`
-  margin-right: 1rem;
-  width: 30%;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
 
+  /* This media query is added to keep the input inside of the divs */
   @media (max-width: 768px) {
-    width: 25%;
+    width: 50%;
   }
 `;
-
-// !Testing
-const StyledListContainer = styled.ul`
-  display: flex;
-  flex-direction: column;
-  /* margin-right: 1rem; */
-`;
-
-const ListElement = styled.li`
-  list-style: none;
-  padding: 0.5rem;
-  border: 0.1rem solid black;
-  width: 30%;
-  margin-left: 63%;
-  background-color: yellow;
-  text-align: center;
-
-  @media (max-width: 768px) {
-    width: 25%;
-  }
-`;
-
-// !Testing
 
 // Styling for the Search button
 const SearchButton = styled.button`
@@ -276,7 +289,7 @@ const SearchButton = styled.button`
   }
 
   @media (max-width: 768px) {
-    width: 50%;
+    width: 30%;
   }
 `;
 

@@ -280,11 +280,11 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
           <option value={true} disabled>
             Select an ability
           </option>
-          {pokemon.abilities.map((ability) => {
+          {pokemon.abilities.map((ability, index) => {
             return (
               <option
                 value={ability.ability.name}
-                key={`CreateBuildAbility:${ability.ability.name}`}
+                key={`CreateBuildAbility:${ability.ability.name + index}`}
               >
                 {capAndRemoveHyphen(ability.ability.name)}
               </option>

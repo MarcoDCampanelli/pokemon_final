@@ -194,7 +194,7 @@ const SpecificPokemon = () => {
                     return (
                       <AbilityEggLink
                         to={`/abilities/${ability.ability.name}`}
-                        key={ability.ability.name}
+                        key={ability.ability.name + index}
                       >
                         {ability.is_hidden
                           ? "Hidden Ability: "
