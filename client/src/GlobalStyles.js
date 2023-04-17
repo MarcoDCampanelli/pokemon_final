@@ -37,7 +37,7 @@ html, body, div, span, p, h1, h2, h3, h4, h5, h6, applet, object, iframe,
         font-size: 100%;
         font: inherit;
         vertical-align: baseline;
-        font-family: sans-serif;
+        font-family:  'Cabin', 'Lato', sans-serif;
     }
 
 `;
