@@ -58,7 +58,6 @@ const Signin = () => {
 
   return (
     <SigninContainer>
-      <Title>Sign In</Title>
       <Form onSubmit={handleSignIn}>
         <InfoContainer>
           <Label>Username:</Label>
@@ -108,28 +107,26 @@ const SigninContainer = styled.div`
   text-align: center;
 `;
 
-// Title styling
-const Title = styled.h1`
-  margin: 0.5rem;
-  font-weight: bold;
-`;
-
 // Styling for the form
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 40%;
   text-align: right;
-  margin: auto;
+  margin: 2rem auto;
   padding: 0.5rem;
   border: 0.1rem solid gray;
   border-radius: 5px;
   background-image: linear-gradient(to bottom, #e5e5e5, #ffffff);
+
+  @media (max-width: 768px) {
+    width: 60%;
+  }
 `;
 
 // Container that holds individual labels and inputs
 const InfoContainer = styled.div`
-  margin: 0.5rem 0;
+  margin: 1rem 0;
 `;
 
 // Styling for the labels
@@ -152,7 +149,7 @@ const Inputs = styled.input`
 // Styling for the button
 const Button = styled.button`
   width: 20%;
-  margin: 2rem auto;
+  margin: 1rem auto;
   padding: 0.5rem;
   border-radius: 5px;
   overflow: hidden;

@@ -41,8 +41,8 @@ const LogInContainer = styled.div`
 
 // Styling for the button
 const Button = styled.button`
-  width: 20%;
-  margin: auto;
+  width: 10%;
+  margin: 2rem auto;
   padding: 0.5rem;
   border-radius: 5px;
   overflow: hidden;
@@ -52,9 +52,13 @@ const Button = styled.button`
     color: white;
     background-image: linear-gradient(to right, #217ebc, #033a5e);
   }
+
+  @media (max-width: 768px) {
+    width: 20%;
+  }
 `;
 
 // Styling for the question of whether the user has or doesn't have an account
 const Question = styled.h3`
-  margin: 0.5rem;
+  font-style: italic;
 `;
