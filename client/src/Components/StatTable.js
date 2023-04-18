@@ -109,16 +109,20 @@ const ColorDiv = styled.div`
 // Header for the first column
 const StatNameHeader = styled.th`
   width: 20%;
+  padding: 0.5rem 0;
+  font-weight: bold;
 `;
 
 // List of stats in the first column
 const StatName = styled.td`
   text-align: center;
+  padding: 0.5rem 0;
 `;
 
 // Header for the second column
 const ValueHeader = styled.th`
   width: 10%;
+  font-weight: bold;
 `;
 
 // List of the values in the second column
@@ -129,11 +133,13 @@ const Value = styled.td`
 // Title for the third column showing stat weight through bars
 const StatWeightHeader = styled.th`
   width: 50%;
+  font-weight: bold;
 `;
 
 // Title for the fourth column
 const MinMaxHeader = styled.th`
   width: 20%;
+  font-weight: bold;
 `;
 
 // List of the values to show min/max of a stat
