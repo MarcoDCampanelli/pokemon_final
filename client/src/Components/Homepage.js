@@ -351,13 +351,20 @@ const PokemonName = styled(Link)`
   text-decoration: none;
   font-weight: bold;
   color: black;
+  margin: 0.4rem auto;
 
   &:hover {
-    color: lightblue;
+    color: #217ebc;
   }
 `;
 
 // Styled image of the sprite of the pokemon
 const Sprite = styled.img`
   width: 50%;
+  margin-bottom: 0.4rem;
+  transition: transform 3s;
+
+  &:hover {
+    transform: scale(1.5);
+  }
 `;
