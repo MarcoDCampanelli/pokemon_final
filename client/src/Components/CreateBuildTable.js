@@ -185,6 +185,7 @@ const CreateBuildTable = ({ pokemonStats, pokemon, generation }) => {
 
   return (
     <Container>
+      <Title>Create Build</Title>
       <Table>
         <thead>
           <tr>
@@ -520,11 +521,18 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
+// Styling for the title of the list
+const Title = styled.p`
+  margin: 1rem auto;
+  font-weight: bold;
+`;
+
 // Styling for the table
 const Table = styled.table`
   border: 0.2rem solid black;
   text-align: center;
   margin: 1rem;
+  background-color: white;
 `;
 
 // Styling for the main  categories of each row and column

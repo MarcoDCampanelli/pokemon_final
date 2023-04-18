@@ -206,14 +206,16 @@ const SpecificPokemon = () => {
                 </LinksContainer>
               </IndividialStat>
               <IndividialStat>
-                Type:
-                {pokemon.types.map((type) => {
-                  return (
-                    <p key={type.type.name}>
-                      {capAndRemoveHyphen(type.type.name)}{" "}
-                    </p>
-                  );
-                })}
+                Types:
+                <LinksContainer>
+                  {pokemon.types.map((type) => {
+                    return (
+                      <TypeDiv key={type.type.name}>
+                        {capAndRemoveHyphen(type.type.name)}{" "}
+                      </TypeDiv>
+                    );
+                  })}
+                </LinksContainer>
               </IndividialStat>
             </InfoCategory>
           ) : (
@@ -282,7 +284,7 @@ const Container = styled.div`
 // Styling for titles of each category and the Pokemon's name
 const Titles = styled.h1`
   font-weight: bold;
-  margin: 0.3rem;
+  margin: 0.5rem auto;
 `;
 
 // Container that will hold the box containing both the sprites and the information
@@ -292,12 +294,12 @@ const PokemonContainer = styled.div`
   border: 0.15rem solid grey;
   text-align: center;
   width: 70%;
-  margin: 1rem auto;
+  margin: 2rem auto;
 `;
 
 // The left sided div that holds the images and the sprites
 const ArtContainer = styled.div`
-  width: 30%;
+  width: 35%;
   padding: auto;
   border-right: 0.15rem solid grey;
 `;
@@ -322,8 +324,9 @@ const SpriteContainer = styled.div`
 // The right sided div that holds the information of the pokemon
 const PokemonInfoContainer = styled.div`
   display: flex;
-  width: 70%;
+  width: 65%;
   flex-direction: column;
+  background-color: #dbdbdb;
 `;
 
 // Container holding the the information for a specific category (physical description, in-game mechanics, hatching info, abilities and type)
@@ -354,8 +357,14 @@ const AbilityEggLink = styled(Link)`
   margin: 0.5rem auto;
 `;
 
+// Styling for the types (Links may come as a stretch goal)
+const TypeDiv = styled.div`
+  margin: 0.5rem auto;
+`;
+
 // Container holding the button that allows you to choose a form
 const FormContainer = styled.div`
+  margin: 2rem auto;
   text-align: center;
 `;
 
@@ -376,8 +385,9 @@ const AttackBuildContainer = styled.div`
   display: flex;
   overflow: hidden;
   justify-content: space-around;
+  background-color: #dbdbdb;
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     flex-direction: column;
   }
 `;
@@ -387,10 +397,10 @@ const AttackColumn = styled.div`
   margin: 0.5rem;
   text-align: center;
   overflow-y: auto;
-  max-height: 500px;
+  max-height: 750px;
   width: 25%;
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     width: 50%;
     margin: 2rem auto;
   }

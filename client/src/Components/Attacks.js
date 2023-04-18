@@ -65,6 +65,7 @@ export default Attacks;
 
 // Styling for the title of the list
 const Title = styled.p`
+  margin: 1rem auto;
   font-weight: bold;
 `;
 
@@ -77,12 +78,13 @@ const Container = styled.div`
   margin: 0.2rem 0;
   border: 0.1rem solid grey;
   border-radius: 5px;
+  background-color: white;
 `;
 
 // Styling for the div that holds the level learned
 const Level = styled.div`
   text-align: left;
-  margin-left: 0.1rem;
+  margin-left: 0.75rem;
   overflow: hidden;
   min-width: 30%;
   font-weight: bold;
@@ -98,6 +100,7 @@ const Move = styled(Link)`
   border-left: 0.1rem solid grey;
 
   &:hover {
-    background-color: lightblue;
+    color: white;
+    background-image: linear-gradient(to right, #217ebc, #033a5e);
   }
 `;
