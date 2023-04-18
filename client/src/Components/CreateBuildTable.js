@@ -575,12 +575,12 @@ const Select = styled.select`
 // Styling for the button
 const Button = styled.button`
   padding: 0.5rem 1rem;
-  color: white;
-  background-color: blue;
-  border-radius: 10px;
+  border-radius: 5px;
+  background-image: linear-gradient(to right, #9acbed, #217ebc);
 
   &:hover {
-    background-color: paleturquoise;
+    color: white;
+    background-image: linear-gradient(to right, #217ebc, #033a5e);
   }
 `;
 

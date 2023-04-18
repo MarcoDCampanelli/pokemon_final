@@ -124,6 +124,7 @@ const Form = styled.form`
   padding: 0.5rem;
   border: 0.1rem solid gray;
   border-radius: 5px;
+  background-image: linear-gradient(to bottom, #e5e5e5, #ffffff);
 `;
 
 // Container that holds individual labels and inputs
@@ -155,10 +156,11 @@ const Button = styled.button`
   padding: 0.5rem;
   border-radius: 5px;
   overflow: hidden;
+  background-image: linear-gradient(to right, #9acbed, #217ebc);
 
   &:hover {
     color: white;
-    background-color: lightblue;
+    background-image: linear-gradient(to right, #217ebc, #033a5e);
   }
 
   @media (max-width: 768px) {
