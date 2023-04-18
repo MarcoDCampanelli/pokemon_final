@@ -251,6 +251,17 @@ const Profile = () => {
     return <LoadingPage />;
   }
 
+  if (profile && profile.party.length === 0) {
+    return (
+      <Container>
+        <NoPokemonMessage>
+          You don't have any Pokemon in your party yet! Get out there{" "}
+          {currentUser}!
+        </NoPokemonMessage>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       {profile.party.map((member) => {
@@ -657,6 +668,11 @@ export default Profile;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const NoPokemonMessage = styled.p`
+  text-align: center;
+  margin: 10rem;
 `;
 
 // This is the container that holds each individual pokemon.

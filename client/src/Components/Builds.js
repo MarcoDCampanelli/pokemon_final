@@ -243,11 +243,21 @@ const Builds = ({ pokemonId }) => {
                     const date = format(purchaseDate, "MMM do Y");
 
                     return (
-                      <IndividualComment key={entry._id + index}>
-                        <Titles>{comment.trainer}</Titles>
+                      <IndividualComment
+                        key={entry._id + index}
+                        color={index % 2 === 0}
+                      >
+                        <TrainerComment>
+                          Trainer: {comment.trainer}
+                        </TrainerComment>
+                        <DateComment>{date}</DateComment>
                         <Comment>{comment.comment}</Comment>
-                        <Comment>Date: {date}</Comment>
                       </IndividualComment>
+                      // <IndividualComment key={entry._id + index}>
+                      //   <Titles>{comment.trainer}</Titles>
+                      //   <Comment>{comment.comment}</Comment>
+                      //   <Comment>Date: {date}</Comment>
+                      // </IndividualComment>
                     );
                   })
                 )}
@@ -386,7 +396,7 @@ const BuildContainer = styled.div`
 // Container that holds a single posted build
 const IndividualBuild = styled.div`
   display: flex;
-  margin: 1rem;
+  margin: 2rem;
   width: 95%;
   border: 0.1rem solid grey;
   overflow: hidden;
@@ -415,12 +425,12 @@ const InfoContainer = styled.div`
 // Styling for titles in each section of the build and the name of the user who posted a comment
 const Titles = styled.h1`
   font-weight: bold;
-  margin: 0.3rem;
+  margin: 0.5rem;
 `;
 
 // Individual pieces of info from first container
 const Info = styled.div`
-  margin: 0.2rem;
+  margin: 0.5rem;
 `;
 
 // The container holding the sprite
@@ -455,10 +465,10 @@ const BuildAttackContainer = styled.div`
 const AttackLink = styled(Link)`
   text-decoration: underline;
   color: black;
-  margin: 0.2rem;
+  margin: 0.5rem;
 
   &:hover {
-    background-color: lightblue;
+    color: #217ebc;
   }
 `;
 
@@ -494,7 +504,7 @@ const TableCell = styled.td`
 // Container for the description written by the person who posted the build
 const DescriptionContainer = styled.div`
   text-align: center;
-  margin: 1rem;
+  margin: 2rem;
   width: 95%;
   padding: 1rem 0;
   font-size: 1.2rem;
@@ -506,7 +516,7 @@ const CommentsContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 95%;
-  margin: 1rem;
+  margin: 2rem;
 
   border: ${(props) => (props.border ? "none" : "0.1rem solid grey")};
 `;
@@ -514,20 +524,39 @@ const CommentsContainer = styled.div`
 // Container that holds individual comments
 const IndividualComment = styled.div`
   margin: 1rem auto;
+  padding-top: 1rem;
   width: 95%;
-  border: 0.1rem solid grey;
+
+  background-color: ${(props) => (props.color ? "white" : "#dbdbdb")};
 `;
 
-// Container that holds a single comment/date
+// Styling for the name of the user commenting
+const TrainerComment = styled.span`
+  margin-left: 0.5rem;
+  font-weight: bold;
+`;
+
+// Styling for the date the comment was posted
+const DateComment = styled.span`
+  font-size: 0.8rem;
+  margin-left: 1rem;
+`;
+
+// Container that holds a single comment
 const Comment = styled.div`
   text-align: left;
-  padding: 0.5rem;
+
+  border: 0.1rem solid grey;
+  margin: 0.5rem auto;
+  padding: 1rem;
 `;
 
 // Styling for the container holding all of the buttons
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 4rem;
 `;
 
 // Styling for individual buttons
@@ -554,13 +583,14 @@ const TextBoxContainer = styled.div`
 const TextBox = styled.textarea`
   max-width: 90%;
   min-width: 50%;
+  min-height: 100px;
   text-align: center;
   margin: 0.5rem;
 `;
 
 // Styling for the div that holds the word limit available in the comment
 const WordLimit = styled.div`
-  color: ${(props) => (props.empty ? "black" : props.full ? "red" : "yellow")};
+  color: ${(props) => (props.empty ? "black" : props.full ? "red" : "#ffc005")};
 `;
 
 // Container that holds the error messages

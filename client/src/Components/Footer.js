@@ -22,6 +22,7 @@ const Container = styled.div`
   flex-direction: column;
   text-align: center;
   border-top: 0.1rem solid black;
+  background-color: #dcecf9;
 `;
 
 // Links to various pages
@@ -31,6 +32,6 @@ const Link = styled(NavLink)`
   margin: 0.5rem auto;
 
   &.active {
-    color: blue;
+    color: #217ebc;
   }
 `;

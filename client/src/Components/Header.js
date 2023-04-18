@@ -16,11 +16,11 @@ const Header = () => {
       <Demo>
         {currentUser ? (
           <UsernameContainer>
-            <NameLink to={`/profile/${currentUser}`}>
-              Welcome, <Underline>{currentUser}</Underline>
-            </NameLink>
             <Link to={"/"}>Return Home</Link>
             <div>
+              <NameLink to={`/profile/${currentUser}`}>
+                Welcome, <Underline>{currentUser}</Underline>
+              </NameLink>
               <Button
                 onClick={() => {
                   window.localStorage.clear();
@@ -77,13 +77,14 @@ const UsernameContainer = styled.div`
 
 // This will style the username
 const NameLink = styled(NavLink)`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
   text-decoration: none;
   color: black;
+  margin: 1rem;
 
   &.active {
-    color: blue;
+    color: #217ebc;
   }
 `;
 
@@ -98,7 +99,7 @@ const Link = styled(NavLink)`
   color: black;
 
   &.active {
-    color: blue;
+    color: #217ebc;
   }
 `;
 
