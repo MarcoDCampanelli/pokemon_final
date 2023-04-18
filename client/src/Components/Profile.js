@@ -836,10 +836,10 @@ const Button = styled.button`
 
 // Styling for the div holding the textarea
 const TextBoxContainer = styled.div`
-  width: 80%;
   margin: auto;
   padding: 1rem 0;
   text-align: center;
+  background-color: #dbdbdb;
 `;
 
 // Styling for the textarea
