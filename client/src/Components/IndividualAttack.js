@@ -205,7 +205,7 @@ const AbilityDescriptionContainer = styled.div`
 const ListContainer = styled.div`
   display: flex;
   justify-content: space-around;
-  margin: 1rem;
+  margin-top: 2rem;
   background-color: #dbdbdb;
 
   @media (max-width: 768px) {

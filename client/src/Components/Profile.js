@@ -457,9 +457,9 @@ const Profile = () => {
                   <>
                     {Object.keys(member.iv).map((stat, index) => {
                       return (
-                        <div key={`Final:${stat}`}>
+                        <IndividualFinalStat key={`Final:${stat}`}>
                           {capAndRemoveHyphen(stat)} : {member.stats[index]}
-                        </div>
+                        </IndividualFinalStat>
                       );
                     })}
                   </>
@@ -662,7 +662,7 @@ const Container = styled.div`
 // This is the container that holds each individual pokemon.
 const PokemonContainer = styled.div`
   display: flex;
-  margin: 1rem auto;
+  margin: 2rem auto;
   border: 0.1rem solid grey;
   overflow: hidden;
 
@@ -697,21 +697,21 @@ const PokemonLink = styled(Link)`
   text-decoration: underline;
   color: black;
   font-weight: bold;
-  margin: 0.2rem;
+  margin: 0.5rem 0;
 
   &:hover {
-    background-color: lightblue;
+    color: #217ebc;
   }
 `;
 
 // Styling for the individual divs holding separate pieces of info
 const Info = styled.div`
-  margin: 0.2rem;
+  margin: 0.5rem 0;
 `;
 
 // Styling for the labels (ability, nature, level and attacks)
 const Label = styled.label`
-  margin: 0rem 0.5rem;
+  margin: 0.5rem 0.5rem;
 `;
 
 // Stlying for the select options (ability, nature, attacks)
@@ -749,16 +749,16 @@ const Title = styled.h1`
 const AttackLink = styled(Link)`
   text-decoration: underline;
   color: black;
-  margin: 0.2rem;
+  margin: 0.5rem;
 
   &:hover {
-    background-color: lightblue;
+    color: #217ebc;
   }
 `;
 
 // Styling for the individual divs holding the label and select of each attack
 const IndividualAttack = styled.div`
-  margin: 1rem;
+  margin: 1rem 0;
 `;
 
 // Container for the stats of the pokemon
@@ -775,6 +775,11 @@ const StatContainer = styled.div`
     margin: 0 auto;
     width: 100%;
   }
+`;
+
+// Styling for individual stats
+const IndividualFinalStat = styled.div`
+  margin: 0.5rem 0;
 `;
 
 // Styling for the table
@@ -812,6 +817,8 @@ const Input = styled.input`
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+  padding-bottom: 2rem;
+  border-bottom: 0.1rem solid black;
 `;
 
 // Styling for the buttons
@@ -831,6 +838,7 @@ const Button = styled.button`
 const TextBoxContainer = styled.div`
   width: 80%;
   margin: auto;
+  padding: 1rem 0;
   text-align: center;
 `;
 
@@ -838,13 +846,14 @@ const TextBoxContainer = styled.div`
 const TextBox = styled.textarea`
   max-width: 90%;
   min-width: 50%;
+  min-height: 100px;
   text-align: center;
   margin: 0.5rem;
 `;
 
 // Styling for the div that holds the word limit available in the comment
 const WordLimit = styled.div`
-  color: ${(props) => (props.empty ? "black" : props.full ? "red" : "yellow")};
+  color: ${(props) => (props.empty ? "black" : props.full ? "red" : "#ffc005")};
 `;
 
 // Container that holds the error messages
