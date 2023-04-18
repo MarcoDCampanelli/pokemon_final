@@ -206,6 +206,7 @@ const ListContainer = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 1rem;
+  background-color: #dbdbdb;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -214,11 +215,10 @@ const ListContainer = styled.div`
 
 // Container for list of pokemon
 const IndividualListContainer = styled.div`
-  border: 0.1rem solid grey;
   max-height: 900px;
   overflow: auto;
   margin: 3rem 1rem;
-  width: 20%;
+  width: 25%;
 
   /* On smaller screens, the width is increased */
   @media (max-width: 980px) {
@@ -255,9 +255,11 @@ const ListElement = styled(Link)`
   border-radius: 5px;
   margin: 0.25rem;
   padding: 0.5rem;
+  background-color: white;
 
   &:hover {
-    background-color: lightblue;
+    color: white;
+    background-image: linear-gradient(to right, #217ebc, #033a5e);
   }
 `;
 
@@ -275,6 +277,7 @@ const PokedexEntryContainer = styled.li`
   margin: 0.5rem auto;
   border: 0.1rem solid grey;
   border-radius: 5px;
+  background-color: white;
 `;
 
 // Styling for the div that holds the generation name

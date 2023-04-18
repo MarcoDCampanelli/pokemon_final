@@ -81,7 +81,8 @@ const EggGroupLink = styled(Link)`
   width: 20%;
 
   &:hover {
-    background-color: lightblue;
+    color: white;
+    background-image: linear-gradient(to right, #217ebc, #033a5e);
   }
 
   /* On smaller screens increase size so that it's more visible */
