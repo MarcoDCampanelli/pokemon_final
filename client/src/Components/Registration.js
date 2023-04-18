@@ -115,6 +115,7 @@ const Form = styled.form`
   padding: 0.5rem;
   border: 0.1rem solid gray;
   border-radius: 5px;
+  background-image: linear-gradient(to bottom, #e5e5e5, #ffffff);
 `;
 
 // Container that holds individual labels and inputs

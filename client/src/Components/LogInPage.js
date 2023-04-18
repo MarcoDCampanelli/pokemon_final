@@ -35,6 +35,8 @@ const LogInContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+  height: 85vh;
+  background-color: #fff4dc;
 `;
 
 // Styling for the button
@@ -44,10 +46,11 @@ const Button = styled.button`
   padding: 0.5rem;
   border-radius: 5px;
   overflow: hidden;
+  background-image: linear-gradient(to right, #9acbed, #217ebc);
 
   &:hover {
     color: white;
-    background-color: lightblue;
+    background-image: linear-gradient(to right, #217ebc, #033a5e);
   }
 `;
 
