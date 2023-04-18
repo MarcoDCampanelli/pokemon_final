@@ -74,7 +74,7 @@ const Paragraph = styled.p`
 const EggGroupLink = styled(Link)`
   text-decoration: none;
   color: black;
-  border: 0.1rem solid black;
+  border: 0.1rem solid grey;
   border-radius: 5px;
   padding: 0.5rem;
   margin: 0.2rem auto;

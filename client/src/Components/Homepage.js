@@ -214,7 +214,7 @@ const SearchContainer = styled.div`
   width: 40%;
   margin: 0.1rem auto;
   justify-content: space-between;
-  border: 0.1rem solid black;
+  border: 0.1rem solid grey;
   border-radius: 5px;
 `;
 
@@ -330,7 +330,7 @@ const PokemonContainer = styled.div`
 const IndividualPokemonContainer = styled.div`
   text-align: center;
   width: 10%;
-  border: 2px solid black;
+  border: 0.15rem solid grey;
   margin: 0.2rem auto;
   overflow: hidden;
 

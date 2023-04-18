@@ -98,18 +98,18 @@ const Paragraph = styled.p`
 const Table = styled.table`
   margin: 2rem auto;
   width: 80%;
-  border: 0.2rem solid black;
+  border: 0.15rem solid black;
 `;
 
 // Styling for the titles in the columns
 const TableHead = styled.th`
   font-weight: bold;
   padding: 0.5rem;
-  border: 0.1rem solid black;
+  border: 0.1rem solid grey;
 `;
 
 // Styling for each tablecell
 const TableCell = styled.td`
   padding: 0.5rem;
-  border: 0.1rem solid black;
+  border: 0.1rem solid grey;
 `;

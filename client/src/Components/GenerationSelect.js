@@ -50,6 +50,6 @@ const Label = styled.label`
 // Styling for the labels
 const Select = styled.select`
   padding: 0.5rem;
-  border: 0.2rem solid black;
+  border: 0.1rem solid grey;
   border-radius: 5px;
 `;

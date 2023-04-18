@@ -289,7 +289,7 @@ const Titles = styled.h1`
 const PokemonContainer = styled.div`
   display: flex;
   flex-direction: row;
-  border: 2px solid black;
+  border: 0.15rem solid grey;
   text-align: center;
   width: 70%;
   margin: 1rem auto;
@@ -299,7 +299,7 @@ const PokemonContainer = styled.div`
 const ArtContainer = styled.div`
   width: 30%;
   padding: auto;
-  border-right: 0.2rem solid black;
+  border-right: 0.15rem solid grey;
 `;
 
 // The large official artwork of the pokemon
@@ -367,7 +367,7 @@ const Label = styled.label`
 // Styling for the labels
 const Select = styled.select`
   padding: 0.5rem;
-  border: 0.2rem solid black;
+  border: 0.1rem solid grey;
   border-radius: 5px;
 `;
 

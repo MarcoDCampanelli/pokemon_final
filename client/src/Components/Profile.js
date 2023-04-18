@@ -663,7 +663,7 @@ const Container = styled.div`
 const PokemonContainer = styled.div`
   display: flex;
   margin: 1rem auto;
-  border: 2px solid black;
+  border: 0.1rem solid grey;
   overflow: hidden;
 
   /* If the pokemon is being updated, the width is expanded to allow for more room. */
@@ -728,8 +728,8 @@ const AttackContainer = styled.div`
   flex-direction: column;
   text-align: center;
   width: 30%;
-  border-left: 0.2rem solid black;
-  border-right: 0.2rem solid black;
+  border-left: 0.1rem solid grey;
+  border-right: 0.1rem solid grey;
 
   /* On smaller screens, since the flex is display, the borders are no longer needed */
   @media (max-width: 912px) {

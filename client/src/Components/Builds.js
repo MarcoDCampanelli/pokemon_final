@@ -387,7 +387,8 @@ const BuildContainer = styled.div`
 const IndividualBuild = styled.div`
   display: flex;
   margin: 1rem;
-  border: 2px solid black;
+  width: 95%;
+  border: 0.1rem solid grey;
   overflow: hidden;
 
   /* On smaller screes, flex-direction is switched to column */
@@ -439,8 +440,8 @@ const BuildAttackContainer = styled.div`
   flex-direction: column;
   text-align: center;
   width: 20%;
-  border-left: 0.2rem solid black;
-  border-right: 0.2rem solid black;
+  border-left: 0.1rem solid grey;
+  border-right: 0.1rem solid grey;
 
   /* On smaller screens, because of flex-column, the borders are no longer needed */
   @media (max-width: 768px) {
@@ -493,28 +494,28 @@ const TableCell = styled.td`
 // Container for the description written by the person who posted the build
 const DescriptionContainer = styled.div`
   text-align: center;
-  width: 90%;
-  padding: 0.5rem;
-  margin: auto;
+  margin: 1rem;
+  width: 95%;
+  padding: 1rem 0;
   font-size: 1.2rem;
-  border: 0.2rem solid black;
+  border: 0.1rem solid grey;
 `;
 
 // Container that holds all of the comments
 const CommentsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 80%;
-  margin: 1rem auto;
+  width: 95%;
+  margin: 1rem;
 
-  border: ${(props) => (props.border ? "none" : "0.2rem solid black")};
+  border: ${(props) => (props.border ? "none" : "0.1rem solid grey")};
 `;
 
 // Container that holds individual comments
 const IndividualComment = styled.div`
   margin: 1rem auto;
   width: 95%;
-  border: 0.1rem solid black;
+  border: 0.1rem solid grey;
 `;
 
 // Container that holds a single comment/date

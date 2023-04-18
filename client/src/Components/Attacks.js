@@ -75,7 +75,7 @@ const Container = styled.div`
   justify-content: space-between;
   padding: 0.5rem 0;
   margin: 0.2rem 0;
-  border: 0.1rem solid black;
+  border: 0.1rem solid grey;
   border-radius: 5px;
 `;
 
@@ -95,7 +95,7 @@ const Move = styled(Link)`
   overflow: hidden;
   text-align: center;
   width: 60%;
-  border-left: 0.1rem solid black;
+  border-left: 0.1rem solid grey;
 
   &:hover {
     background-color: lightblue;

@@ -568,6 +568,7 @@ const Label = styled.label`
 // Stlying for the select options (ability, nature, items, attacks)
 const Select = styled.select`
   padding: 0.5rem;
+  border: 0.1rem solid grey;
   border-radius: 5px;
 `;
 

@@ -149,7 +149,7 @@ const MoveInformation = styled.div`
   flex-direction: column;
   width: 50%;
   margin: auto;
-  border: 0.1rem solid black;
+  border: 0.1rem solid grey;
 
   /* On smaller screens, the width is increased */
   @media (max-width: 768px) {
@@ -161,7 +161,7 @@ const MoveInformation = styled.div`
 const TableTitles = styled.div`
   text-align: center;
   width: 100%;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid grey;
   padding: 0.5rem 0;
   font-weight: bold;
 `;
@@ -172,7 +172,7 @@ const MoveStatsContainer = styled.div`
   text-align: center;
   width: 100%;
   overflow: hidden;
-  border-bottom: 0.1rem solid black;
+  border-bottom: 0.1rem solid grey;
 `;
 
 // Styling for the minor titles in the table (accuracy, power, pp, priority, damage)
@@ -183,7 +183,7 @@ const MoveStat = styled.div`
 
 // Individual boxes inside of the MoveStatsContainer
 const MoveStatContainer = styled.div`
-  border-right: 0.1rem solid black;
+  border-right: 0.1rem solid grey;
   overflow: hidden;
   padding: 0.5rem;
   width: 20%;
@@ -214,7 +214,7 @@ const ListContainer = styled.div`
 
 // Container for list of pokemon
 const IndividualListContainer = styled.div`
-  border: 0.2rem solid black;
+  border: 0.1rem solid grey;
   max-height: 900px;
   overflow: auto;
   margin: 3rem 1rem;
@@ -251,7 +251,7 @@ const ListElement = styled(Link)`
   text-decoration: none;
   justify-content: center;
   color: black;
-  border: 0.1rem solid black;
+  border: 0.1rem solid grey;
   border-radius: 5px;
   margin: 0.25rem;
   padding: 0.5rem;
@@ -273,7 +273,7 @@ const IndividualListContainerDescriptions = styled.div`
 const PokedexEntryContainer = styled.li`
   display: flex;
   margin: 0.5rem auto;
-  border: 0.1rem solid black;
+  border: 0.1rem solid grey;
   border-radius: 5px;
 `;
 
@@ -282,7 +282,7 @@ const PokedexGeneration = styled.div`
   max-width: 20%;
   min-width: 20%;
   padding: 0.5rem 0;
-  border-right: 1px solid black;
+  border-right: 0.1rem solid grey;
   overflow: hidden;
 `;
 

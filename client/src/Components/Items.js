@@ -104,14 +104,14 @@ const Label = styled.label`
 // Styling for the labels
 const Select = styled.select`
   padding: 0.5rem;
-  border: 0.2rem solid black;
+  border: 0.1rem solid grey;
   border-radius: 5px;
 `;
 
 // Container for individual Item
 const IndividualItem = styled.div`
   display: flex;
-  border: 0.2rem solid black;
+  border: 0.1rem solid grey;
   border-radius: 5px;
   margin: 0.5rem auto;
   width: 80%;
@@ -122,7 +122,7 @@ const IndividualItem = styled.div`
 const Name = styled.div`
   max-width: 20%;
   min-width: 20%;
-  border-right: 1px solid black;
+  border-right: 0.1rem solid grey;
 `;
 
 // Image container to center the img of the item

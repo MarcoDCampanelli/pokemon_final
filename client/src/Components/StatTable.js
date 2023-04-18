@@ -87,10 +87,9 @@ export default StatTable;
 
 // Container for the entire table
 const Table = styled.table`
-  border: 0.2rem solid black;
-  border-radius: 5px;
-  width: 65%;
-  margin: 0.5rem auto;
+  border: 0.15rem solid grey;
+  width: 70%;
+  margin: 1rem auto;
 
   @media (max-width: 768px) {
     width: 95%;
