@@ -61,16 +61,20 @@ const IndividualAttack = () => {
         </MoveStatsContainer>
         <TableTitles>Ability Description</TableTitles>
         <AbilityDescriptionContainer>
-          {attack.effect_entries.map((entry) => {
-            return (
-              <span key={entry.effect}>
-                {entry.effect.replace(
-                  "$effect_chance% ",
-                  `${attack.effect_chance}% `
-                )}
-              </span>
-            );
-          })}
+          {attack.name === "flail"
+            ? attack.effect_entries.map((entry) => {
+                return <span key={entry.effect}>{entry.short_effect}</span>;
+              })
+            : attack.effect_entries.map((entry) => {
+                return (
+                  <span key={entry.effect}>
+                    {entry.effect.replaceAll(
+                      "$effect_chance% ",
+                      `${attack.effect_chance}% `
+                    )}
+                  </span>
+                );
+              })}
         </AbilityDescriptionContainer>
       </MoveInformation>
       <ListContainer>
