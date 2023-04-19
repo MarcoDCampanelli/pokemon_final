@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Registration from "./Registration";
 import Signin from "./Signin";
@@ -8,6 +9,7 @@ import styled from "styled-components";
 // This components holds both the SignIn and Register options for the users of the website
 const Login = () => {
   const [account, setAccount] = useState(true);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -16,6 +18,10 @@ const Login = () => {
           <Signin />
           <Question>Don't have an account?</Question>
           <Button onClick={() => setAccount(false)}>Register</Button>
+          <Question>Forgot your password?</Question>
+          <Button onClick={() => navigate("/resetInformation")}>
+            Reset Password
+          </Button>
         </LogInContainer>
       ) : (
         <LogInContainer>

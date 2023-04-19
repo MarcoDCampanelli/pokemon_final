@@ -132,6 +132,66 @@ const Signin = async (req, res) => {
   });
 };
 
+// Handler called in order to reset password
+const ResetPassword = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options);
+  const { user, email, password, passwordRepeat } = req.body;
+
+  // If the password does not match the confirmation, the following error is returned.
+  if (password !== passwordRepeat) {
+    return res
+      .status(401)
+      .json({ status: 401, message: "The passwords do not match." });
+  }
+
+  // The password can't be empty, must contain at least 1 number, and must be at least 8 characters long
+  if (password === "" || !/\d/.test(password) || password.length < 8) {
+    return res.status(406).json({
+      status: 406,
+      message:
+        "Your new password must include a number and be at least 8 characters long.",
+    });
+  }
+
+  await client.connect();
+  const db = client.db("Pokemon");
+
+  // First, check to see if the user exists
+  const result = await db
+    .collection("Users")
+    .findOne({ user: user, email: email });
+
+  if (!result) {
+    return res.status(404).json({
+      status: 404,
+      user: user,
+      email: email,
+      message: " No user with those credentials has been found.",
+    });
+  }
+
+  if (result) {
+    const hash = await bcrypt.hash(password, 10);
+
+    const resetPW = await db
+      .collection("Users")
+      .updateOne({ user: user, email: email }, { $set: { hash: hash } });
+
+    if (resetPW.modifiedCount > 0) {
+      return res
+        .status(201)
+        .json({ status: 201, message: "Password successfully changed." });
+    } else {
+      return res.status(400).json({
+        status: 400,
+        message: "Something went wrong, please try again.",
+      });
+    }
+  }
+
+  client.close();
+};
+
 // Handler to add a Pokemon to the person's party
 const PokemonPartyAddition = async (req, res) => {
   const {
@@ -766,6 +826,7 @@ const DeletePostedBuild = async (req, res) => {
 module.exports = {
   Registration,
   Signin,
+  ResetPassword,
   PokemonPartyAddition,
   GetProfile,
   UpdateBuild,

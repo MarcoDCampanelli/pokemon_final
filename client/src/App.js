@@ -7,6 +7,7 @@ import GlobalStyle from "./GlobalStyles";
 import Header from "./Components/Header";
 import Homepage from "./Components/Homepage";
 import Login from "./Components/LogInPage";
+import ResetPassword from "./Components/ResetPassword";
 import SpecificPokemon from "./Components/SpecificPokemon";
 import IndividualAttack from "./Components/IndividualAttack";
 import Profile from "./Components/Profile";
@@ -31,6 +32,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Homepage />} />
               <Route path="/signin" element={<Login />} />
+              <Route path="/resetInformation" element={<ResetPassword />} />
               <Route path="/pokemon/:pokemon" element={<SpecificPokemon />} />
               <Route path="/attacks/:attack" element={<IndividualAttack />} />
               <Route path="/profile/:user" element={<Profile />} />

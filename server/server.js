@@ -3,6 +3,7 @@ const express = require("express");
 const {
   Registration,
   Signin,
+  ResetPassword,
   PokemonPartyAddition,
   GetProfile,
   UpdateBuild,
@@ -22,6 +23,9 @@ express()
 
   // Endpoint called in order to sign into the website (Signin.js)
   .post("/signinUser", Signin)
+
+  // Endpoint called in order to sign into the website (Signin.js)
+  .patch("/resetPassword", ResetPassword)
 
   // Endpoint called in order to add a pokemon to a user's party (CreateBuildTable.js and Builds.js)
   .post("/pokemonPartyAddition", PokemonPartyAddition)
