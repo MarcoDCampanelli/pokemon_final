@@ -35,7 +35,7 @@ const Natures = () => {
 
   return (
     <Container>
-      <h1>Nature Chart</h1>
+      <Title>Nature Chart</Title>
       <Paragraph>
         Every Pokemon has a specific nature. Certain natures will not change a
         Pokemon's stats, but others will. A nature will increase a certain stat
@@ -45,8 +45,8 @@ const Natures = () => {
         <thead>
           <tr>
             <TableHead>Nature Name</TableHead>
-            <TableHead>Stat Increased</TableHead>
-            <TableHead>Stat Decreased</TableHead>
+            <Increase>Stat Increased</Increase>
+            <Decrease>Stat Decreased</Decrease>
           </tr>
         </thead>
         <tbody>
@@ -88,9 +88,15 @@ const Container = styled.div`
   margin: 1rem auto;
 `;
 
+const Title = styled.h1`
+  font-size: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+`;
+
 // Paragraph explaining how Natures work
 const Paragraph = styled.p`
-  width: 80%;
+  width: 70%;
   margin: 1rem auto;
 `;
 
@@ -106,6 +112,17 @@ const TableHead = styled.th`
   font-weight: bold;
   padding: 0.5rem;
   border: 0.1rem solid grey;
+  background-color: #dbdbdb;
+`;
+
+// Styling for stat increase
+const Increase = styled(TableHead)`
+  background-color: #83bf8f;
+`;
+
+// Styling for stat decrease
+const Decrease = styled(TableHead)`
+  background-color: #f68a89;
 `;
 
 // Styling for each tablecell

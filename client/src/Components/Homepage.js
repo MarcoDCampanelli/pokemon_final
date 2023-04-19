@@ -205,7 +205,8 @@ const HomepageContainer = styled.div`
 // Main title of the website
 const Title = styled.h1`
   font-size: 3rem;
-  margin: 1rem;
+  margin: 2rem;
+  font-weight: bold;
 `;
 
 // Individual search containers
@@ -324,7 +325,7 @@ const PokemonContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 1rem;
+  padding: 2rem 1rem;
 `;
 
 // Container for the individual pokemon

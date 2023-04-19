@@ -253,11 +253,6 @@ const Builds = ({ pokemonId }) => {
                         <DateComment>{date}</DateComment>
                         <Comment>{comment.comment}</Comment>
                       </IndividualComment>
-                      // <IndividualComment key={entry._id + index}>
-                      //   <Titles>{comment.trainer}</Titles>
-                      //   <Comment>{comment.comment}</Comment>
-                      //   <Comment>Date: {date}</Comment>
-                      // </IndividualComment>
                     );
                   })
                 )}

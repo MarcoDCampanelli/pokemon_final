@@ -38,16 +38,18 @@ const Abilities = () => {
         abilities which are randomly acquired. Certain Pokemon even have hidden
         abilities which are usually more powerful and harder to obtain!
       </Paragraph>
-      {abilityList.results.map((ability) => {
-        return (
-          <AbilityLink
-            to={`/abilities/${ability.name}`}
-            key={`AbilityList:${ability.name}`}
-          >
-            {capAndRemoveHyphen(ability.name)}
-          </AbilityLink>
-        );
-      })}
+      <Background>
+        {abilityList.results.map((ability) => {
+          return (
+            <AbilityLink
+              to={`/abilities/${ability.name}`}
+              key={`AbilityList:${ability.name}`}
+            >
+              {capAndRemoveHyphen(ability.name)}
+            </AbilityLink>
+          );
+        })}
+      </Background>
     </AbilityContainer>
   );
 };
@@ -63,14 +65,22 @@ const AbilityContainer = styled.div`
 
 // Styling for the title
 const Title = styled.h1`
-  margin: 1rem auto;
-  font-weight: bold;
+  font-size: 2rem;
+  margin: 2rem 0;
+  text-align: center;
 `;
 
 // Paragraph explaining how Abilities work
 const Paragraph = styled.p`
-  width: 80%;
-  margin: 1rem auto;
+  width: 70%;
+  margin: 2rem auto;
+`;
+
+const Background = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
+  background-color: #dbdbdb;
 `;
 
 // Link to the pokemon's page when clicked
@@ -82,6 +92,7 @@ const AbilityLink = styled(Link)`
   padding: 0.5rem;
   margin: 0.2rem auto;
   width: 20%;
+  background-color: white;
 
   &:hover {
     color: white;

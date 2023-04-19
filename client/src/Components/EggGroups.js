@@ -38,13 +38,15 @@ const EggGroups = () => {
         multiple egg groups. Pokemon who cannot breed, belong to the No Eggs
         group.
       </Paragraph>
-      {eggGroupsList.results.map((group) => {
-        return (
-          <EggGroupLink to={`/eggGroups/${group.name}`} key={group.name}>
-            {capAndRemoveHyphen(group.name)}
-          </EggGroupLink>
-        );
-      })}
+      <Background>
+        {eggGroupsList.results.map((group) => {
+          return (
+            <EggGroupLink to={`/eggGroups/${group.name}`} key={group.name}>
+              {capAndRemoveHyphen(group.name)}
+            </EggGroupLink>
+          );
+        })}
+      </Background>
     </EggGroupsContainer>
   );
 };
@@ -60,14 +62,22 @@ const EggGroupsContainer = styled.div`
 
 // Container for the entire page
 const Title = styled.h1`
-  margin: 1rem auto;
-  font-weight: bold;
+  font-size: 2rem;
+  margin: 2rem 0;
+  text-align: center;
 `;
 
 // Paragraph explaining how EggGroups work
 const Paragraph = styled.p`
-  width: 80%;
-  margin: 1rem auto;
+  width: 70%;
+  margin: 2rem auto;
+`;
+
+const Background = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
+  background-color: #dbdbdb;
 `;
 
 // Link to the pokemon's page when clicked
@@ -79,6 +89,7 @@ const EggGroupLink = styled(Link)`
   padding: 0.5rem;
   margin: 0.2rem auto;
   width: 20%;
+  background-color: white;
 
   &:hover {
     color: white;

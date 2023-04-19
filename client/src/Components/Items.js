@@ -31,6 +31,7 @@ const Items = () => {
 
   return (
     <Container>
+      <Title>Item List</Title>
       <SelectionContainer>
         <Label>Select Item Category:</Label>
         <Select
@@ -88,6 +89,13 @@ export default Items;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  padding-bottom: 2rem;
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  margin: 2rem 0;
+  text-align: center;
 `;
 
 // Container for the label and select options

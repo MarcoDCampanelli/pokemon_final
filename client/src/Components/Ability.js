@@ -42,14 +42,14 @@ const Ability = () => {
     <Container>
       <Title>{capAndRemoveHyphen(abilities.name)}</Title>
       <div>
-        <Title>Ability Description:</Title>
+        <SubTitle>Ability Description:</SubTitle>
         {abilities.effect_entries.map((entry) => {
           if (entry.language.name === "en") {
             return <Description key={entry.effect}>{entry.effect}</Description>;
           }
         })}
       </div>
-      <Title>Pokemon with this Ability:</Title>
+      <SubTitle>Pokemon with this Ability:</SubTitle>
       <PokemonContainer>
         {uniquePokemon.length > 0 &&
           uniquePokemon.map((pokemon) => {
@@ -78,13 +78,19 @@ const Container = styled.div`
 
 // Styling for the title
 const Title = styled.h1`
-  margin: 1rem auto;
-  font-weight: bold;
+  font-size: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+`;
+
+const SubTitle = styled.h2`
+  font-size: 1.5rem;
+  margin: 2rem 0;
 `;
 
 // Styling for the description of the ability
 const Description = styled.div`
-  width: 60%;
+  width: 50%;
   margin: auto;
 `;
 
@@ -92,6 +98,8 @@ const Description = styled.div`
 const PokemonContainer = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 2rem 0;
+  background-color: #dbdbdb;
 `;
 
 // Link to the pokemon's page when clicked
@@ -103,6 +111,7 @@ const PokemonLink = styled(Link)`
   padding: 0.5rem;
   margin: 0.2rem auto;
   width: 20%;
+  background-color: white;
 
   &:hover {
     color: white;

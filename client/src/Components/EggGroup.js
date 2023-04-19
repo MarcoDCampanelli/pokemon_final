@@ -26,6 +26,9 @@ const EggGroup = () => {
   return (
     <Container>
       <Title>{capAndRemoveHyphen(eggGroup.name)}</Title>
+      <Description>
+        The following Pokemon belong to the {eggGroup.name} egg group:
+      </Description>
       <PokemonContainer>
         {eggGroup.pokemon_species.map((pokemon) => {
           return (
@@ -53,14 +56,23 @@ const Container = styled.div`
 
 // Container for the entire page
 const Title = styled.h1`
-  margin: 1rem auto;
-  font-weight: bold;
+  font-size: 2rem;
+  margin: 2rem 0;
+  text-align: center;
+`;
+
+// Styling for the description of the ability
+const Description = styled.div`
+  width: 50%;
+  margin: 2rem auto;
 `;
 
 // Container holding all of the links
 const PokemonContainer = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 2rem 0;
+  background-color: #dbdbdb;
 `;
 
 // Link to the pokemon's page when clicked
@@ -72,6 +84,7 @@ const PokemonLink = styled(Link)`
   padding: 0.5rem;
   margin: 0.2rem auto;
   width: 20%;
+  background-color: white;
 
   &:hover {
     color: white;
