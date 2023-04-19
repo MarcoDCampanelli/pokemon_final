@@ -48,7 +48,7 @@ export default Header;
 
 // Styles the entire Header component, it's position is relative to allow for the image to overlap it.
 const HeaderContainer = styled.div`
-  position: relative;
+  /* position: relative; */
   height: 15vh;
   line-height: 15vh;
 `;
