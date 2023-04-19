@@ -16,7 +16,7 @@ const SpecificPokemon = () => {
   const id = useParams();
   // Used to navigate to an error page
   const navigate = useNavigate();
-  const { capAndRemoveHyphen } = useContext(UserContext);
+  const { capAndRemoveHyphen, returnIcon } = useContext(UserContext);
   // The species of the pokemon determines what gets initially loaded on the page
   const [species, setSpecies] = useState("");
   // The pokemon is either set in the UseEffect if the species matches the name or is set when the person chooses a form
@@ -212,6 +212,7 @@ const SpecificPokemon = () => {
                     return (
                       <TypeDiv key={type.type.name}>
                         {capAndRemoveHyphen(type.type.name)}{" "}
+                        <Icon>{returnIcon(type.type.name)}</Icon>
                       </TypeDiv>
                     );
                   })}
@@ -359,7 +360,15 @@ const AbilityEggLink = styled(Link)`
 
 // Styling for the types (Links may come as a stretch goal)
 const TypeDiv = styled.div`
+  display: flex;
+  align-items: center;
   margin: 0.5rem auto;
+`;
+
+// Styling for the icon of the types
+const Icon = styled.span`
+  margin-left: 1rem;
+  font-size: 1.5rem;
 `;
 
 // Container holding the button that allows you to choose a form

@@ -8,7 +8,8 @@ import LoadingPage from "./LoadingPage";
 // This component will create a page for a specific attack
 const IndividualAttack = () => {
   const id = useParams();
-  const { capAndRemoveHyphen, nameExceptions } = useContext(UserContext);
+  const { capAndRemoveHyphen, nameExceptions, returnIcon } =
+    useContext(UserContext);
   const [attack, setAttack] = useState("");
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ const IndividualAttack = () => {
         <TableTitles>
           <MoveStat>Type:</MoveStat>
           {capAndRemoveHyphen(attack.type.name)}
+          <Icon>{returnIcon(attack.type.name)}</Icon>
         </TableTitles>
         <MoveStatsContainer>
           <MoveStatContainer>
@@ -164,6 +166,12 @@ const TableTitles = styled.div`
   border-bottom: 1px solid grey;
   padding: 0.5rem 0;
   font-weight: bold;
+`;
+
+// Styling for the icon
+const Icon = styled.div`
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
 `;
 
 // Container for the main info of the attack (accuracy, power, pp, priority, damage)

@@ -249,13 +249,18 @@ const ListElement = styled.li`
   margin: auto;
 
   &:hover {
-    background-color: lightgrey;
+    color: white;
+    background-image: linear-gradient(to right, #217ebc, #033a5e);
   }
 `;
 
 const AutoLinkPokemon = styled(Link)`
   text-decoration: none;
   color: black;
+
+  &:hover {
+    color: white;
+  }
 `;
 
 // This container will ensure that the labels and the inputs align
