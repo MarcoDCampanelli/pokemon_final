@@ -70,7 +70,7 @@ const SpecificPokemon = () => {
             />
           ) : (
             <img
-              alt={"Pokemon unavailable"}
+              alt={"Official Pokemon Artwork"}
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${species.id}.png`}
             />
           )}
@@ -78,17 +78,23 @@ const SpecificPokemon = () => {
             <>
               <h1>Regular sprite:</h1>
               <SpriteContainer>
-                <Sprites src={pokemon.sprites.front_default} />
+                <Sprites
+                  src={pokemon.sprites.front_default}
+                  alt={"Male sprite"}
+                />
                 {!species.has_gender_differences ? (
                   <></>
                 ) : pokemon.sprites.front_female ? (
-                  <Sprites src={pokemon.sprites.front_female} />
+                  <Sprites
+                    src={pokemon.sprites.front_female}
+                    alt={"Female sprite"}
+                  />
                 ) : (
                   <></>
                 )}
               </SpriteContainer>
               <h1>Shiny sprite:</h1>
-              <Sprites src={pokemon.sprites.front_shiny} />
+              <Sprites src={pokemon.sprites.front_shiny} alt={"Shiny Sprite"} />
             </>
           ) : (
             <></>
@@ -286,6 +292,7 @@ const Container = styled.div`
 const Titles = styled.h1`
   font-weight: bold;
   margin: 0.5rem auto;
+  font-size: 1.2rem;
 `;
 
 // Container that will hold the box containing both the sprites and the information

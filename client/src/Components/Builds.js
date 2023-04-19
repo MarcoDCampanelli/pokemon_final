@@ -243,10 +243,7 @@ const Builds = ({ pokemonId }) => {
                     const date = format(purchaseDate, "MMM do Y");
 
                     return (
-                      <IndividualComment
-                        key={entry._id + index}
-                        color={index % 2 === 0}
-                      >
+                      <IndividualComment key={entry._id + index}>
                         <TrainerComment>
                           Trainer: {comment.trainer}
                         </TrainerComment>
@@ -521,8 +518,6 @@ const IndividualComment = styled.div`
   margin: 1rem auto;
   padding-top: 1rem;
   width: 95%;
-
-  background-color: ${(props) => (props.color ? "white" : "#dbdbdb")};
 `;
 
 // Styling for the name of the user commenting

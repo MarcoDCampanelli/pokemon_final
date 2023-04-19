@@ -117,7 +117,7 @@ const Form = styled.form`
   padding: 0.5rem;
   border: 0.1rem solid gray;
   border-radius: 5px;
-  background-image: linear-gradient(to bottom, #e5e5e5, #ffffff);
+  background-image: linear-gradient(to bottom, #f2ebde, #ffffff);
 
   @media (max-width: 768px) {
     width: 60%;
