@@ -166,6 +166,7 @@ const TableTitles = styled.div`
   border-bottom: 1px solid grey;
   padding: 0.5rem 0;
   font-weight: bold;
+  font-size: 1.1rem;
 `;
 
 // Styling for the icon
@@ -187,6 +188,7 @@ const MoveStatsContainer = styled.div`
 const MoveStat = styled.div`
   font-weight: bold;
   text-align: center;
+  font-size: 1.1rem;
 `;
 
 // Individual boxes inside of the MoveStatsContainer

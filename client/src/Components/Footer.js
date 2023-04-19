@@ -6,6 +6,7 @@ import styled from "styled-components";
 const Footer = () => {
   return (
     <Container>
+      <Link to={"/helpMeProfessorOak"}>Professor Oak's Lab</Link>
       <Link to={"/natures"}>Natures</Link>
       <Link to={"/items"}>Item List</Link>
       <Link to={"/abilities"}>Ability List</Link>

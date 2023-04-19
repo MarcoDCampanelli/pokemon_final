@@ -17,6 +17,7 @@ import Ability from "./Components/Ability";
 import EggGroups from "./Components/EggGroups";
 import EggGroup from "./Components/EggGroup";
 import ErrorPage from "./Components/ErrorPage";
+import ProfessorOak from "./Components/ProfessorOak";
 import Footer from "./Components/Footer";
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
               <Route path="/abilities/:ability" element={<Ability />} />
               <Route path="/eggGroups" element={<EggGroups />} />
               <Route path="/eggGroups/:group" element={<EggGroup />} />
+              <Route path="/helpMeProfessorOak" element={<ProfessorOak />} />
               <Route path="/error" element={<ErrorPage />} />
             </Routes>
           </Body>
