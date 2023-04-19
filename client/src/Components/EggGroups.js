@@ -71,6 +71,7 @@ const Title = styled.h1`
 const Paragraph = styled.p`
   width: 70%;
   margin: 2rem auto;
+  line-height: 3vh;
 `;
 
 const Background = styled.div`

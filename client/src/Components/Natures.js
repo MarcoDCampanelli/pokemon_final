@@ -98,6 +98,7 @@ const Title = styled.h1`
 const Paragraph = styled.p`
   width: 70%;
   margin: 1rem auto;
+  line-height: 3vh;
 `;
 
 // Styling for the whole table

@@ -92,6 +92,7 @@ const SubTitle = styled.h2`
 const Description = styled.div`
   width: 50%;
   margin: auto;
+  line-height: 3vh;
 `;
 
 // Container for the links of the pokemon with this ability
