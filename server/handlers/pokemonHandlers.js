@@ -652,7 +652,7 @@ const PostBuild = async (req, res) => {
         "Your Pokemon must have at least 1 attack. All attacks must be unique.",
     });
   }
-  console.log(attacks);
+
   await client.connect();
   const db = client.db("Pokemon");
   const _id = uuidv4();

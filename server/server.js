@@ -24,7 +24,7 @@ express()
   // Endpoint called in order to sign into the website (Signin.js)
   .post("/signinUser", Signin)
 
-  // Endpoint called in order to sign into the website (Signin.js)
+  // Endpoint called in order to sign into the website (ResetPassword.js)
   .patch("/resetPassword", ResetPassword)
 
   // Endpoint called in order to add a pokemon to a user's party (CreateBuildTable.js and Builds.js)
