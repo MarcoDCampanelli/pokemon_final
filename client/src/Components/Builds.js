@@ -28,8 +28,7 @@ const Builds = ({ pokemonId }) => {
       .then((res) => res.json())
       .then((resData) => {
         setBuilds(resData);
-      })
-      .catch((err) => navigate("/error"));
+      });
   }, [pokemonId, error]);
 
   // Endpoint called in order to post a comment
