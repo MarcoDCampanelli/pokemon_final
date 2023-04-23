@@ -784,6 +784,7 @@ const PokemonContainer = styled.div`
   /* Flex direction is switched to column on smaller screens */
   @media (max-width: 768px) {
     flex-direction: column;
+    width: 75%;
   }
 `;
 
