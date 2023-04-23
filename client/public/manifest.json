@@ -1,0 +1,22 @@
+
+{
+  "name" : "Competitive Pokemon Builds",
+  "short_name" : "Competitive Pokemon",
+  "start_url" : ".",
+  "id" : ".",
+  "background_color" : "#9acbed",
+  "theme_color" : "#217ebc",
+  "display" : "standalone",
+  "icons" : [
+    {
+      "src" : "assets/pokeball192.png", 
+      "sizes" : "192x192", 
+      "type" : "image/png"
+      },
+    {
+      "src" : "assets/pokeball512.png",
+      "sizes" : "512x512",
+      "type" : "image/png"
+    }
+    ]
+}
