@@ -13,9 +13,8 @@ self.addEventListener("install", (e) => {
 
 // This will fetch the info from the cache or online
 self.addEventListener("fetch", (e) => {
-  console.log(cache);
   e.respondWith(
-    caches.map(e.request).then((response) => {
+    caches.match(e.request).then((response) => {
       return response || fetch(e.request);
     })
   );
