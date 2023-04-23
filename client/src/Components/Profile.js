@@ -16,6 +16,9 @@ const Profile = () => {
     calculateHealth,
     calculateStat,
     changeNatureValues,
+    itemCategories,
+    setItemType,
+    items,
   } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -35,6 +38,7 @@ const Profile = () => {
   const [evSpread, setEvSpread] = useState("");
   const [ivSpread, setIvSpread] = useState("");
   const [level, setLevel] = useState("");
+  const [item, setItem] = useState("");
   // This state is only being used to organize the attacks in alphabetical order
   const [generation, setGeneration] = useState("");
 
@@ -50,6 +54,25 @@ const Profile = () => {
       .catch((err) => navigate("/error"));
   }, [error]);
 
+  // This will fetch the items that the user has decided to scroll through
+  const [itemList, setItemList] = useState("");
+  useEffect(() => {
+    const promises = [];
+    if (items) {
+      items.forEach((item) => {
+        promises.push(
+          fetch(`https://pokeapi.co/api/v2/item/${item.name}/`)
+            .then((res) => res.json())
+            .then((resData) => {
+              return resData;
+            })
+            .catch((err) => navigate("/error"))
+        );
+      });
+    }
+    Promise.all(promises).then((data) => setItemList(data));
+  }, [items]);
+
   // This will grab the info of the pokemon selected to be updated and set all of the states to those of the selected Pokemon
   const handleUpdate = (
     name,
@@ -59,7 +82,8 @@ const Profile = () => {
     ev,
     iv,
     level,
-    generation
+    generation,
+    item
   ) => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
       .then((res) => res.json())
@@ -76,6 +100,7 @@ const Profile = () => {
     setLevel(level);
     setError("");
     setGeneration(generation);
+    setItem(item);
   };
 
   // These 6 variables and functions calculate the pokemon's stat based on what is being modified
@@ -170,6 +195,7 @@ const Profile = () => {
       trainer: currentUser,
       ability: ability,
       nature: nature,
+      item: item,
       iv: ivSpread,
       ev: evSpread,
       stats: [hp, atk, def, spAtk, spDef, spd],
@@ -284,11 +310,75 @@ const Profile = () => {
                 <Info>Index: #{member.index}</Info>
                 <Info>Level: {member.level}</Info>
                 <Info>
-                  Item:{" "}
-                  {member.item ? (
-                    <>{capAndRemoveHyphen(member.item)}</>
+                  {member.entryId !== update && member.item ? (
+                    <Info>
+                      Item: <>{capAndRemoveHyphen(member.item)}</>
+                    </Info>
+                  ) : member.entryId !== update && !member.item ? (
+                    <Info>
+                      Item: <>None</>
+                    </Info>
                   ) : (
-                    <>None</>
+                    <>
+                      <Test>
+                        <Label>Item Category:</Label>
+                        <Select
+                          defaultValue={true}
+                          name="item"
+                          onChange={(e) => {
+                            setItemType(e.target.value);
+                          }}
+                        >
+                          <option disabled value={true}>
+                            Select an item category
+                          </option>
+                          {itemCategories.map((category) => {
+                            return (
+                              <option
+                                value={category.value}
+                                key={`ProfileItemCatgeory:${category.name}`}
+                              >
+                                {category.name}
+                              </option>
+                            );
+                          })}
+                        </Select>
+                      </Test>
+                      <Test>
+                        {itemList.length !== 0 && generation !== "red-blue" && (
+                          <>
+                            <Label>Item</Label>
+                            <Select
+                              defaultValue={true}
+                              name="itemSelect"
+                              onChange={(e) => {
+                                setItem(e.target.value);
+                              }}
+                            >
+                              <option disabled value={true}>
+                                Select an item category
+                              </option>
+                              {itemList.map((item) => {
+                                let check = [];
+                                item.flavor_text_entries.map((entry) =>
+                                  check.push(entry.version_group.name)
+                                );
+                                if (check.includes(generation)) {
+                                  return (
+                                    <option
+                                      value={item.name}
+                                      key={`CreateBuildSpecItem:${item.name}`}
+                                    >
+                                      {capAndRemoveHyphen(item.name)}
+                                    </option>
+                                  );
+                                }
+                              })}
+                            </Select>
+                          </>
+                        )}
+                      </Test>
+                    </>
                   )}
                 </Info>
                 <Info>Generation: {capAndRemoveHyphen(member.generation)}</Info>
@@ -647,7 +737,8 @@ const Profile = () => {
                       member.ev,
                       member.iv,
                       member.level,
-                      member.generation
+                      member.generation,
+                      member.item
                     );
                   }}
                 >
@@ -663,6 +754,11 @@ const Profile = () => {
 };
 
 export default Profile;
+
+const Test = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 // This is the container that holds the entire page
 const Container = styled.div`

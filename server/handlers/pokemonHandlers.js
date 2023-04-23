@@ -393,7 +393,7 @@ const GetProfile = async (req, res) => {
 
 // Handler to be called if an update takes place after the original build is saved to a user's profile
 const UpdateBuild = async (req, res) => {
-  const { trainer, ability, nature, iv, ev, stats, attacks, pokemonId } =
+  const { trainer, ability, nature, item, iv, ev, stats, attacks, pokemonId } =
     req.body;
 
   const client = new MongoClient(MONGO_URI, options);
@@ -490,6 +490,7 @@ const UpdateBuild = async (req, res) => {
           $set: {
             "party.$.ability": ability,
             "party.$.nature": nature,
+            "party.$.item": item,
             "party.$.iv": iv,
             "party.$.ev": ev,
             "party.$.stats": stats,
