@@ -337,9 +337,11 @@ const PokemonContainer = styled.div`
 const IndividualPokemonContainer = styled.div`
   text-align: center;
   width: 10%;
-  border: 0.15rem solid grey;
+  border: 0.15rem solid transparent;
+  border-radius: 5px;
   margin: 0.2rem auto;
   overflow: hidden;
+  box-shadow: 0.1rem 0.1rem 0.3rem 0.1rem #9acbed;
 
   /* The smaller the screen becomes, the large the icon should be to maintain a certain level of visibility, but less icons will be rendered per line */
   @media (max-width: 768px) {
