@@ -513,10 +513,15 @@ const CommentsContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 95%;
-  margin: auto;
+  margin: 2rem;
   box-shadow: 0.2rem 0.2rem 0.5rem grey;
 
   border: ${(props) => (props.border ? "none" : "0.1rem solid grey")};
+
+  /* On smaller screes, flex-direction is switched to column */
+  @media (max-width: 768px) {
+    margin: 2rem auto;
+  }
 `;
 
 // Container that holds individual comments
