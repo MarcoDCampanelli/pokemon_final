@@ -761,11 +761,17 @@ const PostComment = async (req, res) => {
   if (build) {
     try {
       const date = new Date();
+      const _id = uuidv4();
       const leaveComment = await db.collection("CompetitiveBuilds").updateOne(
         { _id: postId },
         {
           $push: {
-            comments: { trainer: trainer, comment: comment, date: date },
+            comments: {
+              trainer: trainer,
+              comment: comment,
+              date: date,
+              _id: _id,
+            },
           },
         }
       );
