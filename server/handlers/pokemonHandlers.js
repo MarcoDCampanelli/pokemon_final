@@ -229,6 +229,11 @@ const PokemonPartyAddition = async (req, res) => {
       .status(404)
       .json({ status: 404, message: "Please select a nature." });
   }
+  if (level > 100) {
+    return res
+      .status(404)
+      .json({ status: 404, message: "Your level cannot exceed 100." });
+  }
 
   // This will check to see if all stat values are numbers
   let statCheck = stats.every((stat) => typeof stat === "number");

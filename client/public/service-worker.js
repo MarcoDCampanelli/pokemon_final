@@ -2,7 +2,7 @@
 
 // staticCacheName is given a version so that we can change the version should we ever change the site since the install event only happens once and won't include new changes
 // !Removing to see if the problem is fixed
-// const staticCacheName = "site-static-v0";
+// const staticCacheName = "site-static-v1";
 // const assets = ["./", "./assets/pokeball192.png", "./assets/pokeball512.png"];
 // // this will hold the fetch requests dont after the initial cache
 // const dynamicCache = "site-dynamic-v1";
