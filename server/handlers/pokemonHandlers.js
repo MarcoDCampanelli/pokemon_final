@@ -788,6 +788,46 @@ const PostComment = async (req, res) => {
   client.close();
 };
 
+// Handler to delete a comment posted by a user.
+const DeleteComment = async (req, res) => {
+  const commentId = req.params.comment;
+
+  const client = new MongoClient(MONGO_URI, options);
+
+  await client.connect();
+  const db = client.db("Pokemon");
+
+  const searchComments = await db
+    .collection("CompetitiveBuilds")
+    .findOne({ "comments._id": commentId });
+
+  if (!searchComments) {
+    return res.status(404).json({ status: 404, message: "Comment not found." });
+  }
+
+  if (searchComments) {
+    const commentDelete = await db
+      .collection("CompetitiveBuilds")
+      .updateOne(
+        { "comments._id": commentId },
+        { $pull: { comments: { _id: commentId } } }
+      );
+
+    if (commentDelete.modifiedCount > 0) {
+      return res
+        .status(201)
+        .json({ status: 201, message: "Comment successfully deleted." });
+    } else {
+      return res.status(500).json({
+        status: 500,
+        message: "Something went wrong, please try again.",
+      });
+    }
+  }
+
+  client.close();
+};
+
 // Handler to delete a build if you are the creator of said build
 const DeletePostedBuild = async (req, res) => {
   const { build } = req.params;
@@ -841,5 +881,6 @@ module.exports = {
   PostBuild,
   GetBuilds,
   PostComment,
+  DeleteComment,
   DeletePostedBuild,
 };

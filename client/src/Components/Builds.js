@@ -63,6 +63,23 @@ const Builds = ({ pokemonId }) => {
       .catch((error) => navigate("/error"));
   };
 
+  // Endpoint called in order to delete a comment
+  const handleDeleteComment = (commentId) => {
+    fetch(`/deleteComment/${commentId}`, {
+      method: "PATCH",
+    })
+      .then((res) => res.json())
+      .then((resData) => {
+        setError(resData);
+        if (resData.status < 299) {
+          setTimeout(() => {
+            setError("");
+          }, 2000);
+        }
+      })
+      .catch((error) => navigate("/error"));
+  };
+
   // Endpoint called in order to delete a build should the creator choose to do so
   const handleDelete = (id) => {
     fetch(`/pokemon/delete/${id}`, {
@@ -242,13 +259,27 @@ const Builds = ({ pokemonId }) => {
                   entry.comments.map((comment, index) => {
                     const purchaseDate = parseISO(comment.date);
                     const date = format(purchaseDate, "MMM do Y");
-
                     return (
                       <IndividualComment key={entry._id + index}>
-                        <TrainerComment>
-                          Trainer: {comment.trainer}
-                        </TrainerComment>
-                        <DateComment>{date}</DateComment>
+                        <CommentInfoContainer>
+                          <div>
+                            <TrainerComment>
+                              Trainer: {comment.trainer}
+                            </TrainerComment>
+                            <DateComment>{date}</DateComment>
+                          </div>
+                          <div>
+                            {entry.trainer === currentUser ? (
+                              <CommentDeleteButton
+                                onClick={() => handleDeleteComment(comment._id)}
+                              >
+                                X
+                              </CommentDeleteButton>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                        </CommentInfoContainer>
                         <Comment>{comment.comment}</Comment>
                       </IndividualComment>
                     );
@@ -328,16 +359,20 @@ const Builds = ({ pokemonId }) => {
                   >
                     Comment
                   </Button>
-                  <Button
-                    onClick={() => {
-                      setPokemon("");
-                      setComment("");
-                      setValue(500);
-                      setError("");
-                    }}
-                  >
-                    Finish
-                  </Button>
+                  {pokemon === entry._id ? (
+                    <Button
+                      onClick={() => {
+                        setPokemon("");
+                        setComment("");
+                        setValue(500);
+                        setError("");
+                      }}
+                    >
+                      Finish
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
                 </ButtonContainer>
               ) : (
                 <></>
@@ -539,6 +574,14 @@ const IndividualComment = styled.div`
   width: 95%;
 `;
 
+// Container for the trainer, date and delete button
+const CommentInfoContainer = styled.div`
+  display: flex;
+  width: 98%;
+  margin: 0 auto;
+  justify-content: space-between;
+`;
+
 // Styling for the name of the user commenting
 const TrainerComment = styled.span`
   margin-left: 0.5rem;
@@ -551,13 +594,26 @@ const DateComment = styled.span`
   margin-left: 1rem;
 `;
 
+// Styling for the Delete Button
+const CommentDeleteButton = styled.button`
+  border: 0.1rem solid grey;
+  margin-right: 0.5rem;
+  font-weight: bold;
+  background-image: linear-gradient(to right, #ff7c7c, #fc4b4b);
+
+  &:hover {
+    color: white;
+    background-image: linear-gradient(to right, #fc4b4b, #ff2d2d);
+  }
+`;
+
 // Container that holds a single comment
 const Comment = styled.div`
   text-align: left;
-
+  width: 95%;
   border: 0.1rem solid grey;
   margin: 0.5rem auto;
-  padding: 1rem;
+  padding: 1rem 0.5rem;
 `;
 
 // Styling for the container holding all of the buttons

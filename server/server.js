@@ -11,6 +11,7 @@ const {
   PostBuild,
   GetBuilds,
   PostComment,
+  DeleteComment,
   DeletePostedBuild,
 } = require("./handlers/pokemonHandlers");
 
@@ -47,6 +48,9 @@ express()
 
   // Endpoint called in order to add a comment to a specific pokemon's build (Builds.js)
   .patch("/pokemon/leaveComment", PostComment)
+
+  //Endpoint called in order to delete a comment left by a user on a certain build (Builds.js)
+  .patch("/deleteComment/:comment", DeleteComment)
 
   // Endpoint called in order to delete a certain build (Builds.js)
   .delete("/pokemon/delete/:build", DeletePostedBuild)
