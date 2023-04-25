@@ -43,6 +43,7 @@ const ProfessorOak = () => {
               <option value={"items"}>Items</option>
               <option value={"abilities"}>Abilities</option>
               <option value={"eggGroups"}>Egg Groups</option>
+              <option value={"types"}>Pokemon Types</option>
             </Select>
           </QuestionSelect>
           <Description>
@@ -107,6 +108,20 @@ const ProfessorOak = () => {
                 will hatch with that specific attack. To find a list of egg
                 groups and the pokemon who belong to them, please visit our{" "}
                 <StyledLink to={"/eggGroups"}>Egg Group</StyledLink> list.
+              </Test>
+            )}
+            {question === "types" && (
+              <Test>
+                All pokemon will either be assigned 1 or 2 types. Each type
+                offers a Pokemon certain offensive and defensive capabilities.
+                For example, offensively, an Electric type pokemon can deal
+                double damage to all Flying and Water type Pokemon. However,
+                they are resisted by Grass, Electric and Dragon type Pokemon and
+                cannot hit Ground type Pokemon at all! Defensively, an Electric
+                Pokemon resists Flying, Steel and Electric types but takes
+                double damage from Ground types. For a closer look at all types,
+                please visit our{" "}
+                <StyledLink to={"/typeMatchUps"}>Type Chart</StyledLink>.
               </Test>
             )}
           </Description>

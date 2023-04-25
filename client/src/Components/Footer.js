@@ -11,6 +11,7 @@ const Footer = () => {
       <Link to={"/items"}>Item List</Link>
       <Link to={"/abilities"}>Ability List</Link>
       <Link to={"/eggGroups"}>Egg Group List</Link>
+      <Link to={"/typeMatchUps"}>Type Charts</Link>
     </Container>
   );
 };
@@ -31,6 +32,10 @@ const Link = styled(NavLink)`
   text-decoration: underline;
   color: black;
   margin: 0.5rem auto;
+
+  &:hover {
+    color: #217ebc;
+  }
 
   &.active {
     color: #217ebc;
