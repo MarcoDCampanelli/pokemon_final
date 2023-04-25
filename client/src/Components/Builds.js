@@ -269,7 +269,7 @@ const Builds = ({ pokemonId }) => {
                             <DateComment>{date}</DateComment>
                           </div>
                           <div>
-                            {entry.trainer === currentUser ? (
+                            {comment.trainer === currentUser ? (
                               <CommentDeleteButton
                                 onClick={() => handleDeleteComment(comment._id)}
                               >
