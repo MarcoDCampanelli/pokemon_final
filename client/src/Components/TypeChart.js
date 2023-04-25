@@ -70,8 +70,6 @@ const TypeChart = () => {
     return <LoadingPage />;
   }
 
-  console.log(newTypeChart);
-
   return (
     <TypeContainer>
       <Title>Offensive Table Chart</Title>
@@ -89,35 +87,67 @@ const TypeChart = () => {
               <TableHead>Types:</TableHead>
               {types &&
                 types.map((type) => {
-                  return <TableHead>{capAndRemoveHyphen(type)}</TableHead>;
+                  return (
+                    <TableHead key={`OffensiveChart${type}`}>
+                      {capAndRemoveHyphen(type)}
+                    </TableHead>
+                  );
                 })}
             </tr>
           </thead>
           <tbody>
-            {types &&
+            {types ? (
               types.map((type) => {
                 return (
-                  <tr>
+                  <tr key={`RowOffense${type}`}>
                     <TableHead>{capAndRemoveHyphen(type)}</TableHead>
                     {newTypeChart[type] &&
-                      types.map((type2) => {
+                      types.map((type2, index) => {
                         if (newTypeChart[type].doubleDamageTo.includes(type2)) {
-                          return <TableCell color={"strong"}>x2</TableCell>;
+                          return (
+                            <TableCell
+                              color={"strong"}
+                              key={`Offense${type}${index}${type2}`}
+                            >
+                              x2
+                            </TableCell>
+                          );
                         } else if (
                           newTypeChart[type].halfDamageTo.includes(type2)
                         ) {
-                          return <TableCell color={"weak"}>x0.5</TableCell>;
+                          return (
+                            <TableCell
+                              color={"weak"}
+                              key={`Offense${type}${index}${type2}`}
+                            >
+                              x0.5
+                            </TableCell>
+                          );
                         } else if (
                           newTypeChart[type].noDamageTo.includes(type2)
                         ) {
-                          return <TableCell color={"immune"}>x0</TableCell>;
+                          return (
+                            <TableCell
+                              color={"immune"}
+                              key={`Offense${type}${index}${type2}`}
+                            >
+                              x0
+                            </TableCell>
+                          );
                         } else {
-                          return <TableCell>-</TableCell>;
+                          return (
+                            <TableCell key={`Offense${type}${index}${type2}`}>
+                              -
+                            </TableCell>
+                          );
                         }
                       })}
                   </tr>
                 );
-              })}
+              })
+            ) : (
+              <></>
+            )}
           </tbody>
         </Table>
       </TableContainer>
@@ -136,37 +166,71 @@ const TypeChart = () => {
               <TableHead>Types:</TableHead>
               {types &&
                 types.map((type) => {
-                  return <TableHead>{capAndRemoveHyphen(type)}</TableHead>;
+                  return (
+                    <TableHead key={`DefensiveChart${type}`}>
+                      {capAndRemoveHyphen(type)}
+                    </TableHead>
+                  );
                 })}
             </tr>
           </thead>
           <tbody>
-            {types &&
+            {types ? (
               types.map((type) => {
                 return (
-                  <tr>
-                    <TableHead>{capAndRemoveHyphen(type)}</TableHead>
+                  <tr key={`RowDefense${type}`}>
+                    <TableHead key={`DefensiveChart${type}`}>
+                      {capAndRemoveHyphen(type)}
+                    </TableHead>
                     {newTypeChart[type] &&
-                      types.map((type2) => {
+                      types.map((type2, index) => {
                         if (
                           newTypeChart[type].doubleDamageFrom.includes(type2)
                         ) {
-                          return <TableCell color={"weak"}>x2</TableCell>;
+                          return (
+                            <TableCell
+                              color={"weak"}
+                              key={`Defense${type}${index}${type2}`}
+                            >
+                              x2
+                            </TableCell>
+                          );
                         } else if (
                           newTypeChart[type].halfDamageFrom.includes(type2)
                         ) {
-                          return <TableCell color={"strong"}>x0.5</TableCell>;
+                          return (
+                            <TableCell
+                              color={"strong"}
+                              key={`Defense${type}${index}${type2}`}
+                            >
+                              x0.5
+                            </TableCell>
+                          );
                         } else if (
                           newTypeChart[type].noDamageFrom.includes(type2)
                         ) {
-                          return <TableCell color={"immune"}>x0</TableCell>;
+                          return (
+                            <TableCell
+                              color={"immune"}
+                              key={`Defense${type}${index}${type2}`}
+                            >
+                              x0
+                            </TableCell>
+                          );
                         } else {
-                          return <TableCell>-</TableCell>;
+                          return (
+                            <TableCell key={`Defense${type}${index}${type2}`}>
+                              -
+                            </TableCell>
+                          );
                         }
                       })}
                   </tr>
                 );
-              })}
+              })
+            ) : (
+              <></>
+            )}
           </tbody>
         </Table>
       </TableContainer>
@@ -221,7 +285,6 @@ const TableHead = styled.th`
 const TableCell = styled.td`
   padding: 0.5rem;
   border: 0.1rem solid grey;
-  width: 5%;
 
   background-color: ${(props) =>
     props.color === "strong"
