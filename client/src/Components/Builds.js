@@ -232,7 +232,9 @@ const Builds = ({ pokemonId }) => {
                   </Table>
                 </StatContainer>
               </IndividualBuild>
-              <DescriptionContainer>{entry.description}</DescriptionContainer>
+              <DescriptionContainer>
+                <Description>{entry.description}</Description>
+              </DescriptionContainer>
               <CommentsContainer border={entry.comments.length === 0}>
                 {entry.comments.length === 0 ? (
                   <></>
@@ -506,6 +508,12 @@ const DescriptionContainer = styled.div`
   @media (max-width: 768px) {
     margin: 2rem auto;
   }
+`;
+
+// Container to make sure text isn't too close to the borders
+const Description = styled.div`
+  margin: auto;
+  width: 95%;
 `;
 
 // Container that holds all of the comments
