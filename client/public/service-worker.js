@@ -1,7 +1,7 @@
 // This is used in order to make the app a PWA
 
 // staticCacheName is given a version so that we can change the version should we ever change the site since the install event only happens once and won't include new changes
-const staticCacheName = "site-static-v1";
+const staticCacheName = "site-static-v2";
 const assets = [
   "./",
   "./assets/pokeball192.png",

@@ -237,9 +237,9 @@ const Builds = ({ pokemonId }) => {
                       </tr>
                       <tr>
                         <TableHead>Final Stat</TableHead>
-                        {entry.stats.map((stat) => {
+                        {entry.stats.map((stat, index) => {
                           return (
-                            <TableCell key={`PostedBuildFinalStat:${stat}`}>
+                            <TableCell key={`PostedBuildFinalStat:${index}`}>
                               {stat}
                             </TableCell>
                           );
