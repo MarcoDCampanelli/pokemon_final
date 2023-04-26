@@ -1,7 +1,7 @@
 // This is used in order to make the app a PWA
 
 // staticCacheName is given a version so that we can change the version should we ever change the site since the install event only happens once and won't include new changes
-const staticCacheName = "site-static-v2";
+const staticCacheName = "site-static-v0";
 const assets = [
   "./",
   "./assets/pokeball192.png",
@@ -21,10 +21,17 @@ self.addEventListener("install", (e) => {
   );
 });
 
-self.addEventListener("fetch", (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => {
-      return response || fetch(e.request);
-    })
+self.addEventListener("fetch", function (event) {
+  event.respondWith(
+    (async function () {
+      try {
+        var res = await fetch(event.request);
+        var cache = await caches.open("cache");
+        cache.put(event.request.url, res.clone());
+        return res;
+      } catch (error) {
+        return caches.match(event.request);
+      }
+    })()
   );
 });
