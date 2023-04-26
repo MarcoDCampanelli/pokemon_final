@@ -7,15 +7,18 @@ const assets = [
   "./assets/pokeball192.png",
   "./assets/pokeball512.png",
   "./assets/Banner.jpg",
-  "./assets/crying pikachu.gif",
+  "./assets/cryingpikachu.gif",
   "./assets/Pokeball.webp",
-  "./assets/running pikahu.gif",
+  "./assets/runningpikachu.gif",
+  "https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,700;1,400;1,600&display=swap",
 ];
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(staticCacheName)).then((cache) => {
-    return cache.addAll(assets);
-  });
+  e.waitUntil(
+    caches.open(staticCacheName).then((cache) => {
+      cache.addAll(assets);
+    })
+  );
 });
 
 self.addEventListener("fetch", (e) => {
